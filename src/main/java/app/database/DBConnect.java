@@ -13,10 +13,16 @@ public class DBConnect {
 	public static Connection getConnection() {
 		try {
 			connection = DriverManager.getConnection(host, userName, password);
+			System.out.print("Connect krồi");
 			return connection;
 		} catch (SQLException e) {
 			e.getStackTrace();
 			return null;
 		}
+	}
+
+	public static void main(String[] args) {
+		Connection cn = DBConnect.getConnection();
+
 	}
 }
