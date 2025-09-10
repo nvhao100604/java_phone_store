@@ -23,6 +23,6 @@ public class DBConnect {
 
 	public static void main(String[] args) {
 		Connection cn = DBConnect.getConnection();
-
+		System.out.print(cn);
 	}
 }
