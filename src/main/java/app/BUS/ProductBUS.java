@@ -21,6 +21,18 @@ public class ProductBUS {
         return dao.addProduct(product);
     }
 
+    public Product getProductById(int productId) {
+        return dao.getProductById(productId);
+    }
+
+    public int DeleteProductById(int productId) {
+        return dao.deleteProductById(productId);
+    }
+
+    public int UpdateProduct(Product product) {
+        return dao.updateProduct(product);
+    }
+
     public static void main(String[] args) {
         ProductBUS bus = new ProductBUS();
         // List<Product> list = bus.getAll();
@@ -29,20 +41,26 @@ public class ProductBUS {
         // }
 
         Product myProduct = new Product(
-                "Smartphone XYZ",
-                4,
+                116,
+                "Smartphone XYZ CAC CAC CAC",
+                1,
                 new BigDecimal("500.00"),
                 4,
                 "https://example.com/images/xyz.jpg",
                 "A high-end smartphone with a powerful processor and a stunning display.",
                 new BigDecimal("750.00"),
                 1);
-
-        if (bus.AddProduct(myProduct) > 0) {
-            System.out.println("Tạo thành công product!");
+        // int id = bus.AddProduct(myProduct);
+        int id = bus.UpdateProduct(myProduct);
+        if (id > 0) {
+            System.out.println("Update thành công product với mã: " + myProduct.getProductId());
         } else {
             System.out.println("Lỗi mày");
         }
         ;
+        // int productId = 113;
+        // if (bus.DeleteProductById(productId) > 0) {
+        // System.out.printf("Deleted: %d", productId);
+        // }
     }
 }
