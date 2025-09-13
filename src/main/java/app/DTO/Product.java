@@ -53,6 +53,20 @@ public class Product {
 		this.productDetails = new ArrayList<>();
 	}
 
+	public Product(int productId, String productName, int brandId, BigDecimal importPrice, int categoryId,
+			String imageUrl, String description, BigDecimal salePrice, int status) {
+		this.productId = productId;
+		this.productName = productName;
+		this.brandId = brandId;
+		this.importPrice = importPrice;
+		this.categoryId = categoryId;
+		this.imageUrl = imageUrl;
+		this.description = description;
+		this.status = status;
+		this.salePrice = salePrice;
+		this.productDetails = new ArrayList<>();
+	}
+
 	// Getters and Setters
 	public int getProductId() {
 		return productId;
