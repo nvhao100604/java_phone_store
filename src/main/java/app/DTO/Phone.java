@@ -27,12 +27,14 @@ public class Phone extends Product {
 	}
 
 	// Parameterized constructor
-	public Phone(int productId, String productName, String brand, BigDecimal importPrice, int categoryId,
-			String imageUrl, String description, int status, BigDecimal salePrice, String screen, String processor,
-			String ram, String storage, String rearCamera, String battery, String operatingSystem, String chargingPort,
-			String refreshRate, String waterAndDustResistance, String weight, String material, String speaker,
-			String fastCharging, String specialFeatures) {
-		super(productId, productName, brand, importPrice, categoryId, imageUrl, description, status, salePrice);
+	public Phone(int productId, String productName, int brandId, String brand, BigDecimal importPrice, int categoryId,
+			String categoryName, String imageUrl, String description, int status, BigDecimal salePrice, String screen,
+			String processor, String ram, String storage, String rearCamera, String battery, String operatingSystem,
+			String chargingPort, String refreshRate, String waterAndDustResistance, String weight, String material,
+			String speaker, String fastCharging, String specialFeatures) {
+		super(productId, productName, brandId, brand, importPrice, categoryId, categoryName, imageUrl, description,
+				salePrice,
+				status);
 		this.screen = screen;
 		this.processor = processor;
 		this.ram = ram;

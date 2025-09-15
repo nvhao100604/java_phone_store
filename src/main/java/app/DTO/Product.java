@@ -8,13 +8,15 @@ public class Product {
 
 	private int productId;
 	private String productName;
+	private int brandId;
 	private String brand;
 	private BigDecimal importPrice;
 	private int categoryId;
+	private String categoryName;
 	private String imageUrl;
 	private String description;
-	private int status;
 	private BigDecimal salePrice;
+	private int status;
 	private List<ProductDetail> productDetails;
 
 	// Constructors
@@ -22,11 +24,40 @@ public class Product {
 		this.productDetails = new ArrayList<>();
 	}
 
-	public Product(int productId, String productName, String brand, BigDecimal importPrice, int categoryId,
-			String imageUrl, String description, int status, BigDecimal salePrice) {
+	public Product(int productId, String productName, int brandId, String brand, BigDecimal importPrice, int categoryId,
+			String categoryName, String imageUrl, String description, BigDecimal salePrice, int status) {
 		this.productId = productId;
 		this.productName = productName;
+		this.brandId = brandId;
 		this.brand = brand;
+		this.importPrice = importPrice;
+		this.categoryId = categoryId;
+		this.categoryName = categoryName;
+		this.imageUrl = imageUrl;
+		this.description = description;
+		this.status = status;
+		this.salePrice = salePrice;
+		this.productDetails = new ArrayList<>();
+	}
+
+	public Product(String productName, int brandId, BigDecimal importPrice, int categoryId,
+			String imageUrl, String description, BigDecimal salePrice, int status) {
+		this.productName = productName;
+		this.brandId = brandId;
+		this.importPrice = importPrice;
+		this.categoryId = categoryId;
+		this.imageUrl = imageUrl;
+		this.description = description;
+		this.status = status;
+		this.salePrice = salePrice;
+		this.productDetails = new ArrayList<>();
+	}
+
+	public Product(int productId, String productName, int brandId, BigDecimal importPrice, int categoryId,
+			String imageUrl, String description, BigDecimal salePrice, int status) {
+		this.productId = productId;
+		this.productName = productName;
+		this.brandId = brandId;
 		this.importPrice = importPrice;
 		this.categoryId = categoryId;
 		this.imageUrl = imageUrl;
@@ -53,6 +84,14 @@ public class Product {
 		this.productName = productName;
 	}
 
+	public int getBrandId() {
+		return brandId;
+	}
+
+	public void setBrandId(int brandId) {
+		this.brandId = brandId;
+	}
+
 	public String getBrand() {
 		return brand;
 	}
@@ -75,6 +114,14 @@ public class Product {
 
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public String getCategory() {
+		return categoryName;
+	}
+
+	public void setCategory(String category) {
+		this.categoryName = category;
 	}
 
 	public String getImageUrl() {
