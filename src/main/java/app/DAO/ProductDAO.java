@@ -43,9 +43,9 @@ public class ProductDAO {
 	public Product getProductById(int productId) {
 		String sql = "SELECT sp.idSP, sp.TENSP, sp.HANG, h.TENHANG, sp.GIANHAP,sp.idDM, d.LOAISP, sp.IMG, sp.MOTA, sp.GIABAN, sp.TRANGTHAI from sanpham sp join hang h ON sp.HANG=h.idHANG join danhmuc d on sp.idDM=d.idDM WHERE sp.idSP= ?";
 		try (Connection con = DBConnect.getConnection();
-				PreparedStatement st = con.prepareStatement(sql);
-				ResultSet rs = st.executeQuery()) {
+				PreparedStatement st = con.prepareStatement(sql)) {
 			st.setInt(1, productId);
+			ResultSet rs = st.executeQuery();
 			return new Product(
 					rs.getInt(1),
 					rs.getString(2),
