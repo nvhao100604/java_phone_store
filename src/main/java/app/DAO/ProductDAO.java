@@ -46,18 +46,20 @@ public class ProductDAO {
 				PreparedStatement st = con.prepareStatement(sql)) {
 			st.setInt(1, productId);
 			ResultSet rs = st.executeQuery();
-			return new Product(
-					rs.getInt(1),
-					rs.getString(2),
-					rs.getInt(3),
-					rs.getString(4),
-					rs.getBigDecimal(5),
-					rs.getInt(6),
-					rs.getString(7),
-					rs.getString(8),
-					rs.getString(9),
-					rs.getBigDecimal(10),
-					rs.getInt(11));
+			if (rs.next()) {
+				return new Product(
+						rs.getInt(1),
+						rs.getString(2),
+						rs.getInt(3),
+						rs.getString(4),
+						rs.getBigDecimal(5),
+						rs.getInt(6),
+						rs.getString(7),
+						rs.getString(8),
+						rs.getString(9),
+						rs.getBigDecimal(10),
+						rs.getInt(11));
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

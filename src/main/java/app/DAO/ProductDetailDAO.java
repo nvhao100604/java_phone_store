@@ -35,4 +35,26 @@ public class ProductDetailDAO {
         return null;
     }
 
+    public ProductDetail getProductDetailByDetailId(int productDetailId) {
+        String sql = "SELECT * from chitietsanpham WHERE idCTSP=?";
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement st = con.prepareStatement(sql)) {
+            st.setInt(1, productDetailId);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return new ProductDetail(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getBigDecimal(5),
+                        rs.getInt(6),
+                        rs.getString(7));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

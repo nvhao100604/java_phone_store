@@ -16,6 +16,10 @@ public class ProductDetailBUS {
         return dao.getProductDetailById(productId);
     }
 
+    public ProductDetail getProductDetailByDetailId(int productDetailId) {
+        return dao.getProductDetailByDetailId(productDetailId);
+    }
+
     public static void main(String[] args) {
         ProductDetailBUS bus = new ProductDetailBUS();
         List<ProductDetail> list = bus.getProductDetailById(1);
