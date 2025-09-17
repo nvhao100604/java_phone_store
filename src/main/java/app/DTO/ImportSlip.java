@@ -1,8 +1,8 @@
 package app.DTO;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ImportSlip {
@@ -29,6 +29,13 @@ public class ImportSlip {
 		this.profit = profit;
 		this.status = status;
 		this.details = new ArrayList<>();
+	}
+
+	public ImportSlip(int supplierId, Date importDate, BigDecimal totalAmount, int profit) {
+		this.supplierId = supplierId;
+		this.importDate = importDate;
+		this.totalAmount = totalAmount;
+		this.profit = profit;
 	}
 
 	// Getters and Setters

@@ -1,12 +1,14 @@
 package app.DTO;
 
+import java.math.BigDecimal;
+
 public class ProductDetail {
 
 	private int productDetailId;
 	private int productId;
 	private String color;
 	private String capacity;
-	private float priceAdjustment;
+	private BigDecimal priceAdjustment;
 	private int stock;
 	private String imageUrl;
 
@@ -14,7 +16,7 @@ public class ProductDetail {
 	public ProductDetail() {
 	}
 
-	public ProductDetail(int productDetailId, int productId, String color, String capacity, float priceAdjustment,
+	public ProductDetail(int productDetailId, int productId, String color, String capacity, BigDecimal priceAdjustment,
 			int stock, String imageUrl) {
 		this.productDetailId = productDetailId;
 		this.productId = productId;
@@ -23,6 +25,14 @@ public class ProductDetail {
 		this.priceAdjustment = priceAdjustment;
 		this.stock = stock;
 		this.imageUrl = imageUrl;
+	}
+
+	public ProductDetail(int productDetailId, String color, String capacity,
+			int stock) {
+		this.productDetailId = productDetailId;
+		this.color = color;
+		this.capacity = capacity;
+		this.stock = stock;
 	}
 
 	// Getters and Setters
@@ -58,11 +68,11 @@ public class ProductDetail {
 		this.capacity = capacity;
 	}
 
-	public float getPriceAdjustment() {
+	public BigDecimal getPriceAdjustment() {
 		return priceAdjustment;
 	}
 
-	public void setPriceAdjustment(float priceAdjustment) {
+	public void setPriceAdjustment(BigDecimal priceAdjustment) {
 		this.priceAdjustment = priceAdjustment;
 	}
 
