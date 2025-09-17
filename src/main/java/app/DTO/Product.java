@@ -21,7 +21,6 @@ public class Product {
 
 	// Constructors
 	public Product() {
-		this.productDetails = new ArrayList<>();
 	}
 
 	public Product(int productId, String productName, int brandId, String brand, BigDecimal importPrice, int categoryId,
@@ -65,6 +64,16 @@ public class Product {
 		this.status = status;
 		this.salePrice = salePrice;
 		this.productDetails = new ArrayList<>();
+	}
+
+	public Product(int productId, String productName, BigDecimal importPrice,
+			int productDetailId, String color, String capacity, int stock) {
+		this.productId = productId;
+		this.productName = productName;
+		this.importPrice = importPrice;
+		this.productDetails = new ArrayList<>();
+		productDetails.add(new ProductDetail(
+				productDetailId, color, capacity, stock));
 	}
 
 	// Getters and Setters
