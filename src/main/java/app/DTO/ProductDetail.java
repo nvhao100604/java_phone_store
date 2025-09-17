@@ -27,6 +27,14 @@ public class ProductDetail {
 		this.imageUrl = imageUrl;
 	}
 
+	public ProductDetail(int productDetailId, String color, String capacity,
+			int stock) {
+		this.productDetailId = productDetailId;
+		this.color = color;
+		this.capacity = capacity;
+		this.stock = stock;
+	}
+
 	// Getters and Setters
 	public int getProductDetailId() {
 		return productDetailId;

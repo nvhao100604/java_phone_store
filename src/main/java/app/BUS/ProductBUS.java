@@ -5,10 +5,9 @@ import java.util.List;
 
 import app.DAO.ProductDAO;
 import app.DTO.Product;
-import app.DTO.ProductDetail;
 
 public class ProductBUS {
-	private ProductDAO dao;
+	private final ProductDAO dao;
 
 	public ProductBUS() {
 		dao = new ProductDAO();
@@ -30,8 +29,32 @@ public class ProductBUS {
 		return dao.deleteProductById(productId);
 	}
 
+	public int softDeleteProductById(int productId) {
+		return dao.softDeleteProductById(productId);
+	}
+
 	public int UpdateProduct(Product product) {
 		return dao.updateProduct(product);
+	}
+
+	public List<Product> searchProductsByName(String keyword) {
+		return dao.searchProductsByName(keyword);
+	}
+
+	public List<Product> filterProductsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
+		return dao.filterProductsByPriceRange(minPrice, maxPrice);
+	}
+
+	public List<Product> filterProductsByCategory(int categoryId) {
+		return dao.filterProductsByCategory(categoryId);
+	}
+
+	public List<Product> filterProductsByBrand(int brandId) {
+		return dao.filterProductsByBrand(brandId);
+	}
+
+	public List<Product> sortProductsByPrice(boolean ascending) {
+		return dao.sortProductsByPrice(ascending);
 	}
 
 	public static void main(String[] args) {

@@ -6,25 +6,25 @@ import app.DAO.ProductDetailDAO;
 import app.DTO.ProductDetail;
 
 public class ProductDetailBUS {
-    private ProductDetailDAO dao;
+	private ProductDetailDAO dao;
 
-    public ProductDetailBUS() {
-        dao = new ProductDetailDAO();
-    }
+	public ProductDetailBUS() {
+		dao = new ProductDetailDAO();
+	}
 
-    public List<ProductDetail> getProductDetailById(int productId) {
-        return dao.getProductDetailById(productId);
-    }
+	public List<ProductDetail> getProductDetailById(int productId) {
+		return dao.getProductDetailById(productId);
+	}
 
-    public ProductDetail getProductDetailByDetailId(int productDetailId) {
-        return dao.getProductDetailByDetailId(productDetailId);
-    }
+	public ProductDetail getProductDetailByDetailId(int productDetailId) {
+		return dao.getProductDetailByDetailId(productDetailId);
+	}
 
-    public static void main(String[] args) {
-        ProductDetailBUS bus = new ProductDetailBUS();
-        List<ProductDetail> list = bus.getProductDetailById(1);
-        for (ProductDetail detail : list) {
-            System.out.println("Product Detail check: " + detail.getColor() + " - " + detail.getCapacity());
-        }
-    }
+	public static void main(String[] args) {
+//        ProductDetailBUS bus = new ProductDetailBUS();
+//        List<ProductDetail> list = bus.getProductDetailById(1);
+//        for (ProductDetail detail : list) {
+//            System.out.println("Product Detail check: " + detail.getColor() + " - " + detail.getCapacity());
+//        }
+	}
 }
