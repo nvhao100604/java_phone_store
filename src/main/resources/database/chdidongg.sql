@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th9 14, 2025 lúc 04:35 AM
+-- Thời gian đã tạo: Th9 15, 2025 lúc 03:12 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -90,7 +90,7 @@ INSERT INTO `chitietsanpham` (`idCTSP`, `idSP`, `MAUSAC`, `DUNGLUONG`, `DIEUCHIN
 (10, 2, 'Đen', '512GB', 3000000, 'iphone-16-den.jpg'),
 (11, 2, 'Trắng', '128GB', -3000000, 'iphone-16-trang.jpg'),
 (12, 2, 'Trắng', '256GB', 0, 'iphone-16-trang.jpg'),
-(13, 2, 'tea', '128GB', -3000000, 'iphone-16-teal.jpg'),
+(13, 2, 'Xanh trà', '128GB', -3000000, 'iphone-16-teal.jpg'),
 (14, 2, 'Xanh dương', '128GB', -3000000, 'iPhone-16-Ultramarine1.jpg'),
 (15, 2, 'Xanh lá', '128GB', -3000000, 'Iphone 16.jpg'),
 (31, 3, 'Đen', '256GB', 0, 'SamSung Galaxy Z Flip 6.jpg'),
@@ -299,7 +299,7 @@ CREATE TABLE `khachhang` (
   `idkh` int(11) NOT NULL,
   `hoten` varchar(40) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `sdt` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `diachi` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
+  `diachi` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -309,8 +309,14 @@ CREATE TABLE `khachhang` (
 INSERT INTO `khachhang` (`idkh`, `hoten`, `sdt`, `diachi`) VALUES
 (1, 'Nguyễn Thanh Bình', '0902487107', '65 Nguyễn Du phường An Phú Quận 12 TPHCM'),
 (2, 'Trương Xuân Cảnh', '0902483119', '102 Nguyễn Công Trứ phường An Phú Quận 12 TPHCM'),
-(3, 'Vũ Hào', '0977453631', '1 An Định phường Xuân Thiều Quận 3 TPHCM'),
-(4, 'Nguyễn Minh Thành', '0907885606', '70 Đinh Bộ Lĩnh phường An Thành Quận 2 Hà Nội');
+(3, 'Nguyễn Vũ Hào', '0977453631', '1 An Định phường Xuân Thiều Quận 3 TPHCM'),
+(4, 'Nguyễn Minh Thành', '0907885606', '70 Đinh Bộ Lĩnh phường An Thành Quận 2 Hà Nội'),
+(5, 'Nguyễn Văn Khánh', '0946325157', '75/12 Nguyễn Văn Cừ, Phường 1, Quận 5, Tp. Hồ Chí '),
+(6, 'Hồ Văn Phương', '0935169720', '1A Cao Thắng, Phường 2, Quận 3, Tp. Hồ Chí Minh'),
+(7, 'Dương Văn Chiêu', '0835764210', '149 Nguyễn Thị Minh Khai, Phường Phạm Ngũ Lão, Quậ'),
+(8, 'Nguyễn Thiên Phúc', '0375861720', '193/13 Nam Kỳ Khởi Nghĩa, Phường Võ Thị Sáu, Quận '),
+(9, 'Nguyễn Minh Phong', '0394481650', '159 Phan Xích Long, Phường 7, Quận Phú Nhuận, Tp. '),
+(10, 'Trần Khánh Duy', '0946753030', '35/7 Đường D5, Phường 25, Quận Bình Thạnh, Tp. Hồ ');
 
 -- --------------------------------------------------------
 
@@ -333,11 +339,11 @@ CREATE TABLE `khuyenmai` (
 --
 
 INSERT INTO `khuyenmai` (`MAKHUYENMAI`, `CODE`, `GIATRI`, `SOLUONG`, `NGAYAPDUNG`, `HANSUDUNG`, `TRANGTHAI`) VALUES
-(1, 'SALE10', 10000.00, 89, '2024-01-01', '2024-12-31', 1),
-(2, 'SALE20', 20000.00, 50, '2024-02-01', '2024-06-30', 1),
-(3, 'DISCOUNT15', 15000.00, 30, '2024-03-01', '2024-07-31', 1),
-(4, 'NEWYEAR25', 25000.00, 18, '2024-04-01', '2026-05-31', 1),
-(5, 'SUMMER30', 30000.00, 1, '2024-05-01', '2026-09-16', 1);
+(1, 'SALE10', 10000.00, 89, '2025-09-01', '2025-12-31', 1),
+(2, 'SALE20', 20000.00, 50, '2025-09-15', '2025-12-15', 1),
+(3, 'DISCOUNT15', 15000.00, 30, '2025-10-01', '2025-12-24', 1),
+(4, 'NEWYEAR25', 25000.00, 18, '2025-10-15', '2026-01-01', 1),
+(5, 'SUMMER30', 30000.00, 20, '2025-06-01', '2025-12-31', 1);
 
 -- --------------------------------------------------------
 
@@ -360,7 +366,7 @@ CREATE TABLE `nhacungcap` (
 INSERT INTO `nhacungcap` (`idNCC`, `TENNCC`, `SDT`, `DIACHI`, `TRANGTHAI`) VALUES
 (1, 'Công ty TNHH A', '0123456789', 'Ngõ 11, Đường Tôn Thất Tùng, Đống Đa Hà Nội', 1),
 (2, 'Công ty TNHH B', '0123456789', 'Huỳnh Tấn Phát – Tổ 12 – Khu Phố 2 – TT.Nhà Bè', 1),
-(3, 'X Kong ty', '0123456789', 'Phố Tô Vĩnh Diễn, phường Khương Trung, quận Thanh ', 1),
+(3, 'Công ty X', '0123456789', 'Phố Tô Vĩnh Diễn, phường Khương Trung, quận Thanh ', 1),
 (4, 'Công ty C', '0371956740', 'Đường Lê Lợi, phường Bến Nghé, Quận 1, Thành phố H', 0),
 (5, 'Công ty TNHH Duy', '0123456780', 'Đ.Trần Xuân Soạn, Tân Hưng, Quận 7, TP.HCM', 1),
 (6, 'Công ty D', '0234523984', 'Đường Trần Duy Hưng, Quận Cầu Giấy , TP Hà Nội', 1);
@@ -378,6 +384,13 @@ CREATE TABLE `nhanvien` (
   `DIACHI` varchar(255) NOT NULL,
   `TINHTRANG` varchar(40) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `nhanvien`
+--
+
+INSERT INTO `nhanvien` (`idTK`, `GIOITINH`, `NGAYSINH`, `DIACHI`, `TINHTRANG`) VALUES
+(1, 1, '1995-05-15', '459 Nguyễn Đình Chiểu', 'Đang làm');
 
 -- --------------------------------------------------------
 
@@ -509,6 +522,13 @@ CREATE TABLE `taikhoan` (
   `idQUYEN` int(11) NOT NULL DEFAULT 1,
   `TRANGTHAI` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `taikhoan`
+--
+
+INSERT INTO `taikhoan` (`idTK`, `USERNAME`, `PASSWORD`, `SDT`, `EMAIL`, `HOTEN`, `idQUYEN`, `TRANGTHAI`) VALUES
+(1, 'NV0001', '123456', '0946376320', 'admin@gmail.com', 'ADMIN', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -751,7 +771,7 @@ ALTER TABLE `hang`
 -- AUTO_INCREMENT cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `idkh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idkh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT cho bảng `khuyenmai`
