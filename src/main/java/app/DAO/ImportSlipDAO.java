@@ -79,12 +79,12 @@ public class ImportSlipDAO {
             // TODO: handle exception
             e.printStackTrace();
         }
-        return 0;
+        return -1;
     }
 
     public int updateImportSlip(ImportSlip importSlip) {
         if (importSlip.getImportSlipId() == 0) {
-            return 0;
+            return -1;
         }
 
         String sql = "UPDATE phieunhap SET idNCC=?, NGAYNHAP=?, THANHTIEN=?, LOINHUAN=?, TRANGTHAI=? WHERE idPN=?";
@@ -101,7 +101,7 @@ public class ImportSlipDAO {
             // TODO: handle exception
             e.printStackTrace();
         }
-        return 0;
+        return -1;
     }
 
     public int deleteImportSlip(int importSlipId) {
@@ -113,7 +113,7 @@ public class ImportSlipDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 0;
+        return -1;
     }
 
     public int softDeleteImportSlip(int importSlipId) {
@@ -125,7 +125,7 @@ public class ImportSlipDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 0;
+        return -1;
     }
 
     public List<ImportSlip> searchImportSlips(String keyword) {

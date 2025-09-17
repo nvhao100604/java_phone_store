@@ -15,7 +15,7 @@ public class Order {
 	private String address;
 	private Integer promotionCode;
 	private int status;
-	private int paymentId;
+	private PaymentMethod paymentId;
 	private List<OrderDetail> orderDetails;
 
 	public Order() {
@@ -23,7 +23,7 @@ public class Order {
 	}
 
 	public Order(int orderId, int accountId, int customerId, BigDecimal totalAmount, Date purchaseDate, String address,
-			Integer promotionCode, int status, int paymentId) {
+			Integer promotionCode, int status, PaymentMethod paymentId) {
 		this.orderId = orderId;
 		this.accountId = accountId;
 		this.customerId = customerId;
@@ -32,6 +32,18 @@ public class Order {
 		this.address = address;
 		this.promotionCode = promotionCode;
 		this.status = status;
+		this.paymentId = paymentId;
+		this.orderDetails = new ArrayList<>();
+	}
+
+	public Order(int accountId, int customerId, BigDecimal totalAmount, Date purchaseDate, String address,
+			Integer promotionCode, PaymentMethod paymentId) {
+		this.accountId = accountId;
+		this.customerId = customerId;
+		this.totalAmount = totalAmount;
+		this.purchaseDate = purchaseDate;
+		this.address = address;
+		this.promotionCode = promotionCode;
 		this.paymentId = paymentId;
 		this.orderDetails = new ArrayList<>();
 	}
@@ -100,11 +112,11 @@ public class Order {
 		this.status = status;
 	}
 
-	public int getPaymentId() {
+	public PaymentMethod getPaymentId() {
 		return paymentId;
 	}
 
-	public void setPaymentId(int paymentId) {
+	public void setPaymentId(PaymentMethod paymentId) {
 		this.paymentId = paymentId;
 	}
 
