@@ -32,11 +32,11 @@ public class ProductTypeBUS {
         return dao.deleteProductType(productTypeId);
     }
 
-    // public static void main(String[] args) {
-    //     ProductTypeBUS bus = new ProductTypeBUS();
-    //     List<ProductType> list = bus.getAll();
-    //     for (ProductType productType : list) {
-    //         System.out.println("Product Type check: " + productType.toString());
-    //     }
-    // }
+    public static void main(String[] args) {
+        ProductTypeBUS bus = new ProductTypeBUS();
+        List<ProductType> list = bus.getAll();
+        for (ProductType productType : list) {
+            System.out.println("Product Type check: " + productType.toString());
+        }
+    }
 }
