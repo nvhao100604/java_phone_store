@@ -1,7 +1,6 @@
 package app.DTO;
 
 public class Account {
-
 	private int accountId;
 	private String username;
 	private String password;
@@ -12,8 +11,7 @@ public class Account {
 	private int status;
 
 	// Constructors
-	public Account() {
-	}
+	public Account() {}
 
 	public Account(int accountId, String username, String password, String phoneNumber, String email, String fullName,
 			int roleId, int status) {
@@ -25,6 +23,15 @@ public class Account {
 		this.fullName = fullName;
 		this.roleId = roleId;
 		this.status = status;
+	}
+
+	public Account(String username, String password, String phoneNumber, String email, String fullName, int roleId) {
+		this.username = username;
+		this.password = password;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.fullName = fullName;
+		this.roleId = roleId;
 	}
 
 	// Getters and Setters
@@ -90,5 +97,20 @@ public class Account {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return 
+			"Account{" + 
+			"accountId=" + accountId + 
+			", username=" + username + 
+			", password=" + password + 
+			", phoneNumber=" + phoneNumber + 
+			", email=" + email + 
+			", fullName=" + fullName + 
+			", roleId=" + roleId +
+			", status=" + status + 
+			"}";
 	}
 }
