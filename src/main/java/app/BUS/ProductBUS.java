@@ -33,6 +33,10 @@ public class ProductBUS {
 		return dao.softDeleteProductById(productId);
 	}
 
+	public int restoreProduct(int productId) {
+		return dao.restoreProduct(productId);
+	}
+
 	public int UpdateProduct(Product product) {
 		return dao.updateProduct(product);
 	}

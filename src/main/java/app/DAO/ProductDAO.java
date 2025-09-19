@@ -150,6 +150,20 @@ public class ProductDAO {
 		return 0;
 	}
 
+	public int restoreProduct(int productId) {
+		String sql = "UPDATE sanpham SET TRANGTHAI=1 WHERE idSP= ?";
+		try (Connection con = DBConnect.getConnection();
+				PreparedStatement st = con.prepareStatement(sql)) {
+			st.setInt(1, productId);
+			int rowsAffect = st.executeUpdate();
+			// System.out.println("Rows: " + rowsAffect);
+			return rowsAffect;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
 	public List<Product> searchProductsByName(String keyword) {
 		List<Product> list = new ArrayList<>();
 		String sql = "SELECT sp.idSP, sp.TENSP, sp.HANG, h.TENHANG, sp.GIANHAP, sp.idDM, d.LOAISP, sp.IMG, sp.MOTA, sp.GIABAN, sp.TRANGTHAI from sanpham sp join hang h ON sp.HANG=h.idHANG join danhmuc d on sp.idDM=d.idDM WHERE sp.TENSP LIKE ? AND sp.TRANGTHAI=1";

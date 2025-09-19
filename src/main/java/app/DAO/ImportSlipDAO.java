@@ -128,6 +128,18 @@ public class ImportSlipDAO {
         return -1;
     }
 
+    public int restoreImportSlip(int importSlipId) {
+        String sql = "UPDATE phieunhap SET TRANGTHAI=1 WHERE idPN=?";
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, importSlipId);
+            return stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public List<ImportSlip> searchImportSlips(String keyword) {
         List<ImportSlip> list = new ArrayList<>();
         String sql = "SELECT * FROM phieunhap WHERE idPN LIKE ? OR idNCC LIKE ? OR NGAYNHAP LIKE ? OR THANHTIEN LIKE ? OR LOINHUAN LIKE ? OR TRANGTHAI LIKE ? AND TRANGTHAI=1";

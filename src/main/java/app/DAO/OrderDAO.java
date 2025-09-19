@@ -150,6 +150,18 @@ public class OrderDAO {
         return -1;
     }
 
+    public int restoreOrder(int orderId) {
+        String sql = "UPDATE donhang SET TRANGTHAI=1 WHERE idHD=?";
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public Order getOrderById(int orderId) {
         String sql = "SELECT * FROM donhang WHERE idHD=?";
         try (Connection con = DBConnect.getConnection();
@@ -205,7 +217,7 @@ public class OrderDAO {
 
     public List<Order> searchOrders(String keyword) {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM donhang WHERE idHD LIKE ? OR idTK LIKE ? OR idkh LIKE ? OR THANHTIEN LIKE ? OR NGAYMUA LIKE ? OR DIACHI LIKE ? OR MAKHUYENMAI LIKE ? OR TRANGTHAI LIKE ? OR PTTHANHTOAN LIKE ? AND TRANGTHAI=1";
+        String sql = "SELECT * FROM donhang WHERE (idHD LIKE ? OR idTK LIKE ? OR idkh LIKE ? OR THANHTIEN LIKE ? OR NGAYMUA LIKE ? OR DIACHI LIKE ? OR MAKHUYENMAI LIKE ? OR TRANGTHAI LIKE ? OR PTTHANHTOAN LIKE ?) AND TRANGTHAI=1";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
             String likeKeyword = "%" + keyword + "%";
