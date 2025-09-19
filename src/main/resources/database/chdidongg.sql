@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 17, 2025 at 05:55 AM
+-- Generation Time: Sep 19, 2025 at 06:48 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -215,8 +215,9 @@ INSERT INTO `chucnang` (`idCN`, `TENCN`, `TRANGTHAI`) VALUES
 (6, 'Nhân viên', 1),
 (7, 'Phân quyền', 1),
 (8, 'Tài khoản', 1),
-(10, 'Phiếu nhập', 1),
-(11, 'Thông tin nhân viên', 1);
+(9, 'Nhà sản xuất', 1),
+(10, 'Loại sản phẩm', 1),
+(11, 'Phiếu nhập', 1);
 
 -- --------------------------------------------------------
 
@@ -339,10 +340,15 @@ INSERT INTO `khachhang` (`idkh`, `hoten`, `sdt`, `diachi`) VALUES
 CREATE TABLE `khuyenmai` (
   `MAKHUYENMAI` int(11) NOT NULL,
   `CODE` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `MOTA` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `IS_PERCENT` tinyint(1) NOT NULL,
   `GIATRI` decimal(10,2) NOT NULL,
+  `PHANTRAM` int(2) NOT NULL,
   `SOLUONG` int(11) NOT NULL DEFAULT 0,
   `NGAYAPDUNG` date NOT NULL,
   `HANSUDUNG` date NOT NULL,
+  `HANG` int(11) DEFAULT NULL,
+  `DANHMUC` int(11) DEFAULT NULL,
   `TRANGTHAI` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -350,12 +356,12 @@ CREATE TABLE `khuyenmai` (
 -- Dumping data for table `khuyenmai`
 --
 
-INSERT INTO `khuyenmai` (`MAKHUYENMAI`, `CODE`, `GIATRI`, `SOLUONG`, `NGAYAPDUNG`, `HANSUDUNG`, `TRANGTHAI`) VALUES
-(1, 'SALE10', 10000.00, 89, '2024-01-01', '2024-12-31', 1),
-(2, 'SALE20', 20000.00, 50, '2024-02-01', '2024-06-30', 1),
-(3, 'DISCOUNT15', 15000.00, 30, '2024-03-01', '2024-07-31', 1),
-(4, 'NEWYEAR25', 25000.00, 18, '2024-04-01', '2026-05-31', 1),
-(5, 'SUMMER30', 30000.00, 1, '2024-05-01', '2026-09-16', 1);
+INSERT INTO `khuyenmai` (`MAKHUYENMAI`, `CODE`, `MOTA`, `IS_PERCENT`, `GIATRI`, `PHANTRAM`, `SOLUONG`, `NGAYAPDUNG`, `HANSUDUNG`, `HANG`, `DANHMUC`, `TRANGTHAI`) VALUES
+(1, 'SALE10', '', 0, 10000.00, 0, 89, '2024-01-01', '2024-12-31', 1, 2, 1),
+(2, 'SALE20', '', 0, 20000.00, 0, 50, '2024-02-01', '2024-06-30', 2, 3, 1),
+(3, 'DISCOUNT15', '', 0, 15000.00, 0, 30, '2024-03-01', '2024-07-31', 3, 1, 1),
+(4, 'NEWYEAR25', '', 0, 25000.00, 0, 18, '2024-04-01', '2026-05-31', 4, 4, 1),
+(5, 'SUMMER30', '', 0, 30000.00, 0, 1, '2024-05-01', '2026-09-16', 5, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -407,6 +413,17 @@ CREATE TABLE `phanquyen` (
   `idQUYEN` int(11) NOT NULL,
   `idCN` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `phanquyen`
+--
+
+INSERT INTO `phanquyen` (`idQUYEN`, `idCN`) VALUES
+(0, 1),
+(1, 2),
+(2, 3),
+(0, 4),
+(1, 5);
 
 -- --------------------------------------------------------
 
@@ -682,7 +699,9 @@ ALTER TABLE `khachhang`
 -- Indexes for table `khuyenmai`
 --
 ALTER TABLE `khuyenmai`
-  ADD PRIMARY KEY (`MAKHUYENMAI`);
+  ADD PRIMARY KEY (`MAKHUYENMAI`),
+  ADD KEY `hang-km` (`HANG`),
+  ADD KEY `dm-km` (`DANHMUC`);
 
 --
 -- Indexes for table `nhacungcap`
@@ -863,6 +882,13 @@ ALTER TABLE `donhang`
 --
 ALTER TABLE `imei`
   ADD CONSTRAINT `imei_ibfk_1` FOREIGN KEY (`idCTSP`) REFERENCES `chitietsanpham` (`idCTSP`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `khuyenmai`
+--
+ALTER TABLE `khuyenmai`
+  ADD CONSTRAINT `dm-km` FOREIGN KEY (`DANHMUC`) REFERENCES `danhmuc` (`idDM`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `hang-km` FOREIGN KEY (`HANG`) REFERENCES `hang` (`idHANG`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `nhanvien`
