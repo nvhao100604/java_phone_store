@@ -1,5 +1,6 @@
 package app.DTO;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Employee {
@@ -11,13 +12,14 @@ public class Employee {
     private Date dateOfBirth; 
     private String userName;
     private String address;
+    private BigDecimal salary;
     private int status;
 
     // Constructors
     public Employee() {}
 
     public Employee(int employeeId, String fullName, String gender, String phoneNumber, String email, Date dateOfBirth,
-                    String userName, String address, int status) {
+                    String userName, String address, BigDecimal salary, int status) {
         this.employeeId = employeeId;
         this.fullName = fullName;
         this.gender = gender;
@@ -26,6 +28,7 @@ public class Employee {
         this.dateOfBirth = dateOfBirth;
         this.userName = userName;
         this.address = address;
+        this.salary = salary;
         this.status = status;
     }
 
@@ -109,6 +112,14 @@ public class Employee {
         this.address = address;
     }
 
+    public BigDecimal getSalary() {
+        return salary;
+    }
+
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
+    }
+
     public int getStatus () {
         return status;
     }
@@ -128,6 +139,7 @@ public class Employee {
                 ", email=" + email +    
                 ", userName=" + userName +
                 ", address=" + address +
+                ", salary=" + salary +
                 ", status=" + status +
                 '}';
     }
