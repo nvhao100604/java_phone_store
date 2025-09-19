@@ -52,19 +52,13 @@ public class MainGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblTieuDe = new JLabel("");
-		lblTieuDe.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTieuDe.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblTieuDe.setBounds(10, 35, 414, 25);
-		contentPane.add(lblTieuDe);
-
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0, 64, 128));
 		panel.setBounds(0, 0, 230, 845);
 		add(panel);
 		
 		JButton btnPhiuNhp = new JButton("PHIẾU NHẬP");
-		btnPhiuNhp.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon phiếu nhập.jpg"));
+		btnPhiuNhp.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon phiếu nhập.jpg"));
 		btnPhiuNhp.setForeground(new Color(255, 255, 255));
 		btnPhiuNhp.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnPhiuNhp.setBounds(12, 255, 169, 60);
@@ -73,12 +67,18 @@ public class MainGUI extends JFrame {
 		btnPhiuNhp.setOpaque(false);
 		btnPhiuNhp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					giaodienphieunhap = new qlkho_phieunhap();
+					giaodienphieunhap.frmQunLKho.setVisible(true);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		panel.setLayout(null);
 		
 		JButton btnNewButton_11 = new JButton("SẢN PHẨM");
-		btnNewButton_11.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon sản phẩm.png"));
+		btnNewButton_11.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon sản phẩm.png"));
 		btnNewButton_11.setForeground(new Color(255, 255, 255));
 		btnNewButton_11.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_11.setBorderPainted(false); 
@@ -92,7 +92,7 @@ public class MainGUI extends JFrame {
 		panel.add(btnNewButton_11);
 		
 		JButton btnNewButton_10 = new JButton("NHÀ CUNG CẤP");
-		btnNewButton_10.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon nhà cung cấp.png"));
+		btnNewButton_10.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon nhà cung cấp.png"));
 		btnNewButton_10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -111,7 +111,7 @@ public class MainGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_8.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon thống kê.png"));
+		btnNewButton_8.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon thống kê.png"));
 		btnNewButton_8.setForeground(new Color(255, 255, 255));
 		btnNewButton_8.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_8.setBounds(2, 374, 167, 98);
@@ -121,7 +121,7 @@ public class MainGUI extends JFrame {
 		panel.add(btnNewButton_8);
 		
 		JButton btnNewButton_3 = new JButton("NHÂN VIÊN");
-		btnNewButton_3.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon nhân viên.jpg"));
+		btnNewButton_3.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon nhân viên.jpg"));
 		btnNewButton_3.setForeground(new Color(255, 255, 255));
 		btnNewButton_3.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_3.setBorderPainted(false); 
@@ -139,7 +139,7 @@ public class MainGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_7.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon hóa đơn.png"));
+		btnNewButton_7.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon hóa đơn.png"));
 		btnNewButton_7.setForeground(new Color(255, 255, 255));
 		btnNewButton_7.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_7.setBounds(2, 315, 167, 70);
@@ -149,7 +149,7 @@ public class MainGUI extends JFrame {
 		panel.add(btnNewButton_7);
 		
 		JLabel lblNewLabel_13 = new JLabel("");
-		lblNewLabel_13.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon tài khoản ( hiển thị ).png"));
+		lblNewLabel_13.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon tài khoản ( hiển thị ).png"));
 		lblNewLabel_13.setBounds(25, 691, 63, 55);
 		panel.add(lblNewLabel_13);
 		
@@ -185,7 +185,7 @@ public class MainGUI extends JFrame {
 				}
 			}
 		});
-		btnNewButton_14.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon tài khoản ( chức năng ).png"));
+		btnNewButton_14.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon tài khoản ( chức năng ).png"));
 		btnNewButton_14.setBounds(2, 458, 158, 55);
 		btnNewButton_14.setBorderPainted(false); 
 		btnNewButton_14.setContentAreaFilled(false);  

@@ -3,11 +3,11 @@ package app.DTO;
 public class ProductType {
     private int productTypeId;
     private String productTypeName;
-    private String productTypeStatus;
+    private int productTypeStatus;
 
     public ProductType() {}
- 
-    public ProductType(int productTypeId, String productTypeName, String productTypeStatus) {
+
+    public ProductType(int productTypeId, String productTypeName, int productTypeStatus) {
         this.productTypeId = productTypeId;
         this.productTypeName = productTypeName;
         this.productTypeStatus = productTypeStatus;
@@ -33,11 +33,11 @@ public class ProductType {
         this.productTypeName = productTypeName;
     }
 
-    public String getProductTypeStatus() {
+    public int getProductTypeStatus() {
         return productTypeStatus;
     }
 
-    public void setProductTypeStatus(String productTypeStatus) {
+    public void setProductTypeStatus(int productTypeStatus) {
         this.productTypeStatus = productTypeStatus;
     }
 
