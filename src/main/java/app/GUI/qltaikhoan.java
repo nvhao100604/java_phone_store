@@ -29,18 +29,17 @@ import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import java.awt.Font;
 
-public class qlkho_phieunhap {
+public class qltaikhoan {
 
-	public JFrame frmQunLKho;
+	public JFrame frmQunTaikhoan;
 	private JTable table;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private qltaikhoan giaodientaikhoan;
+	private qlkho_phieunhap giaodienphieunhap;
+
 	/**
 	 * Launch the application.
 	 */
@@ -48,8 +47,8 @@ public class qlkho_phieunhap {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					qlkho_phieunhap window = new qlkho_phieunhap();
-					window.frmQunLKho.setVisible(true);
+					qltaikhoan window = new qltaikhoan();
+					window.frmQunTaikhoan.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,7 +59,7 @@ public class qlkho_phieunhap {
 	/**
 	 * Create the application.
 	 */
-	public qlkho_phieunhap() {
+	public qltaikhoan() {
 		initialize();
 	}
 
@@ -68,19 +67,19 @@ public class qlkho_phieunhap {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmQunLKho = new JFrame();
-		frmQunLKho.setForeground(new Color(255, 255, 255));
-		frmQunLKho.setBackground(new Color(0, 64, 128));
-		frmQunLKho.setTitle("Quản lý phiếu nhập");
-		frmQunLKho.setBounds(100, 100, 1600, 1000);
-		frmQunLKho.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmQunLKho.getContentPane().setLayout(null);
+		frmQunTaikhoan = new JFrame();
+		frmQunTaikhoan.setForeground(new Color(255, 255, 255));
+		frmQunTaikhoan.setBackground(new Color(0, 64, 128));
+		frmQunTaikhoan.setTitle("Quản lý Tài Khoản");
+		frmQunTaikhoan.setBounds(100, 100, 1600, 1000);
+		frmQunTaikhoan.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmQunTaikhoan.getContentPane().setLayout(null);
 
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0, 64, 128));
 		panel.setBounds(0, 0, 230, 845);
-		frmQunLKho.getContentPane().add(panel);
+		frmQunTaikhoan.getContentPane().add(panel);
 		
 		JButton btnPhiuNhp = new JButton("PHIẾU NHẬP");
 		btnPhiuNhp.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon phiếu nhập.jpg"));
@@ -92,6 +91,12 @@ public class qlkho_phieunhap {
 		btnPhiuNhp.setOpaque(false);
 		btnPhiuNhp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					giaodienphieunhap = new qlkho_phieunhap();
+					giaodienphieunhap.frmQunLKho.setVisible(true);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		panel.setLayout(null);
@@ -196,12 +201,6 @@ public class qlkho_phieunhap {
 		btnNewButton_14.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_14.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					giaodientaikhoan = new qltaikhoan();
-					giaodientaikhoan.frmQunTaikhoan.setVisible(true);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
 			}
 		});
 		btnNewButton_14.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon tài khoản ( chức năng ).png"));
@@ -215,7 +214,7 @@ public class qlkho_phieunhap {
 		panel_1.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		panel_1.setBackground(new Color(255, 255, 255));
 		panel_1.setBounds(229, 0, 660, 142);
-		frmQunLKho.getContentPane().add(panel_1);
+		frmQunTaikhoan.getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 		
 		JButton btnNewButton = new JButton("");
@@ -291,7 +290,7 @@ public class qlkho_phieunhap {
 		panel_2.setBorder(new TitledBorder(null, "Tìm kiếm", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		panel_2.setBackground(new Color(255, 255, 255));
 		panel_2.setBounds(889, 0, 651, 142);
-		frmQunLKho.getContentPane().add(panel_2);
+		frmQunTaikhoan.getContentPane().add(panel_2);
 		panel_2.setLayout(null);
 		
 		JButton btnNewButton_6 = new JButton("Làm mới\r\n");
@@ -299,7 +298,7 @@ public class qlkho_phieunhap {
 		btnNewButton_6.setBounds(439, 34, 140, 55);
 		panel_2.add(btnNewButton_6);
 		
-		JLabel lblNewLabel_10 = new JLabel("Mã phiếu nhập:");
+		JLabel lblNewLabel_10 = new JLabel("Mã tài khoản:");
 		lblNewLabel_10.setBounds(39, 34, 100, 13);
 		panel_2.add(lblNewLabel_10);
 		
@@ -308,80 +307,9 @@ public class qlkho_phieunhap {
 		panel_2.add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblNewLabel_11 = new JLabel("Thời gian:");
-		lblNewLabel_11.setBounds(39, 89, 70, 13);
-		panel_2.add(lblNewLabel_11);
-		
-		textField_5 = new JTextField();
-		textField_5.setBounds(111, 86, 96, 19);
-		panel_2.add(textField_5);
-		textField_5.setColumns(10);
-		
-		JLabel lblNewLabel_12 = new JLabel("-");
-		lblNewLabel_12.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblNewLabel_12.setBounds(238, 86, 20, 13);
-		panel_2.add(lblNewLabel_12);
-		
-		textField_6 = new JTextField();
-		textField_6.setBounds(248, 86, 96, 19);
-		panel_2.add(textField_6);
-		textField_6.setColumns(10);
-		
-		JButton btnNewButton_9 = new JButton("");
-		btnNewButton_9.setBounds(190, 86, 68, 21);
-		panel_2.add(btnNewButton_9);
-		btnNewButton_9.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon chọn ngày.jpg"));
-		btnNewButton_9.setBorderPainted(false); 
-		btnNewButton_9.setContentAreaFilled(false);  
-		btnNewButton_9.setOpaque(false);
-		
-		JButton btnNewButton_12 = new JButton("");
-		btnNewButton_12.setBounds(322, 86, 85, 21);
-		panel_2.add(btnNewButton_12);
-		btnNewButton_12.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon chọn ngày.jpg"));
-		btnNewButton_12.setBorderPainted(false); 
-		btnNewButton_12.setContentAreaFilled(false);  
-		btnNewButton_12.setOpaque(false);
-		btnNewButton_12.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SpinnerDateModel model = new SpinnerDateModel();
-				JSpinner dateSpinner = new JSpinner(model);
-				dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd"));
-
-				int option = JOptionPane.showOptionDialog(
-				    null,
-				    dateSpinner,
-				    "Chọn thời gian",
-				    JOptionPane.OK_CANCEL_OPTION,
-				    JOptionPane.PLAIN_MESSAGE,
-				    null,
-				    null,
-				    null
-				);
-			}
-		});
-		btnNewButton_9.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SpinnerDateModel model = new SpinnerDateModel();
-				JSpinner dateSpinner = new JSpinner(model);
-				dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd"));
-
-				int option = JOptionPane.showOptionDialog(
-				    null,
-				    dateSpinner,
-				    "Chọn thời gian",
-				    JOptionPane.OK_CANCEL_OPTION,
-				    JOptionPane.PLAIN_MESSAGE,
-				    null,
-				    null,
-				    null
-				);
-			}
-		});
-		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(229, 345, 1311, 72);
-		frmQunLKho.getContentPane().add(scrollPane);
+		frmQunTaikhoan.getContentPane().add(scrollPane);
 		
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
@@ -405,50 +333,50 @@ public class qlkho_phieunhap {
 		table.getColumnModel().getColumn(1).setPreferredWidth(98);
 		scrollPane.setViewportView(table);
 		
-		JLabel lblNewLabel_6 = new JLabel("DANH SÁCH PHIẾU NHẬP");
+		JLabel lblNewLabel_6 = new JLabel("DANH SÁCH TÀI KHOẢN");
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_6.setBounds(812, 162, 195, 27);
-		frmQunLKho.getContentPane().add(lblNewLabel_6);
+		frmQunTaikhoan.getContentPane().add(lblNewLabel_6);
 		
 		JLabel lblNewLabel_3 = new JLabel("Mã phiếu:");
 		lblNewLabel_3.setBounds(262, 216, 60, 13);
-		frmQunLKho.getContentPane().add(lblNewLabel_3);
+		frmQunTaikhoan.getContentPane().add(lblNewLabel_3);
 		
 		textField_1 = new JTextField();
 		textField_1.setEditable(false);
 		textField_1.setBounds(333, 213, 269, 19);
-		frmQunLKho.getContentPane().add(textField_1);
+		frmQunTaikhoan.getContentPane().add(textField_1);
 		textField_1.setColumns(10);
 		
 		JLabel lblNewLabel_7 = new JLabel("Ngày lập:");
 		lblNewLabel_7.setBounds(262, 266, 60, 13);
-		frmQunLKho.getContentPane().add(lblNewLabel_7);
+		frmQunTaikhoan.getContentPane().add(lblNewLabel_7);
 		
 		textField_2 = new JTextField();
 		textField_2.setEditable(false);
 		textField_2.setBounds(333, 263, 269, 19);
-		frmQunLKho.getContentPane().add(textField_2);
+		frmQunTaikhoan.getContentPane().add(textField_2);
 		textField_2.setColumns(10);
 		
 		JLabel lblNewLabel_8 = new JLabel("Người lập:");
 		lblNewLabel_8.setBounds(947, 216, 60, 13);
-		frmQunLKho.getContentPane().add(lblNewLabel_8);
+		frmQunTaikhoan.getContentPane().add(lblNewLabel_8);
 		
 		textField_3 = new JTextField();
 		textField_3.setEditable(false);
 		textField_3.setBounds(1058, 213, 230, 19);
-		frmQunLKho.getContentPane().add(textField_3);
+		frmQunTaikhoan.getContentPane().add(textField_3);
 		textField_3.setColumns(10);
 		
 		JLabel lblNewLabel_9 = new JLabel("Nhà cung cấp:");
 		lblNewLabel_9.setBounds(947, 266, 101, 13);
-		frmQunLKho.getContentPane().add(lblNewLabel_9);
+		frmQunTaikhoan.getContentPane().add(lblNewLabel_9);
 		
 		textField_4 = new JTextField();
 		textField_4.setEditable(false);
 		textField_4.setBounds(1058, 263, 230, 19);
-		frmQunLKho.getContentPane().add(textField_4);
+		frmQunTaikhoan.getContentPane().add(textField_4);
 		textField_4.setColumns(10);
 	}
 }
