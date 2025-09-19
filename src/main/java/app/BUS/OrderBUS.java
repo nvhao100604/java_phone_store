@@ -38,6 +38,10 @@ public class OrderBUS {
         return dao.softDeleteOrder(orderId);
     }
 
+    public int restoreOrder(int orderId) {
+        return dao.restoreOrder(orderId);
+    }
+
     public Order getOrderById(int orderId) {
         return dao.getOrderById(orderId);
     }

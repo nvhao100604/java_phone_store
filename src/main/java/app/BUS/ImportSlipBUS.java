@@ -45,6 +45,10 @@ public class ImportSlipBUS {
         return dao.softDeleteImportSlip(importSlipId);
     }
 
+    public int restoreImportSlip(int importSlipId) {
+        return dao.restoreImportSlip(importSlipId);
+    }
+
     public boolean importDataFromExcel(String filePath) {
         try (FileInputStream fis = new FileInputStream(filePath);
                 Workbook workbook = new XSSFWorkbook(fis)) {
