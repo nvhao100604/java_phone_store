@@ -112,7 +112,7 @@ public class qlkho_phieunhap {
 
 		JButton btnNewButton_10 = new JButton("NHÀ CUNG CẤP");
 		btnNewButton_10.setIcon(new ImageIcon(
-				"C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Đồ án Nhóm\\Source code ( tổng hợp )\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon nhà cung cấp.png"));
+				"src\\main\\resources\\Ảnh\\icon nhà cung cấp.png"));
 		btnNewButton_10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
