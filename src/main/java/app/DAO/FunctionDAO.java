@@ -1,0 +1,53 @@
+package app.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import app.DTO.Function;
+import app.database.DBConnect;
+
+public class FunctionDAO {
+    public List<Function> getAll() {
+        List<Function> list = new ArrayList<>();
+        String sql = "SELECT * FROM chucnang";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql);
+            ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Function function = new Function (
+                        rs.getInt("idCN"),
+                        rs.getString("TENCN"),
+                        rs.getString("ICON"),
+                        rs.getInt("TRANGTHAI")
+                    );
+                    list.add(function);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        return list;
+    }
+
+    public List<Function> getFunction() {
+        List<Function> list = new ArrayList<>();
+        String sql = "SELECT idCN, TENCN FROM chucnang";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql);
+            ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Function function = new Function (
+                        rs.getInt("idCN"),
+                        rs.getString("TENCN")
+                    );
+                    list.add(function);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        return list;
+    }
+}
