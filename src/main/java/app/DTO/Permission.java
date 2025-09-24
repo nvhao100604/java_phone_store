@@ -20,6 +20,11 @@ public class Permission {
 		this.status = status;
 	}
 
+	public Permission(int permissionId, String permissionName) {
+		this.permissionId = permissionId;
+		this.permissionName = permissionName;
+	}
+
 	// Getters and Setters
 	public int getPermissionId() {
 		return permissionId;
