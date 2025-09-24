@@ -8,7 +8,7 @@ public class DBConnect {
 	private static Connection connection;
 	private static String host = "jdbc:p6spy:mysql://localhost:3306/chdidongg";
 	private static String userName = "root";
-	private static String password = "";
+	private static String password = "binh4321";
 
 	public static Connection getConnection() {
 		try {

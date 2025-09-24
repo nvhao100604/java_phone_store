@@ -7,12 +7,9 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
@@ -33,12 +30,10 @@ public class qltaikhoan {
 
 	public JFrame frmQunTaikhoan;
 	private JTable table;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
 	private JTextField textField;
 	private qlkho_phieunhap giaodienphieunhap;
+	private qltaikhoan_gdchinhsua giaodienchinhsua;
+	private qltaikhoan_gdthem giaodienthem;
 
 	/**
 	 * Launch the application.
@@ -224,7 +219,12 @@ public class qltaikhoan {
 		btnNewButton.setContentAreaFilled(false);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					giaodienthem= new qltaikhoan_gdthem();
+					giaodienthem.frmThmTiKhon.setVisible(true);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnNewButton.setBounds(20, 33, 55, 50);
@@ -245,6 +245,16 @@ public class qltaikhoan {
 		btnNewButton_2.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon chỉnh sửa.jpg"));
 		btnNewButton_2.setBorderPainted(false);
 		btnNewButton_2.setContentAreaFilled(false);
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					giaodienchinhsua= new qltaikhoan_gdchinhsua();
+					giaodienchinhsua.frmThmTiKhon.setVisible(true);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnNewButton_2.setBounds(171, 33, 66, 50);
 		panel_1.add(btnNewButton_2);
 		
@@ -295,88 +305,46 @@ public class qltaikhoan {
 		
 		JButton btnNewButton_6 = new JButton("Làm mới\r\n");
 		btnNewButton_6.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon làm mới.jpg"));
-		btnNewButton_6.setBounds(439, 34, 140, 55);
+		btnNewButton_6.setBounds(412, 51, 140, 55);
 		panel_2.add(btnNewButton_6);
 		
-		JLabel lblNewLabel_10 = new JLabel("Mã tài khoản:");
-		lblNewLabel_10.setBounds(39, 34, 100, 13);
-		panel_2.add(lblNewLabel_10);
-		
 		textField = new JTextField();
-		textField.setBounds(127, 34, 163, 19);
+		textField.setBounds(180, 68, 222, 21);
 		panel_2.add(textField);
 		textField.setColumns(10);
 		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"-- Chọn --", "mã tài khoản", "username", "số điện thoại", "email", "họ tên", "mã quyền hạn", "trạng thái"}));
+		comboBox.setBounds(45, 68, 125, 21);
+		panel_2.add(comboBox);
+		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(229, 345, 1311, 72);
+		scrollPane.setBounds(229, 199, 1311, 646);
 		frmQunTaikhoan.getContentPane().add(scrollPane);
 		
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, "", null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
 			},
 			new String[] {
-				"M\u00E3 phi\u1EBFu nh\u1EADp", "Ng\u00E0y nh\u1EADp phi\u1EBFu", "Ng\u01B0\u1EDDi nh\u1EADp", "Nh\u00E0 cung c\u1EA5p", "Th\u00E0nh ti\u1EC1n", "L\u1EE3i nhu\u1EADn", "Tr\u1EA1ng th\u00E1i"
+				"M\u00E3 t\u00E0i kho\u1EA3n", "T\u00EAn t\u00E0i kho\u1EA3n", "M\u1EADt kh\u1EA9u", "S\u1ED1 \u0111i\u1EC7n tho\u1EA1i", "\u0110\u1ECBa ch\u1EC9 Email", "H\u1ECD v\u00E0 T\u00EAn", "M\u00E3 quy\u1EC1n h\u1EA1n", "Tr\u1EA1ng th\u00E1i"
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
-				true, true, false, false, false, false, false
+				true, true, false, false, false, false, false, true
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
-		table.getColumnModel().getColumn(0).setPreferredWidth(94);
+		table.getColumnModel().getColumn(0).setPreferredWidth(85);
 		table.getColumnModel().getColumn(1).setPreferredWidth(98);
 		scrollPane.setViewportView(table);
 		
 		JLabel lblNewLabel_6 = new JLabel("DANH SÁCH TÀI KHOẢN");
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_6.setBounds(812, 162, 195, 27);
+		lblNewLabel_6.setBounds(807, 162, 195, 27);
 		frmQunTaikhoan.getContentPane().add(lblNewLabel_6);
-		
-		JLabel lblNewLabel_3 = new JLabel("Mã phiếu:");
-		lblNewLabel_3.setBounds(262, 216, 60, 13);
-		frmQunTaikhoan.getContentPane().add(lblNewLabel_3);
-		
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setBounds(333, 213, 269, 19);
-		frmQunTaikhoan.getContentPane().add(textField_1);
-		textField_1.setColumns(10);
-		
-		JLabel lblNewLabel_7 = new JLabel("Ngày lập:");
-		lblNewLabel_7.setBounds(262, 266, 60, 13);
-		frmQunTaikhoan.getContentPane().add(lblNewLabel_7);
-		
-		textField_2 = new JTextField();
-		textField_2.setEditable(false);
-		textField_2.setBounds(333, 263, 269, 19);
-		frmQunTaikhoan.getContentPane().add(textField_2);
-		textField_2.setColumns(10);
-		
-		JLabel lblNewLabel_8 = new JLabel("Người lập:");
-		lblNewLabel_8.setBounds(947, 216, 60, 13);
-		frmQunTaikhoan.getContentPane().add(lblNewLabel_8);
-		
-		textField_3 = new JTextField();
-		textField_3.setEditable(false);
-		textField_3.setBounds(1058, 213, 230, 19);
-		frmQunTaikhoan.getContentPane().add(textField_3);
-		textField_3.setColumns(10);
-		
-		JLabel lblNewLabel_9 = new JLabel("Nhà cung cấp:");
-		lblNewLabel_9.setBounds(947, 266, 101, 13);
-		frmQunTaikhoan.getContentPane().add(lblNewLabel_9);
-		
-		textField_4 = new JTextField();
-		textField_4.setEditable(false);
-		textField_4.setBounds(1058, 263, 230, 19);
-		frmQunTaikhoan.getContentPane().add(textField_4);
-		textField_4.setColumns(10);
 	}
 }

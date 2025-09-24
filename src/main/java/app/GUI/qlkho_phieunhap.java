@@ -29,7 +29,7 @@ import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import java.awt.Font;
 
-public class qlkho_phieunhap {
+public class qlkho_phieunhap extends JPanel {
 
 	public JFrame frmQunLKho;
 	private JTable table;
@@ -79,7 +79,7 @@ public class qlkho_phieunhap {
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0, 64, 128));
 		panel.setBounds(0, 0, 230, 845);
-		frmQunLKho.getContentPane().add(panel);
+		add(panel);
 
 		JButton btnPhiuNhp = new JButton("PHIẾU NHẬP");
 		btnPhiuNhp.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon phiếu nhập.jpg"));
