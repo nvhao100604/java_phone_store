@@ -191,6 +191,26 @@ public class MainGUI extends JFrame {
 		btnNewButton_14.setContentAreaFilled(false);  
 		btnNewButton_14.setOpaque(false);
 		panel.add(btnNewButton_14);
-	}
 
+		// Button to open PermissionGUI
+		JButton btnPermission = new JButton("PHÂN QUYỀN");
+		btnPermission.setForeground(new Color(255, 255, 255));
+		btnPermission.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnPermission.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon phân quyền.png")); 
+		btnPermission.setBounds(2, 520, 158, 55);
+		btnPermission.setBorderPainted(false);
+		btnPermission.setContentAreaFilled(false);
+		btnPermission.setOpaque(false);
+		btnPermission.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					app.GUI.PermissionGUI permissionGUI = new app.GUI.PermissionGUI();
+					permissionGUI.showPermissionTable();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		panel.add(btnPermission);
+	}
 }
