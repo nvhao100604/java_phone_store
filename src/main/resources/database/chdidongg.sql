@@ -1888,6 +1888,45 @@ CREATE TABLE `taikhoan` (
 
 -- --------------------------------------------------------
 
+INSERT INTO `taikhoan` (`idTK`, `USERNAME`, `PASSWORD`, `SDT`, `EMAIL`, `HOTEN`, `idQUYEN`, `TRANGTHAI`) VALUES
+(1, 'user1', 'pass1', '0123456789', 'user1@example.com', 'Nguyen Van A', 1, 1),
+(2, 'user2', 'pass2', '0987654321', 'user2@example.com', 'Le Thi B', 1, 1),
+(3, 'user3', 'pass3', '0345678923', 'user3@example.com', 'Tran Van C', 1, 1),
+(4, 'user4', 'pass4', '0765432189', 'user4@example.com', 'Pham Thi D', 1, 1),
+(5, 'user5', 'pass5', '0912345678', 'user5@example.com', 'Hoang Van E', 1, 1),
+(6, 'vu', '$2y$12$zeG2TV9guLeGLkzofNNlMOXHOhFHVZ7JCS75rwZM28KNHrjdinldi', '0367645099', 'nguyenvanvuem1705@gm', 'nguyenvu111', 1, 1),
+(7, 'vu12', '$2y$12$kKf0xVHtP9WTAjKiSeeEsee0JID5DIdjD8N3wDcKrCxRaMYF3.6B2', '0367645098', 'nguyenvanvuem1705@gm', 'nguyenvu111', 1, 1),
+(8, 'VU333', '$2y$12$xac1lRe.ljUaHoLrxVDKz.rrMWuKMRDmFJyMtYv3b3Gze3nPbaPq6', '0367645097', 'nguyenvanvuem1705@gm', 'nguyenvu222', 1, 1),
+(9, 'nguoideptrai', '$2y$12$4kqyNGv5RQ.IrtX0.Jz0.eM9FOZUyfV5.q.nwONQGR6gNPFUX622y', '0799697981', 'biedu.upes@gmail.com', 'ấy sì bà', 1, 1),
+(10, 'XuanCanh', '$2y$12$GtimSHuPw8QhzTkW.D0TbeD4jOfcSSeLgIhi4vnTkIxAys6jJGxJ2', '0397161910', 'xuanc38791@gmail.com', 'Trương Xuân Cảnh', 1, 1),
+(11, 'Xuân Cảnh Xuân Cảnh Xuân Cảnh ', '$2y$12$fMMjoSAHcsmCwQow0xGXgud6epKwXOgubFXp7ESfg006GjrKUeCO2', '0397161912', 'xuanc387911@gmail.com', 'Trương Xuân Cảnh', 0, 1),
+(12, '0123456789', '$2y$12$y0XCvAmrMLui506qX75s3O7yNIQ26B5SZo0wNb61phCITFaNZxLwW', '0123456787', 'nva.upes@gmail.com', 'Nguyễn Văn A', 1, 1),
+(13, 'tinhcha', '$2y$12$HcD85LlxGZg/Yg4JmCcp1u5Xiyqo04j96AjkU4QUpBw7pd6xFabZu', '0799697982', 'kememay.upes@gmail.com', 'ấy sì bà', 2, 1),
+(14, '12345', '$2y$12$gwTIglcGqbd/XLvpfV0zyeHuxw1cVC3wE55ST5Nfye4YS9corNBQ6', '0799697983', 'ketiamay.upes@gmail.com', 'dồ ái mồ', 1, 1),
+(15, '0123456780', '$2y$12$m9IqL/TLRksAkQ4.YRPmV.Bq2fndmuzL812j71PaNghoUf9AGaHa2', '0799697984', 'manbohiuthu2@gmail.com', 'hieu chu nhat', 0, 1),
+(16, '0123456785', '$2y$12$rQoUf67jzp5fz.Fdmv8KUOKgfk/M7BRd5ns/ToglRChH8vKLdotdK', '0799697985', 'manbohiuthu3@gmail.com', 'hieu thu 7', 1, 1),
+(17, '0987656764', '$2y$12$33hBtujgxAo0N9G5JRzFJuKEJsoWKNN1ARizShleyHgNaPDOGVVze', '0987656764', 'dinhv@gmail.com', 'Nguyễn Đình V', 2, 1),
+(18, '0858482144', '$2y$12$gYZ8DsQZHdoeH6KEAgGuBOBK2K7554FCQ1ugqjs/MtT2edPz9h8KC', '0858482144', 'thuong2004@gmail.com', 'Nguyễn Ngọc T', 1, 0),
+(19, '0858482145', '$2y$12$PezdQLA4uILRc5ovsSwiFOdODj6ROmqtaLuK9D6swE7MT89zK6yKC', '0858482145', 'thuong1605@gmail.com', 'Võ Hoàng V', 0, 1),
+(20, '0858487778', '$2y$12$Pdphqh168riXjV.QPZEteekQzVDufTgqf.jTfLBI1sSnzaXds6gcO', '0858487778', 'thu16052004@gmail.com', 'Võ Thị Thư', 2, 1),
+(21, '0858482140', '$2y$12$8S/dyJ8OnIlAbrJZLqBjUunWfRfWCGJu1a.dxyEmLhSw/nZvcCOvC', '0858482140', 'thuong@gmail.com', 'ttt', 2, 1),
+(22, '0858482111', '$2y$12$7dTYKEaykVzLjf6T70PL0epVwRusQCJBhIb40xCl8Hkw7vqXKxcrq', '0858482111', 'aaa@gmail.com', 'Nguyễn Văn A', 2, 1),
+(23, '0123333333', '$2y$12$w2rL56W8zgOxnvrRO30mYezVk6Ep3ObKc12p2EtibdJ0GPk4sN9yC', '0123333333', 'aba@gmail.com', 'Nguyễn Văn B', 2, 1),
+(24, 'NV24', '$2y$12$wU/xVsT4qat07QeUsiQfwOjK4bEQj6XuGLoqQJ1F8Il4Wn3wiw2P.', '0326749382', 'dinhnhu97@gmail.com', 'Nguyễn Đình Như', 2, 1),
+(25, 'NV25', '$2y$12$UY7mXcsghzNyi2DbRUJqv.gLBmARkPG4hXbrMbU/l2jQXv2F7ZFU2', '0234567891', 'acv@gmail.com', 'Nguyễn Thị C', 2, 1),
+(26, 'NV26', '$2y$12$klxL3IusLpdLTcHjjVMFdeNkY5ez59JrUovjTqGesZkSORqloLmlS', '0234567888', 'acv@gmail.com', 'Mất tttttt', 2, 1),
+(27, 'NV27', '$2y$12$xYXzqCfwklMaZbBu6MFxK.j0nNzeU93SxR92oY109z1Aw8rOaXL4u', '0234567800', 'acv@gmail.com', 'Hoàng Văn C', 2, 1),
+(28, 'NV28', '$2y$12$Gdrcq7TZ0/wYpN4LDU1Zd.DPZW8JC5frI4pBGx7QiWLe3COpF4TBG', '0234567833', 'acv@gmail.com', 'Mất não', 2, 1),
+(29, 'NV29', '$2y$12$.UQAf8sFK5o3t8G/Pgom..s/5bOxgiCpwr6.ZPPQBZFZ2wx45dH8a', '0234567855', 'duyhao@gmail.com', 'Trần Duy Hào', 2, 1),
+(30, 'NV30', '$2y$12$t8ZY4UDR1DOPD9YvGLbPbuZTbv26U9/36OYlCA4ncOcBOZ.x/qlJa', '0332244669', 'truongsinhcanh1910@gmail.com', 'Trần Văn V', 2, 1),
+(31, 'NV31', '$2y$12$BRvWxhW53MiCPryNuc5cbexsyoF9tVTEoraJrWjGM3VB7ctdWD1/2', '0332244668', 'aba@gmail.com', 'Bành Thị Gái', 2, 1),
+(32, 'Nguoi dep trai', '$2y$12$AKvF3ISier6aVTnKs0cV9.z/2qmAXjTwr0ErG83a0TbaFOPBZWTWi', '0896727670', 'khuong@gmail.com', 'Trần Duy Khương', 2, 1),
+(33, 'Khương97', '$2y$12$DuL2wnEG7T43.waQPZHjTuBolxB5MTnx8eXs19KaTaf53LorjFtWG', '0706433641', 'khuong1@gmail.com', 'Trần Duy Khương', 0, 1),
+(34, 'NV34', '$2y$12$AczFTuqRBqAVNTgKv3eG5eaHCgWC4aTb7kjb8IsQe93AUb8FIaj56', '0799697989', 'biedit.upes@gmail.com', 'ài dố sì mốt', 2, 2),
+(35, 'thuong', '$2y$12$PhzaLWkjObJyFJVGnF0lte9IpTq1P4rVyKlc3Ar6kqQ15V9HTJfRi', '0858482103', 'thuong16052004@gmail.com', 'Võ Thị Thương', 0, 1),
+(38, 'thuong1', '$2y$12$8d4vLrBadqaO87iXNb1haO.geRdC.IEum3NvS0e59Q7NCLx0vXVge', '0858482104', 'tttt052004@gmail.com', 'Võ Thị T', 0, 1);
+
+
 --
 -- Cấu trúc bảng cho bảng `thongsokythuat`
 --
