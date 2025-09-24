@@ -69,7 +69,7 @@ public class MainGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					giaodienphieunhap = new qlkho_phieunhap();
-					giaodienphieunhap.setVisible(true);
+					giaodienphieunhap.frmQlkho.setVisible(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
