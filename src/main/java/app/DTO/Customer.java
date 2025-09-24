@@ -18,6 +18,12 @@ public class Customer {
 		this.address = address;
 	}
 
+	public Customer(String fullName, String phoneNumber, String address) {
+		this.fullName = fullName;
+		this.phoneNumber = phoneNumber;
+		this.address = address;
+	}
+
 	// Getters and Setters
 	public int getCustomerId() {
 		return customerId;

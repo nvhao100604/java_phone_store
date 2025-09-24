@@ -14,7 +14,7 @@ import app.database.DBConnect;
 public class EmployeeDAO {
     public List<Employee> getAll() {
         List<Employee> list = new ArrayList<>();
-        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, NV.NGAYSINH, tk.USERNAME, nv.DIACHI, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK";
+        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, NV.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql);
             ResultSet rs = st.executeQuery()) {
@@ -28,7 +28,8 @@ public class EmployeeDAO {
                         rs.getDate(6),
                         rs.getString(7),
                         rs.getString(8),
-                        rs.getInt(9)
+                        rs.getBigDecimal(9),
+                        rs.getInt(10)
                     );
                     list.add(employee);
                 }
@@ -39,7 +40,7 @@ public class EmployeeDAO {
     }
 
     public Employee getEmployeeById(int employeeId) {
-        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, NV.NGAYSINH, tk.USERNAME, nv.DIACHI, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK WHERE nv.idTK = ?";
+        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, NV.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN WHERE nv.idTK = ?";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql);
             ResultSet rs = st.executeQuery()) {
@@ -53,7 +54,8 @@ public class EmployeeDAO {
                     rs.getDate(6),
                     rs.getString(7),
                     rs.getString(8),
-                    rs.getInt(9)
+                    rs.getBigDecimal(9),
+                    rs.getInt(10)
                 );
             } catch (Exception e) {
                 e.printStackTrace();

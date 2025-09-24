@@ -8,23 +8,23 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.DTO.ProductType;
+import app.DTO.Company;
 import app.database.DBConnect;
 
-public class ProductTypeDAO {
-    public List<ProductType> getAll() {
-        List<ProductType> list = new ArrayList<>();
-        String sql = "SELECT * FROM danhmuc";
+public class CompanyDAO {
+    public List<Company> getAll() {
+        List<Company> list = new ArrayList<>();
+        String sql = "SELECT * FROM hang";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql);
             ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
-                    ProductType productType = new ProductType(
-                        rs.getInt("idDM"),
-                        rs.getString("LOAISP"),
+                    Company company = new Company(
+                        rs.getInt("idHANG"),
+                        rs.getString("TENHANG"),
                         rs.getInt("TRANGTHAI")
                     );
-                    list.add(productType);
+                    list.add(company);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -32,15 +32,15 @@ public class ProductTypeDAO {
         return list;
     }
 
-    public ProductType getProductTypeById(int productTypeId) {
-        String sql = "SELECT * FROM danhmuc WHERE idDM = ?";
+    public Company getCompanyById(int companyId) {
+        String sql = "SELECT * FORM hang WHERE idHANG = ?";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql);
             ResultSet rs = st.executeQuery()) {
-                st.setInt(1, productTypeId);
-                return new ProductType(
-                    rs.getInt("idDM"),
-                    rs.getString("LOAISP"),
+                st.setInt(1, companyId);
+                return new Company(
+                    rs.getInt("idHANG"),
+                    rs.getString("TENHANG"),
                     rs.getInt("TRANGTHAI")
                 );
             } catch (Exception e) {
@@ -49,16 +49,16 @@ public class ProductTypeDAO {
         return null;
     }
 
-    public int addProductType(ProductType productType) {
-        String sql = "INSERT INTO danhmuc (LOAISP) VALUES (?)";
+    public int addCompany(Company company) {
+        String sql = "INSERT INTO hang (TENHANG) VALUES (?)";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
-                stmt.setString(1, productType.getProductTypeName());
+                stmt.setString(1, company.getCompanyName());
                 stmt.executeUpdate();
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         int generatedId = rs.getInt(1);
-                        System.out.println("Inserted product type ID: " + generatedId);
+                        System.out.println("Inserted company ID: " + generatedId);
                         return generatedId;
                     }
                 }
@@ -68,13 +68,13 @@ public class ProductTypeDAO {
         return 0;
     }
 
-    public int updateProductType(ProductType productType) {
-        String sql = "UPDATE danhmuc SET LOAISP = ?, TRANGTHAI = ? WHERE idDM = ?";
+    public int updateCompany(Company company) {
+        String sql = "UPDATE hang SET TENHANG = ?, TRANGTHAI = ? WHERE idHANG = ?";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setString(1, productType.getProductTypeName());
-                stmt.setInt(2, productType.getProductTypeStatus());
-                stmt.setInt(3, productType.getProductTypeId());
+                stmt.setString(1, company.getCompanyName());
+                stmt.setInt(2, company.getCompanyStatus());
+                stmt.setInt(3, company.getCompanyId());
                 return stmt.executeUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -82,13 +82,13 @@ public class ProductTypeDAO {
         return 0;
     }
 
-    public int deleteProductType(int productTypeId) {
-        String sql = "DELETE FROM danhmuc WHERE idDM = ?";
+    public int deleteCompany(int companyId) {
+        String sql = "DELETE FORM hang WHERE idHANG = ?";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setInt(1, productTypeId);
+                stmt.setInt(1, companyId);
                 int rowsAffected = stmt.executeUpdate();
-                System.out.println("Deleted rows: " + rowsAffected);
+                System.out.println("Rows affected: " + rowsAffected);
                 return rowsAffected;
             } catch (Exception e) {
                 e.printStackTrace();
