@@ -13,6 +13,10 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.table.DefaultTableModel;
+
+import app.BUS.ImportSlipBUS;
+import app.DTO.ImportSlip;
+
 import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
@@ -26,6 +30,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 
 import java.awt.GridLayout;
+import java.awt.List;
+
 import javax.swing.BoxLayout;
 import java.awt.Font;
 
@@ -41,6 +47,8 @@ public class qlkho_phieunhap {
 	private JTextField textField_5;
 	private JTextField textField_6;
 	private qltaikhoan giaodientaikhoan;
+	private ImportSlipBUS bus;
+
 	/**
 	 * Launch the application.
 	 */
@@ -61,6 +69,7 @@ public class qlkho_phieunhap {
 	 * Create the application.
 	 */
 	public qlkho_phieunhap() {
+		bus = new ImportSlipBUS();
 		initialize();
 	}
 
@@ -395,15 +404,17 @@ public class qlkho_phieunhap {
 		scrollPane.setBounds(229, 345, 1311, 72);
 		frmQlkho.getContentPane().add(scrollPane);
 
+		java.util.List<ImportSlip> importSlipList = bus.getAllActiveImportSlips();
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
-				new Object[][] {
-						{ null, "", null, null, null, null, null },
-						{ null, null, null, null, null, null, null },
-						{ null, null, null, null, null, null, null },
-				},
+				importSlipList.size() > 0
+						? importSlipList.stream()
+								.map(s -> new Object[] { s.getImportSlipId(), s.getImportDate(),
+										s.getSupplierId(), s.getTotalAmount(), s.getProfit(), s.getStatus() })
+								.toArray(Object[][]::new)
+						: new Object[][] { { null, null, null, null, null, null, null } },
 				new String[] {
-						"M\u00E3 phi\u1EBFu nh\u1EADp", "Ng\u00E0y nh\u1EADp phi\u1EBFu", "Ng\u01B0\u1EDDi nh\u1EADp",
+						"M\u00E3 phi\u1EBFu nh\u1EADp", "Ng\u01B0\u1EDDi nh\u1EADp",
 						"Nh\u00E0 cung c\u1EA5p", "Th\u00E0nh ti\u1EC1n", "L\u1EE3i nhu\u1EADn", "Tr\u1EA1ng th\u00E1i"
 				}) {
 			boolean[] columnEditables = new boolean[] {
@@ -464,4 +475,5 @@ public class qlkho_phieunhap {
 		frmQlkho.getContentPane().add(textField_4);
 		textField_4.setColumns(10);
 	}
+
 }
