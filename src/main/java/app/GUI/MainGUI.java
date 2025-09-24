@@ -69,7 +69,7 @@ public class MainGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					giaodienphieunhap = new qlkho_phieunhap();
-					giaodienphieunhap.frmQunLKho.setVisible(true);
+					giaodienphieunhap.setVisible(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -204,7 +204,7 @@ public class MainGUI extends JFrame {
 		btnPermission.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					app.GUI.PermissionGUI permissionGUI = new app.GUI.PermissionGUI();
+					PermissionGUI permissionGUI = new PermissionGUI();
 					permissionGUI.showPermissionTable();
 				} catch (Exception e1) {
 					e1.printStackTrace();
