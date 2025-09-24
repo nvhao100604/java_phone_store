@@ -88,7 +88,7 @@ public class qltaikhoan {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					giaodienphieunhap = new qlkho_phieunhap();
-					giaodienphieunhap.frmQunLKho.setVisible(true);
+					giaodienphieunhap.frmQlkho.setVisible(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
