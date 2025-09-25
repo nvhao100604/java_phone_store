@@ -49,11 +49,11 @@ public class FunctionDAO {
         return list;
     }
 
-    public static void main(String[] args) {
-        FunctionDAO dao = new FunctionDAO();
-        List<Function> functions = dao.getAll();
-        for (Function function : functions) {
-            System.out.println(function);
-        }
-    }
+    // public static void main(String[] args) {
+    // FunctionDAO dao = new FunctionDAO();
+    // List<Function> functions = dao.getAll();
+    // for (Function function : functions) {
+    // System.out.println(function.getFunctionName());
+    // }
+    // }
 }

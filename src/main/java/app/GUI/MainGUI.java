@@ -1,26 +1,15 @@
 package app.GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import app.DTO.Product;
 
 public class MainGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private qltaikhoan giaodientaikhoan;
-	private qlkho_phieunhap giaodienphieunhap;
 	private JPanel contentPane;
 	private sidebar navBar;
 
@@ -54,13 +43,18 @@ public class MainGUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+
+	public static MainGUI getInstance() {
+		return new MainGUI();
+	}
+
 	public MainGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Giao diện chính");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1600, 1000);
 
-		navBar = new sidebar();
+		navBar = new sidebar(this);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -201,7 +195,7 @@ public class MainGUI extends JFrame {
 		// btnNewButton_14.setOpaque(false);
 		// panel.add(btnNewButton_14);
 
-		// // Button to open PermissionGUI
+		// Button to open PermissionGUI
 		// JButton btnPermission = new JButton("PHÂN QUYỀN");
 		// btnPermission.setForeground(new Color(255, 255, 255));
 		// btnPermission.setFont(new Font("Tahoma", Font.BOLD, 11));

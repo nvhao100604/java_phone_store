@@ -1,3 +1,4 @@
 /target
 spy.log
-/src/main/java/app/database
+src/main/java/app/database
+**/app/database/

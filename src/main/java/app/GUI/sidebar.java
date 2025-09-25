@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.function.Function;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -15,26 +14,28 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import app.BUS.FunctionBUS;
+import app.DTO.Function;
 
 public class sidebar extends JPanel {
 	// JButton btnPhiuNhp, btnNewButton_11, btnNewButton_10, btnNewButton_8,
 	// btnNewButton_3, btnNewButton_7,
 	// btnNewButton_13, btnNewButton_14;
 	JLabel lblNewLabel_13, lblNewLabel_14;
+	private MainGUI mainGUI;
 	private final FunctionBUS bus;
 
-	public void InitialGUI(Class<?> guiClass, JFrame mainGUI) {
+	public void InitialGUI(Class<?> guiClass) {
 		try {
 			Object guiInstance = guiClass.getDeclaredConstructor().newInstance();
 			if (guiInstance instanceof JPanel) {
-				setContent((JPanel) guiInstance, mainGUI);
+				setContent((JPanel) guiInstance);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void setContent(JPanel newPanel, JFrame mainGUI) {
+	public void setContent(JPanel newPanel) {
 		mainGUI.getContentPane().removeAll();
 		mainGUI.add(this, BorderLayout.NORTH); // nhớ add lại navbar
 		newPanel.setBounds(230, 0, 1354, 845);
@@ -43,9 +44,10 @@ public class sidebar extends JPanel {
 		mainGUI.repaint();
 	}
 
-	public sidebar() {
-		initialize();
+	public sidebar(MainGUI mainGUI) {
+		this.mainGUI = mainGUI;
 		bus = new FunctionBUS();
+		initialize();
 	}
 
 	private void initialize() {
@@ -180,14 +182,27 @@ public class sidebar extends JPanel {
 		// btnNewButton_14.setOpaque(false);
 		// add(btnNewButton_14);
 
-		List<app.DTO.Function> functions = bus.getAll();
-		System.out.println(functions.size());
+		List<Function> functions = bus.getAll();
+		// System.out.println(functions.size());
+		for (Function function : functions) {
+			System.out.println("check function: " + function.getFunctionName());
+			SideBarButton button = new SideBarButton(function.getFunctionName(),
+					"src\\main\\resources\\Ảnh\\" + function.getIcon());
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					InitialGUI(function.getGuiClass());
+					System.out.println("check function: " + function.getGuiClass());
+				}
+			});
+			button.setBounds(10, (functions.indexOf(function) * 70), 149, 60);
+			add(button);
+		}
 	}
 
 	public class SideBarButton extends JButton {
 		public SideBarButton(String text, String iconPath) {
 			super(text);
-			setIcon(new ImageIcon(iconPath));
+			setIcon(new ImageIcon(iconPath != "" ? iconPath : ""));
 			setForeground(new Color(255, 255, 255));
 			setFont(new Font("Tahoma", Font.BOLD, 11));
 			setBorderPainted(false);
@@ -197,7 +212,7 @@ public class sidebar extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 				}
 			});
-			setBounds(10, 73, 149, 76);
+			// setBounds(10, 73, 149, 76);
 		}
 	}
 }
