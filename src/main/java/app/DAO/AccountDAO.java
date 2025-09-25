@@ -11,8 +11,8 @@ import java.util.List;
 import app.DTO.Account;
 import app.database.DBConnect;
 
-public class AccountDAO {
-    public List<Account> getAll() {
+public class AccountDAO { 
+    public List<Account> getAll() { // xuất hết dữ liệu tài khoản hiện có trong database
         List<Account> list = new ArrayList<>();
         String sql = "SELECT * FROM taikhoan";
         try (Connection con = DBConnect.getConnection();
@@ -37,7 +37,7 @@ public class AccountDAO {
         return list;
     }
 
-    public Account getAccountById(int accountId) {
+    public Account getAccountById(int accountId) { // tìm kiếm tài khoản
         String sql = "SELECT * FROM taikhoan WHERE idTK = ?";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql);
@@ -59,7 +59,7 @@ public class AccountDAO {
         return null;
     }
 
-    public int addAccount(Account account) {
+    public int addAccount(Account account) { // thêm 1 tài khoản mới
         String sql = "INSERT INTO taikhoan (USERNAME, PASSWORD, SDT, EMAIL, HOTEN, idQUYEN) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
@@ -83,7 +83,7 @@ public class AccountDAO {
         return 0;
     }
 
-    public int updateAccount(Account account) {
+    public int updateAccount(Account account) { // chỉnh sửa tài khoản hiện tại
         String sql = "UPDATE taikhoan SET USERNAME = ?, PASSWORD = ?, SDT = ?, EMAIL = ?, HOTEN = ?, idQUYEN = ?, TRANGTHAI = ? WHERE idTK = ?";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -102,7 +102,7 @@ public class AccountDAO {
         return 0;
     }
 
-    public int deleteAccount(int accountId) {
+    public int deleteAccount(int accountId) { // xóa tài khoản hiện có
         String sql = "DELETE FROM taikhoan WHERE idTK = ?";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement stmt = con.prepareStatement(sql)) {

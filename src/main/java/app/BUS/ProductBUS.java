@@ -63,28 +63,9 @@ public class ProductBUS {
 
 	public static void main(String[] args) {
 		ProductBUS bus = new ProductBUS();
-		// List<Product> list = bus.getAll();
-		// for (Product product : list) {
-		// System.out.println("Product check: " + product.getProductName());
-		// }
-
-		// Product myProduct = new Product(116, "Smartphone XYZ CAC CAC CAC", 1, new
-		// BigDecimal("500.00"), 4,
-		// "https://example.com/images/xyz.jpg",
-		// "A high-end smartphone with a powerful processor and a stunning display.",
-		// new BigDecimal("750.00"), 1);
-		// // int id = bus.AddProduct(myProduct);
-		// int id = bus.UpdateProduct(myProduct);
-		// if (id > 0) {
-		// System.out.println("Update thành công product với mã: " +
-		// myProduct.getProductId());
-		// } else {
-		// System.out.println("Lỗi mày");
-		// }
-		// ;
-		// int productId = 113;
-		// if (bus.DeleteProductById(productId) > 0) {
-		// System.out.printf("Deleted: %d", productId);
-		// }
+		List<Product> products = bus.getAll();
+		for (Product p : products) {
+			System.out.println(p.getProductName());
+		}
 	}
 }
