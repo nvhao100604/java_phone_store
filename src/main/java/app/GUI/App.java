@@ -1,5 +1,6 @@
 package app.GUI;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -35,7 +36,8 @@ public class App {
 	 */
 	private void initialize() {
 		frame = new MainGUI();
-		frame.setBounds(100, 100, 450, 300);
+		// frame.setBounds(100, 100);
+		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
