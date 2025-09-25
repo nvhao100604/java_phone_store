@@ -1,52 +1,25 @@
 package app.GUI;
-
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-public class sidebar {
-
-	private JFrame frame;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					sidebar window = new sidebar();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
-	public sidebar() {
+import javax.swing.JPanel;
+public class sidebar extends JPanel 
+{
+	JButton btnPhiuNhp,btnNewButton_11,btnNewButton_10,btnNewButton_8,btnNewButton_3,btnNewButton_7,btnNewButton_13,btnNewButton_14;
+	JLabel lblNewLabel_13,lblNewLabel_14;
+	public sidebar() 
+	{
 		initialize();
 	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.getContentPane().setBackground(new Color(0, 64, 128));
-		frame.setBounds(0,0,230,845);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JButton btnPhiuNhp = new JButton("PHIẾU NHẬP");
+	private void initialize() 
+	{
+		setBackground(new Color(0, 64, 128));
+		setBounds(0,0,230,845);
+		btnPhiuNhp = new JButton("PHIẾU NHẬP");
 		btnPhiuNhp.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon phiếu nhập.jpg"));
 		btnPhiuNhp.setForeground(new Color(255, 255, 255));
 		btnPhiuNhp.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -58,9 +31,8 @@ public class sidebar {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		frame.setLayout(null);
-
-		JButton btnNewButton_11 = new JButton("SẢN PHẨM");
+		setLayout(null);
+		btnNewButton_11 = new JButton("SẢN PHẨM");
 		btnNewButton_11.setIcon(new ImageIcon(
 				"src\\main\\resources\\Ảnh\\icon sản phẩm.png"));
 		btnNewButton_11.setForeground(new Color(255, 255, 255));
@@ -73,9 +45,8 @@ public class sidebar {
 			}
 		});
 		btnNewButton_11.setBounds(2, 135, 157, 76);
-		frame.add(btnNewButton_11);
-
-		JButton btnNewButton_10 = new JButton("NHÀ CUNG CẤP");
+		add(btnNewButton_11);
+		btnNewButton_10 = new JButton("NHÀ CUNG CẤP");
 		btnNewButton_10.setIcon(new ImageIcon(
 				"src\\main\\resources\\Ảnh\\icon nhà cung cấp.png"));
 		btnNewButton_10.addActionListener(new ActionListener() {
@@ -88,10 +59,9 @@ public class sidebar {
 		btnNewButton_10.setBorderPainted(false);
 		btnNewButton_10.setContentAreaFilled(false);
 		btnNewButton_10.setOpaque(false);
-		frame.add(btnNewButton_10);
-		frame.add(btnPhiuNhp);
-
-		JButton btnNewButton_8 = new JButton("THỐNG KÊ");
+		add(btnNewButton_10);
+		add(btnPhiuNhp);
+		btnNewButton_8 = new JButton("THỐNG KÊ");
 		btnNewButton_8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -104,9 +74,8 @@ public class sidebar {
 		btnNewButton_8.setBorderPainted(false);
 		btnNewButton_8.setContentAreaFilled(false);
 		btnNewButton_8.setOpaque(false);
-		frame.add(btnNewButton_8);
-
-		JButton btnNewButton_3 = new JButton("NHÂN VIÊN");
+		add(btnNewButton_8);
+		btnNewButton_3 = new JButton("NHÂN VIÊN");
 		btnNewButton_3.setIcon(new ImageIcon(
 				"src\\main\\resources\\Ảnh\\icon nhân viên.jpg"));
 		btnNewButton_3.setForeground(new Color(255, 255, 255));
@@ -119,9 +88,8 @@ public class sidebar {
 			}
 		});
 		btnNewButton_3.setBounds(10, 73, 149, 76);
-		frame.add(btnNewButton_3);
-
-		JButton btnNewButton_7 = new JButton("HÓA ĐƠN");
+		add(btnNewButton_3);
+		btnNewButton_7 = new JButton("HÓA ĐƠN");
 		btnNewButton_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -134,21 +102,18 @@ public class sidebar {
 		btnNewButton_7.setBorderPainted(false);
 		btnNewButton_7.setContentAreaFilled(false);
 		btnNewButton_7.setOpaque(false);
-		frame.add(btnNewButton_7);
-
-		JLabel lblNewLabel_13 = new JLabel("");
+		add(btnNewButton_7);
+		lblNewLabel_13 = new JLabel("");
 		lblNewLabel_13.setIcon(new ImageIcon(
 				"src\\main\\resources\\Ảnh\\icon tài khoản ( hiển thị ).png"));
 		lblNewLabel_13.setBounds(25, 691, 63, 55);
-		frame.add(lblNewLabel_13);
-
-		JLabel lblNewLabel_14 = new JLabel("Admin");
+		add(lblNewLabel_13);
+		lblNewLabel_14 = new JLabel("Admin");
 		lblNewLabel_14.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNewLabel_14.setForeground(new Color(255, 255, 255));
 		lblNewLabel_14.setBounds(90, 701, 45, 13);
-		frame.add(lblNewLabel_14);
-
-		JButton btnNewButton_13 = new JButton("Đăng xuất");
+		add(lblNewLabel_14);
+		btnNewButton_13 = new JButton("Đăng xuất");
 		btnNewButton_13.setBorderPainted(false);
 		btnNewButton_13.setContentAreaFilled(false);
 		btnNewButton_13.setOpaque(false);
@@ -159,9 +124,8 @@ public class sidebar {
 		btnNewButton_13.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnNewButton_13.setForeground(new Color(255, 255, 255));
 		btnNewButton_13.setBounds(43, 724, 149, 21);
-		frame.add(btnNewButton_13);
-
-		JButton btnNewButton_14 = new JButton("TÀI KHOẢN");
+		add(btnNewButton_13);
+		btnNewButton_14 = new JButton("TÀI KHOẢN");
 		btnNewButton_14.setForeground(new Color(255, 255, 255));
 		btnNewButton_14.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_14.addActionListener(new ActionListener() {
@@ -180,7 +144,6 @@ public class sidebar {
 		btnNewButton_14.setBorderPainted(false);
 		btnNewButton_14.setContentAreaFilled(false);
 		btnNewButton_14.setOpaque(false);
-		frame.add(btnNewButton_14);
+		add(btnNewButton_14);
 	}
-
 }
