@@ -11,8 +11,6 @@ public class khungchucnang extends JPanel
 { 
 	JButton btnNewButton,btnNewButton_1,btnNewButton_2,btnNewButton_4,btnNewButton_5;
 	JLabel lblNewLabel,lblNewLabel_1,lblNewLabel_2,lblNewLabel_4,lblNewLabel_5;
-	qltaikhoan_gdchinhsua giaodienchinhsua;
-	qltaikhoan_gdthem giaodienthem;
 	public khungchucnang() 
 	{
 		initialize();
@@ -30,12 +28,6 @@ public class khungchucnang extends JPanel
 		btnNewButton.setContentAreaFilled(false);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					giaodienthem= new qltaikhoan_gdthem();
-					giaodienthem.frmThmTiKhon.setVisible(true);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
 			}
 		});
 		btnNewButton.setBounds(20, 33, 55, 50);
@@ -56,12 +48,6 @@ public class khungchucnang extends JPanel
 		btnNewButton_2.setContentAreaFilled(false);
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					giaodienchinhsua= new qltaikhoan_gdchinhsua();
-					giaodienchinhsua.frmThmTiKhon.setVisible(true);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
 			}
 		});
 		btnNewButton_2.setBounds(171, 33, 66, 50);
