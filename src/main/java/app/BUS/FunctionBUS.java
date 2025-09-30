@@ -16,6 +16,10 @@ public class FunctionBUS {
         return DAO.getAll();
     }
 
+    public List<Function> getFunctionsForRole() {
+        return DAO.getFunctionsForRole();
+    }
+
     public List<Function> getFunction() {
         return DAO.getFunction();
     } 

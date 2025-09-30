@@ -182,7 +182,7 @@ public class sidebar extends JPanel {
 		// btnNewButton_14.setOpaque(false);
 		// add(btnNewButton_14);
 
-		List<Function> functions = bus.getAll();
+		List<Function> functions = bus.getFunctionsForRole();
 		// System.out.println(functions.size());
 		for (Function function : functions) {
 			System.out.println("check function: " + function.getFunctionName());
