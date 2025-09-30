@@ -34,7 +34,7 @@ public class FunctionDAO {
 
     public List<Function> getFunctionsForRole() {
         List<Function> list = new ArrayList<>();
-        String sql = "SELECT c.* FROM phanquyen pq JOIN quyen q ON pq.idQUYEN = q.idQUYEN JOIN chucnang c ON pq.idCN = c.idCN WHERE q.idQUYEN = 1";
+        String sql = "SELECT c.* FROM phanquyen pq JOIN quyen q ON pq.idQUYEN = q.idQUYEN JOIN chucnang c ON pq.idCN = c.idCN WHERE q.idQUYEN = 0";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql);
             ResultSet rs = st.executeQuery()) {
