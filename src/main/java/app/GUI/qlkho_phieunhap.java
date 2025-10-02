@@ -91,7 +91,7 @@ public class qlkho_phieunhap {
 		frmQlkho.getContentPane().add(panel);
 
 		JButton btnPhiuNhp = new JButton("PHIẾU NHẬP");
-		btnPhiuNhp.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon phiếu nhập.png"));
+		btnPhiuNhp.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon phiếu nhập.png"));
 		btnPhiuNhp.setForeground(new Color(255, 255, 255));
 		btnPhiuNhp.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnPhiuNhp.setBounds(12, 207, 169, 60);
@@ -105,7 +105,7 @@ public class qlkho_phieunhap {
 		panel.setLayout(null);
 
 		JButton btnNewButton_11 = new JButton("SẢN PHẨM");
-		btnNewButton_11.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon sản phẩm.png"));
+		btnNewButton_11.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon sản phẩm.png"));
 		btnNewButton_11.setForeground(new Color(255, 255, 255));
 		btnNewButton_11.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_11.setBorderPainted(false);
@@ -124,7 +124,7 @@ public class qlkho_phieunhap {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_8.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon thống kê.png"));
+		btnNewButton_8.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon thống kê.png"));
 		btnNewButton_8.setForeground(new Color(255, 255, 255));
 		btnNewButton_8.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_8.setBounds(2, 315, 167, 98);
@@ -134,7 +134,7 @@ public class qlkho_phieunhap {
 		panel.add(btnNewButton_8);
 
 		JButton btnNewButton_3 = new JButton("NHÂN VIÊN");
-		btnNewButton_3.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon nhân viên.png"));
+		btnNewButton_3.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon nhân viên.png"));
 		btnNewButton_3.setForeground(new Color(255, 255, 255));
 		btnNewButton_3.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_3.setBorderPainted(false);
@@ -152,7 +152,7 @@ public class qlkho_phieunhap {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_7.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon hóa đơn.png"));
+		btnNewButton_7.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon hóa đơn.png"));
 		btnNewButton_7.setForeground(new Color(255, 255, 255));
 		btnNewButton_7.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_7.setBounds(2, 265, 167, 70);
@@ -162,7 +162,7 @@ public class qlkho_phieunhap {
 		panel.add(btnNewButton_7);
 
 		JLabel lblNewLabel_13 = new JLabel("");
-		lblNewLabel_13.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon tài khoản ( hiển thị ).png"));
+		lblNewLabel_13.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon tài khoản ( hiển thị ).png"));
 		lblNewLabel_13.setBounds(25, 691, 63, 55);
 		panel.add(lblNewLabel_13);
 
@@ -198,7 +198,7 @@ public class qlkho_phieunhap {
 				}
 			}
 		});
-		btnNewButton_14.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon tài khoản ( chức năng ).png"));
+		btnNewButton_14.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon tài khoản ( chức năng ).png"));
 		btnNewButton_14.setBounds(11, 395, 158, 55);
 		btnNewButton_14.setBorderPainted(false);
 		btnNewButton_14.setContentAreaFilled(false);
@@ -213,7 +213,7 @@ public class qlkho_phieunhap {
 		btnNewButton_10.setBackground(new Color(255, 255, 255));
 		btnNewButton_10.setForeground(new Color(255, 255, 255));
 		btnNewButton_10.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnNewButton_10.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon phân quyền.png"));
+		btnNewButton_10.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon phân quyền.png"));
 		btnNewButton_10.setBounds(24, 450, 157, 70);
 		btnNewButton_10.setBorderPainted(false);
 		btnNewButton_10.setContentAreaFilled(false);
@@ -229,7 +229,7 @@ public class qlkho_phieunhap {
 
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setToolTipText("");
-		btnNewButton.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon thêm.png"));
+		btnNewButton.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon thêm.png"));
 		btnNewButton.setBorderPainted(false);
 		btnNewButton.setContentAreaFilled(false);
 		btnNewButton.addActionListener(new ActionListener() {
@@ -241,7 +241,7 @@ public class qlkho_phieunhap {
 		panel_1.add(btnNewButton);
 
 		JButton btnNewButton_1 = new JButton("");
-		btnNewButton_1.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon xóa.png"));
+		btnNewButton_1.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon xóa.png"));
 		btnNewButton_1.setBorderPainted(false);
 		btnNewButton_1.setContentAreaFilled(false);
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -252,7 +252,7 @@ public class qlkho_phieunhap {
 		panel_1.add(btnNewButton_1);
 
 		JButton btnNewButton_2 = new JButton("");
-		btnNewButton_2.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon chỉnh sửa.png"));
+		btnNewButton_2.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon chỉnh sửa.png"));
 		btnNewButton_2.setBorderPainted(false);
 		btnNewButton_2.setContentAreaFilled(false);
 		btnNewButton_2.setBounds(171, 33, 66, 50);
@@ -263,14 +263,14 @@ public class qlkho_phieunhap {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_4.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon nhập excel.png"));
+		btnNewButton_4.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon nhập excel.png"));
 		btnNewButton_4.setBorderPainted(false);
 		btnNewButton_4.setContentAreaFilled(false);
 		btnNewButton_4.setBounds(260, 33, 55, 50);
 		panel_1.add(btnNewButton_4);
 
 		JButton btnNewButton_5 = new JButton("");
-		btnNewButton_5.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon xuất excel.png"));
+		btnNewButton_5.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon xuất excel.png"));
 		btnNewButton_5.setBorderPainted(false);
 		btnNewButton_5.setContentAreaFilled(false);
 		btnNewButton_5.setBounds(343, 33, 55, 50);
@@ -304,7 +304,7 @@ public class qlkho_phieunhap {
 		panel_2.setLayout(null);
 
 		JButton btnNewButton_6 = new JButton("Làm mới\r\n");
-		btnNewButton_6.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon làm mới.png"));
+		btnNewButton_6.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon làm mới.png"));
 		btnNewButton_6.setBounds(439, 34, 140, 55);
 		panel_2.add(btnNewButton_6);
 
@@ -337,17 +337,17 @@ public class qlkho_phieunhap {
 		textField_6.setColumns(10);
 
 		JButton btnNewButton_9 = new JButton("");
-		btnNewButton_9.setBounds(190, 86, 68, 21);
+		btnNewButton_9.setBounds(188, 77, 70, 35);
 		panel_2.add(btnNewButton_9);
-		btnNewButton_9.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon chọn ngày.png"));
+		btnNewButton_9.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon chọn ngày.png"));
 		btnNewButton_9.setBorderPainted(false);
 		btnNewButton_9.setContentAreaFilled(false);
 		btnNewButton_9.setOpaque(false);
 
 		JButton btnNewButton_12 = new JButton("");
-		btnNewButton_12.setBounds(322, 86, 85, 21);
+		btnNewButton_12.setBounds(325, 77, 70, 40);
 		panel_2.add(btnNewButton_12);
-		btnNewButton_12.setIcon(new ImageIcon("C:\\Users\\DELL\\OneDrive\\Desktop\\Ngôn ngữ lập trình Java\\Các icon mới tìm được\\icon chọn ngày.png"));
+		btnNewButton_12.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon chọn ngày.png"));
 		btnNewButton_12.setBorderPainted(false);
 		btnNewButton_12.setContentAreaFilled(false);
 		btnNewButton_12.setOpaque(false);
