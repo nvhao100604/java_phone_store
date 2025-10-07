@@ -64,21 +64,22 @@ public class Function {
 	public Class<?> getGuiClass() {
 		switch (functionId) {
 			case 1:
+				return qltaikhoan.class;
 			case 2:
-				return ProductGUI.class;
 			case 3:
+				return PermissionGUI.class;
 			case 4:
+				return ProductGUI.class;
 			case 5:
 			case 6:
 			case 7:
-				return PermissionGUI.class;
 			case 8:
+				return qlkho_phieunhap.class;
 			case 9:
 			case 10:
 			case 11:
-				return qlkho_phieunhap.class;
 			default:
-				return ProductGUI.class; // or a default class
+				return ProductGUI.class;
 		}
 	}
 }

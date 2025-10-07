@@ -1,9 +1,9 @@
 package app.GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,9 +33,9 @@ public class sidebar extends JPanel {
 	}
 
 	private void initialize() {
+		setPreferredSize(new Dimension(200, 0));
 		setBackground(new Color(0, 64, 128));
-		setBounds(0, 0, 230, 845);
-		setLayout(null);
+		setLayout(new GridLayout(0, 1, 0, 0));
 
 		List<Function> functions = bus.getAll();
 		// System.out.println(functions.size());
@@ -49,7 +49,7 @@ public class sidebar extends JPanel {
 					System.out.println("check function: " + function.getGuiClass());
 				}
 			});
-			button.setBounds(10, (functions.indexOf(function) * 70), 180, 70);
+			button.setBounds(0, (functions.indexOf(function) * 50), 200, 50);
 			add(button);
 		}
 	}

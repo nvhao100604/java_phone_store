@@ -1,6 +1,7 @@
 package app.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -59,9 +60,11 @@ public class MainGUI extends JFrame {
 	}
 
 	public void setContent(JPanel newPanel) {
-		getContentPane().remove(contentPane);
-		// newPanel.setBounds(230, 0, 1354, 845);
-		add(newPanel);
+		getContentPane().removeAll();
+		contentPane = newPanel;
+		contentPane.setPreferredSize(new Dimension(0, 0));
+		getContentPane().add(navBar, BorderLayout.WEST);
+		getContentPane().add(contentPane, BorderLayout.CENTER);
 		revalidate();
 		repaint();
 	}
@@ -70,13 +73,13 @@ public class MainGUI extends JFrame {
 		setTitle("Giao diện chính");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1600, 1000);
+		setLayout(new BorderLayout());
 
 		navBar = new sidebar(this);
-		contentPane = new JPanel();
-		// contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setBounds(231, 0, 1300, 845);
-		// contentPane.setLayout(null);
+		contentPane = new ProductGUI();
+		contentPane.setPreferredSize(new Dimension(0, 0));
 		add(navBar, BorderLayout.WEST);
-		add(contentPane);
+		add(contentPane, BorderLayout.CENTER);
+		setVisible(true);
 	}
 }
