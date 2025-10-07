@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 25, 2025 at 05:35 PM
+-- Generation Time: Oct 07, 2025 at 12:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -208,17 +208,17 @@ CREATE TABLE `chucnang` (
 --
 
 INSERT INTO `chucnang` (`idCN`, `TENCN`, `ICON`, `TRANGTHAI`) VALUES
-(1, 'Thống kê', 'icon thống kê.png', 1),
-(2, 'Sản phẩm', '', 1),
-(3, 'Đơn hàng', '', 1),
-(4, 'Nhà cung cấp', '', 1),
-(5, 'Khuyến mãi', '', 1),
-(6, 'Nhân viên', '', 1),
-(7, 'Phân quyền', '', 1),
-(8, 'Tài khoản', '', 1),
-(9, 'Nhà sản xuất', '', 1),
-(10, 'Loại sản phẩm', '', 1),
-(11, 'Phiếu nhập', 'icon phiếu nhập.jpg', 1);
+(1, 'Tài khoản', 'icon tài khoản ( chức năng ).png', 1),
+(2, 'Nhân viên', 'icon nhân viên.png', 1),
+(3, 'Phân quyền', 'icon phân quyền.png', 1),
+(4, 'Sản phẩm', 'icon sản phẩm.png', 1),
+(5, 'Loại sản phẩm', 'icon loại sản phẩm.png', 1),
+(6, 'Nhà cung cấp', 'icon nhà cung cấp.png', 1),
+(7, 'Nhà sản xuất', 'icon nhà sản xuất.png', 1),
+(8, 'Phiếu nhập', 'icon phiếu nhập.png', 1),
+(9, 'Đơn hàng', 'icon hóa đơn.png', 1),
+(10, 'Khuyến mãi', 'icon khuyến mãi.png', 1),
+(11, 'Thống kê', 'icon thống kê.png', 1);
 
 -- --------------------------------------------------------
 
@@ -421,10 +421,10 @@ CREATE TABLE `phanquyen` (
 
 INSERT INTO `phanquyen` (`idQUYEN`, `idCN`) VALUES
 (0, 1),
-(1, 2),
-(2, 3),
-(0, 4),
-(1, 5);
+(0, 1),
+(0, 1),
+(0, 1),
+(0, 1);
 
 -- --------------------------------------------------------
 
@@ -772,7 +772,7 @@ ALTER TABLE `chitietsanpham`
 -- AUTO_INCREMENT for table `chucnang`
 --
 ALTER TABLE `chucnang`
-  MODIFY `idCN` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `idCN` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT for table `danhmuc`
