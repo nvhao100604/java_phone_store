@@ -1,14 +1,20 @@
 package app;
 
-import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
+import app.GUI.LoginGUI;
 import app.GUI.MainGUI;
+import app.utils.FadeTransition;
 
-public class PhoneStoreApplication {
-	private MainGUI frame;
+public class PhoneStoreApplication extends JFrame {
+	private CardLayout layout;
+	private JPanel mainPanel;
+	private LoginGUI login;
+	private MainGUI main;
 
 	/**
 	 * Launch the application.
@@ -18,7 +24,7 @@ public class PhoneStoreApplication {
 			public void run() {
 				try {
 					PhoneStoreApplication window = new PhoneStoreApplication();
-					window.frame.setVisible(true);
+					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -37,9 +43,43 @@ public class PhoneStoreApplication {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new MainGUI();
-		// frame.setBounds(100, 100);
-		frame.setLayout(new BorderLayout());
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		layout = new CardLayout();
+		mainPanel = new JPanel(layout);
+
+		login = new LoginGUI(this);
+		main = new MainGUI(this);
+
+		mainPanel.add(login, "login");
+		mainPanel.add(main, "main");
+
+		add(mainPanel);
+		// showLogin();
+		layout.show(mainPanel, "login");
+		mainPanel.revalidate();
+		mainPanel.repaint();
+		setSize(login.getPreferredSize());
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setVisible(true);
+	}
+
+	public void showMain() {
+		// layout.show(mainPanel, "main");
+		// mainPanel.revalidate();
+		// mainPanel.repaint();
+		// setSize(main.getPreferredSize());
+		// setLocationRelativeTo(null);
+
+		FadeTransition.switchPanel(mainPanel, login, main);
+	}
+
+	public void showLogin() {
+		// layout.show(mainPanel, "login");
+		// mainPanel.revalidate();
+		// mainPanel.repaint();
+		// setSize(login.getPreferredSize());
+		// setLocationRelativeTo(null);
+
+		FadeTransition.switchPanel(mainPanel, main, login);
 	}
 }
