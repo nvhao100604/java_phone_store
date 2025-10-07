@@ -30,15 +30,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 
-import java.awt.GridLayout;
-import java.awt.List;
-
-import javax.swing.BoxLayout;
 import java.awt.Font;
 
-public class qlkho_phieunhap {
-	
-	public JFrame frmQlkho;
+public class qlkho_phieunhap extends JPanel {
+
 	private JTable table;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -47,7 +42,7 @@ public class qlkho_phieunhap {
 	private JTextField textField;
 	private JTextField textField_5;
 	private JTextField textField_6;
-	private qltaikhoan giaodientaikhoan;
+	// private qltaikhoan giaodientaikhoan;
 	private ImportSlipBUS bus;
 
 	/**
@@ -58,7 +53,7 @@ public class qlkho_phieunhap {
 			public void run() {
 				try {
 					qlkho_phieunhap window = new qlkho_phieunhap();
-					window.frmQlkho.setVisible(true);
+					// window.frmQlkho.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -78,18 +73,16 @@ public class qlkho_phieunhap {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmQlkho=new JFrame();
-		frmQlkho.setForeground(new Color(255, 255, 255));
-		frmQlkho.setBackground(new Color(0, 64, 128));
-		frmQlkho.setTitle("Quản lý phiếu nhập");
-		frmQlkho.setBounds(100, 100, 1600, 1000);
-		frmQlkho.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmQlkho.getContentPane().setLayout(null);
+		setForeground(new Color(255, 255, 255));
+		setBackground(new Color(0, 64, 128));
+		// setTitle("Quản lý phiếu nhập");
+		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// frmQlkho.getContentPane().setLayout(null);
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0, 64, 128));
 		panel.setBounds(0, 0, 230, 845);
-		frmQlkho.getContentPane().add(panel);
+		add(panel);
 
 		JButton btnPhiuNhp = new JButton("PHIẾU NHẬP");
 		URL duongdananh = getClass().getResource("/Ảnh/icon phiếu nhập.png");
@@ -193,12 +186,12 @@ public class qlkho_phieunhap {
 		btnNewButton_14.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_14.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					giaodientaikhoan = new qltaikhoan();
-					giaodientaikhoan.frmQunTaikhoan.setVisible(true);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+				// try {
+				// giaodientaikhoan = new qltaikhoan();
+				// giaodientaikhoan.frmQunTaikhoan.setVisible(true);
+				// } catch (Exception e1) {
+				// e1.printStackTrace();
+				// }
 			}
 		});
 		btnNewButton_14.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon tài khoản ( chức năng ).png"));
@@ -207,7 +200,7 @@ public class qlkho_phieunhap {
 		btnNewButton_14.setContentAreaFilled(false);
 		btnNewButton_14.setOpaque(false);
 		panel.add(btnNewButton_14);
-		
+
 		JButton btnNewButton_10 = new JButton("PHÂN QUYỀN");
 		btnNewButton_10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -227,7 +220,7 @@ public class qlkho_phieunhap {
 		panel_1.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		panel_1.setBackground(new Color(255, 255, 255));
 		panel_1.setBounds(229, 0, 660, 142);
-		frmQlkho.getContentPane().add(panel_1);
+		add(panel_1);
 		panel_1.setLayout(null);
 
 		JButton btnNewButton = new JButton("");
@@ -303,7 +296,7 @@ public class qlkho_phieunhap {
 		panel_2.setBorder(new TitledBorder(null, "Tìm kiếm", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		panel_2.setBackground(new Color(255, 255, 255));
 		panel_2.setBounds(889, 0, 651, 142);
-		frmQlkho.getContentPane().add(panel_2);
+		add(panel_2);
 		panel_2.setLayout(null);
 
 		JButton btnNewButton_6 = new JButton("Làm mới\r\n");
@@ -391,7 +384,7 @@ public class qlkho_phieunhap {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(229, 345, 1311, 72);
-		frmQlkho.getContentPane().add(scrollPane);
+		add(scrollPane);
 
 		java.util.List<ImportSlip> importSlipList = bus.getAllActiveImportSlips();
 		table = new JTable();
@@ -422,46 +415,46 @@ public class qlkho_phieunhap {
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_6.setBounds(828, 162, 195, 27);
-		frmQlkho.getContentPane().add(lblNewLabel_6);
+		add(lblNewLabel_6);
 
 		JLabel lblNewLabel_3 = new JLabel("Mã phiếu:");
 		lblNewLabel_3.setBounds(406, 216, 60, 13);
-		frmQlkho.getContentPane().add(lblNewLabel_3);
+		add(lblNewLabel_3);
 
 		textField_1 = new JTextField();
 		textField_1.setEditable(false);
 		textField_1.setBounds(476, 213, 269, 19);
-		frmQlkho.getContentPane().add(textField_1);
+		add(textField_1);
 		textField_1.setColumns(10);
 
 		JLabel lblNewLabel_7 = new JLabel("Ngày lập:");
 		lblNewLabel_7.setBounds(406, 266, 60, 13);
-		frmQlkho.getContentPane().add(lblNewLabel_7);
+		add(lblNewLabel_7);
 
 		textField_2 = new JTextField();
 		textField_2.setEditable(false);
 		textField_2.setBounds(476, 263, 269, 19);
-		frmQlkho.getContentPane().add(textField_2);
+		add(textField_2);
 		textField_2.setColumns(10);
 
 		JLabel lblNewLabel_8 = new JLabel("Người lập:");
 		lblNewLabel_8.setBounds(1097, 216, 60, 13);
-		frmQlkho.getContentPane().add(lblNewLabel_8);
+		add(lblNewLabel_8);
 
 		textField_3 = new JTextField();
 		textField_3.setEditable(false);
 		textField_3.setBounds(1189, 213, 230, 19);
-		frmQlkho.getContentPane().add(textField_3);
+		add(textField_3);
 		textField_3.setColumns(10);
 
 		JLabel lblNewLabel_9 = new JLabel("Nhà cung cấp:");
 		lblNewLabel_9.setBounds(1080, 266, 101, 13);
-		frmQlkho.getContentPane().add(lblNewLabel_9);
+		add(lblNewLabel_9);
 
 		textField_4 = new JTextField();
 		textField_4.setEditable(false);
 		textField_4.setBounds(1189, 263, 230, 19);
-		frmQlkho.getContentPane().add(textField_4);
+		add(textField_4);
 		textField_4.setColumns(10);
 	}
 }
