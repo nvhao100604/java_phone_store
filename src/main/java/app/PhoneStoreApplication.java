@@ -1,11 +1,13 @@
-package app.GUI;
+package app;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-public class App {
+import app.GUI.MainGUI;
+
+public class PhoneStoreApplication {
 	private MainGUI frame;
 
 	/**
@@ -15,7 +17,7 @@ public class App {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					App window = new App();
+					PhoneStoreApplication window = new PhoneStoreApplication();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -27,7 +29,7 @@ public class App {
 	/**
 	 * Create the application.
 	 */
-	public App() {
+	public PhoneStoreApplication() {
 		initialize();
 	}
 

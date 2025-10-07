@@ -77,11 +77,6 @@ public class PermissionGUI extends JPanel {
 
 		JTable table = new JTable(model);
 		JScrollPane scrollPane = new JScrollPane(table);
-
-		// JFrame frame = new JFrame("Permission Table");
-		// frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		// frame.setSize(800, 400);
-		// frame.setLayout(new BorderLayout());
 		add(scrollPane, BorderLayout.CENTER);
 		setVisible(true);
 	}

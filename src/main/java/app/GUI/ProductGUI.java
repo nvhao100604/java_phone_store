@@ -27,7 +27,7 @@ public class ProductGUI extends JPanel {
         setLayout(new BorderLayout());
 
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(229, 345, 1311, 72);
+        scrollPane.setBounds(231, 345, 1000, 72);
         add(scrollPane);
 
         String[] columnNames = { "Mã sản phẩm", "Tên sản phẩm", "Loại", "Hãng", "Giá bán" };
