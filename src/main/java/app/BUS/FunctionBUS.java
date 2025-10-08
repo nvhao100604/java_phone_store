@@ -16,11 +16,11 @@ public class FunctionBUS {
         return DAO.getAll();
     }
 
-    public List<Function> getFunctionsForRole() {
-        return DAO.getFunctionsForRole();
+    public List<Function> getFunctionsForRole(int id) {
+        return DAO.getFunctionsForRole(id);
     }
 
     public List<Function> getFunction() {
         return DAO.getFunction();
-    } 
+    }
 }
