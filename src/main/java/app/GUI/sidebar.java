@@ -1,6 +1,8 @@
 package app.GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -16,28 +18,57 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import app.BUS.FunctionBUS;
+import app.DTO.Account;
 import app.DTO.Function;
+import app.GUI.interfaces.UserAware;
 
 public class sidebar extends JPanel {
-	// JButton btnPhiuNhp, btnNewButton_11, btnNewButton_10, btnNewButton_8,
-	// btnNewButton_3, btnNewButton_7,
-	// btnNewButton_13, btnNewButton_14;
 	JLabel lblNewLabel_13, lblNewLabel_14;
 	private MainGUI mainGUI;
 	private final FunctionBUS bus;
+	private JPanel navPanel;
+	private AccountPanel accountPanel;
+	private Account userACcount;
 
 	public sidebar(MainGUI mainGUI) {
 		this.mainGUI = mainGUI;
 		bus = new FunctionBUS();
+		accountPanel = new AccountPanel(mainGUI);
+		navPanel = new JPanel();
+		this.userACcount = mainGUI.getAccount();
 		initialize();
 	}
 
 	private void initialize() {
-		setPreferredSize(new Dimension(200, 0));
+		setPreferredSize(new Dimension(250, 0));
 		setBackground(new Color(0, 64, 128));
-		setLayout(new GridLayout(0, 1, 0, 0));
+		setLayout(new BorderLayout());
+	}
 
-		List<Function> functions = bus.getAll();
+	public class SideBarButton extends JButton {
+		public SideBarButton(String text, String iconPath) {
+			super(text);
+			ImageIcon originalIcon = new ImageIcon(iconPath != "" ? iconPath : "");
+			Image originalImage = originalIcon.getImage();
+			int newWidth = 40;
+			int newHeight = 40;
+			Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+			ImageIcon scaledIcon = new ImageIcon(scaledImage);
+			setHorizontalAlignment(SwingConstants.LEFT);
+			setHorizontalTextPosition(SwingConstants.RIGHT);
+			setIcon(scaledIcon);
+			setForeground(new Color(255, 255, 255));
+			setFont(new Font("Tahoma", Font.BOLD, 15));
+			setBorderPainted(false);
+			setContentAreaFilled(false);
+			// setOpaque(false);
+		}
+	}
+
+	public void GenerateSideBar() {
+		navPanel.setLayout(new GridLayout(0, 1, 0, 0));
+		navPanel.setBackground(null);
+		List<Function> functions = bus.getFunctionsForRole(userACcount.getRoleId());
 		// System.out.println(functions.size());
 		for (Function function : functions) {
 			System.out.println("check function: " + function.getFunctionName());
@@ -49,33 +80,17 @@ public class sidebar extends JPanel {
 					System.out.println("check function: " + function.getGuiClass());
 				}
 			});
-			button.setBounds(0, (functions.indexOf(function) * 50), 200, 50);
-			add(button);
+			button.setPreferredSize(new Dimension(250, 80));
+			navPanel.add(button);
 		}
+		add(navPanel, BorderLayout.CENTER);
+		add(accountPanel, BorderLayout.SOUTH);
 	}
 
-	public class SideBarButton extends JButton {
-		public SideBarButton(String text, String iconPath) {
-			super(text);
-			ImageIcon originalIcon = new ImageIcon(iconPath != "" ? iconPath : "");
-			Image originalImage = originalIcon.getImage();
-			int newWidth = 32;
-			int newHeight = 32;
-			Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-			ImageIcon scaledIcon = new ImageIcon(scaledImage);
-			setHorizontalAlignment(SwingConstants.LEFT);
-			setHorizontalTextPosition(SwingConstants.RIGHT);
-			setIcon(scaledIcon);
-			setForeground(new Color(255, 255, 255));
-			setFont(new Font("Tahoma", Font.BOLD, 11));
-			setBorderPainted(false);
-			setContentAreaFilled(false);
-			setOpaque(false);
-			addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-			// setBounds(10, 73, 149, 76);
-		}
+	public void setAccount(Account userAccount) {
+		this.userACcount = userAccount;
+		this.accountPanel = new AccountPanel(mainGUI);
+		removeAll();
+		GenerateSideBar();
 	}
 }

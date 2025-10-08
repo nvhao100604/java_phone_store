@@ -4,6 +4,7 @@ import app.GUI.PermissionGUI;
 import app.GUI.ProductGUI;
 import app.GUI.qlkho_phieunhap;
 import app.GUI.qltaikhoan;
+import app.GUI.quanlynhanvien;
 
 public class Function {
 
@@ -66,6 +67,7 @@ public class Function {
 			case 1:
 				return qltaikhoan.class;
 			case 2:
+				return quanlynhanvien.class;
 			case 3:
 				return PermissionGUI.class;
 			case 4:

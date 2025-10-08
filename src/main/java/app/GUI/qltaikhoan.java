@@ -4,7 +4,11 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -27,9 +31,8 @@ import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import java.awt.Font;
 
-public class qltaikhoan {
+public class qltaikhoan extends JPanel {
 
-	public JFrame frmQunTaikhoan;
 	private JTable table;
 	private JTextField textField;
 	private qlkho_phieunhap giaodienphieunhap;
@@ -44,7 +47,7 @@ public class qltaikhoan {
 			public void run() {
 				try {
 					qltaikhoan window = new qltaikhoan();
-					window.frmQunTaikhoan.setVisible(true);
+					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -63,18 +66,14 @@ public class qltaikhoan {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmQunTaikhoan = new JFrame();
-		frmQunTaikhoan.setForeground(new Color(255, 255, 255));
-		frmQunTaikhoan.setBackground(new Color(0, 64, 128));
-		frmQunTaikhoan.setTitle("Quản lý Tài Khoản");
-		frmQunTaikhoan.setBounds(100, 100, 1600, 1000);
-		frmQunTaikhoan.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmQunTaikhoan.getContentPane().setLayout(null);
+		setLayout(new BorderLayout());
+		setForeground(new Color(255, 255, 255));
+		setPreferredSize(new Dimension(0, 0));
 
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(0, 64, 128));
-		panel.setBounds(0, 0, 230, 845);
-		frmQunTaikhoan.getContentPane().add(panel);
+		JPanel topContainer = new JPanel();
+		topContainer.setLayout(new GridLayout(1, 2));
+		add(topContainer, BorderLayout.NORTH);
+
 
 		JButton btnPhiuNhp = new JButton("PHIẾU NHẬP");
 		URL duongdananh = getClass().getResource("/Ảnh/icon phiếu nhập.png");
@@ -89,7 +88,7 @@ public class qltaikhoan {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		panel.setLayout(null);
+		setLayout(null);
 
 		JButton btnNewButton_11 = new JButton("SẢN PHẨM");
 		URL duongdananh1 = getClass().getResource("/Ảnh/icon sản phẩm.png");
@@ -104,8 +103,8 @@ public class qltaikhoan {
 			}
 		});
 		btnNewButton_11.setBounds(12, 135, 157, 76);
-		panel.add(btnNewButton_11);
-		panel.add(btnPhiuNhp);
+		add(btnNewButton_11);
+		add(btnPhiuNhp);
 
 		JButton btnNewButton_8 = new JButton("THỐNG KÊ");
 		btnNewButton_8.addActionListener(new ActionListener() {
@@ -119,7 +118,7 @@ public class qltaikhoan {
 		btnNewButton_8.setBorderPainted(false);
 		btnNewButton_8.setContentAreaFilled(false);
 		btnNewButton_8.setOpaque(false);
-		panel.add(btnNewButton_8);
+		add(btnNewButton_8);
 
 		JButton btnNewButton_3 = new JButton("NHÂN VIÊN");
 		btnNewButton_3.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon nhân viên.png"));
@@ -133,7 +132,7 @@ public class qltaikhoan {
 			}
 		});
 		btnNewButton_3.setBounds(10, 73, 171, 76);
-		panel.add(btnNewButton_3);
+		add(btnNewButton_3);
 
 		JButton btnNewButton_7 = new JButton("HÓA ĐƠN");
 		btnNewButton_7.addActionListener(new ActionListener() {
@@ -147,18 +146,18 @@ public class qltaikhoan {
 		btnNewButton_7.setBorderPainted(false);
 		btnNewButton_7.setContentAreaFilled(false);
 		btnNewButton_7.setOpaque(false);
-		panel.add(btnNewButton_7);
+		add(btnNewButton_7);
 
 		JLabel lblNewLabel_13 = new JLabel("");
 		lblNewLabel_13.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon tài khoản ( hiển thị ).png"));
 		lblNewLabel_13.setBounds(25, 691, 63, 55);
-		panel.add(lblNewLabel_13);
+		add(lblNewLabel_13);
 
 		JLabel lblNewLabel_14 = new JLabel("Admin");
 		lblNewLabel_14.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNewLabel_14.setForeground(new Color(255, 255, 255));
 		lblNewLabel_14.setBounds(90, 701, 45, 13);
-		panel.add(lblNewLabel_14);
+		add(lblNewLabel_14);
 
 		JButton btnNewButton_13 = new JButton("Đăng xuất");
 		btnNewButton_13.setBorderPainted(false);
@@ -171,7 +170,7 @@ public class qltaikhoan {
 		btnNewButton_13.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnNewButton_13.setForeground(new Color(255, 255, 255));
 		btnNewButton_13.setBounds(43, 724, 149, 21);
-		panel.add(btnNewButton_13);
+		add(btnNewButton_13);
 
 		JButton btnNewButton_14 = new JButton("TÀI KHOẢN");
 		btnNewButton_14.setForeground(new Color(255, 255, 255));
@@ -191,7 +190,7 @@ public class qltaikhoan {
 		btnNewButton_14.setBorderPainted(false);
 		btnNewButton_14.setContentAreaFilled(false);
 		btnNewButton_14.setOpaque(false);
-		panel.add(btnNewButton_14);
+		add(btnNewButton_14);
 
 		JButton btnNewButton_10 = new JButton("PHÂN QUYỀN");
 		btnNewButton_10.addActionListener(new ActionListener() {
@@ -206,13 +205,13 @@ public class qltaikhoan {
 		btnNewButton_10.setBorderPainted(false);
 		btnNewButton_10.setContentAreaFilled(false);
 		btnNewButton_10.setOpaque(false);
-		panel.add(btnNewButton_10);
+		add(btnNewButton_10);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		panel_1.setBackground(new Color(255, 255, 255));
 		panel_1.setBounds(229, 0, 660, 142);
-		frmQunTaikhoan.getContentPane().add(panel_1);
+		add(panel_1);
 		panel_1.setLayout(null);
 
 		JButton btnNewButton = new JButton("");
@@ -299,11 +298,15 @@ public class qltaikhoan {
 		lblNewLabel_5.setBounds(343, 97, 73, 13);
 		panel_1.add(lblNewLabel_5);
 
+		khungchucnang khungchucnang = new khungchucnang();
+		topContainer.add(khungchucnang);
+
+
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(null, "Tìm kiếm", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		panel_2.setBackground(new Color(255, 255, 255));
-		panel_2.setBounds(889, 0, 651, 142);
-		frmQunTaikhoan.getContentPane().add(panel_2);
+		panel_2.setPreferredSize(new Dimension(0, 300));
+		topContainer.add(panel_2, BorderLayout.NORTH);
 		panel_2.setLayout(null);
 
 		JButton btnNewButton_6 = new JButton("Làm mới\r\n");
@@ -323,8 +326,8 @@ public class qltaikhoan {
 		panel_2.add(comboBox);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(229, 199, 1311, 646);
-		frmQunTaikhoan.getContentPane().add(scrollPane);
+		scrollPane.setPreferredSize(new Dimension(0, 500));
+		add(scrollPane, BorderLayout.SOUTH);
 
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
@@ -351,6 +354,6 @@ public class qltaikhoan {
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_6.setBounds(807, 162, 195, 27);
-		frmQunTaikhoan.getContentPane().add(lblNewLabel_6);
+		add(lblNewLabel_6);
 	}
 }

@@ -1,24 +1,35 @@
 package app;
 
-import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
+import app.DTO.Account;
+import app.GUI.LoginGUI;
 import app.GUI.MainGUI;
+import app.GUI.sidebar;
+import app.utils.FadeTransition;
 
-public class PhoneStoreApplication {
-	private MainGUI frame;
+public class PhoneStoreApplication extends JFrame {
+	private CardLayout layout;
+	private JPanel mainPanel;
+	private LoginGUI login;
+	private MainGUI main;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		// UIUtils.setGlobalFont(new Font("Arial", ));
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					PhoneStoreApplication window = new PhoneStoreApplication();
-					window.frame.setVisible(true);
+					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -37,9 +48,50 @@ public class PhoneStoreApplication {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new MainGUI();
-		// frame.setBounds(100, 100);
-		frame.setLayout(new BorderLayout());
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setMinimumSize(new Dimension(500, 400));
+		layout = new CardLayout();
+		mainPanel = new JPanel(layout);
+
+		login = new LoginGUI(this);
+		main = new MainGUI(this);
+
+		mainPanel.add(login, "login");
+		mainPanel.add(main, "main");
+
+		add(mainPanel);
+		layout.show(mainPanel, "login");
+		mainPanel.revalidate();
+		mainPanel.repaint();
+		setSize(login.getPreferredSize());
+		setMinimumSize(login.getMinimumSize());
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setVisible(true);
+	}
+
+	public void showMain() {
+		// layout.show(mainPanel, "main");
+		// mainPanel.revalidate();
+		// mainPanel.repaint();
+		// setSize(main.getPreferredSize());
+		// setLocationRelativeTo(null);
+		setMinimumSize(main.getMinimumSize());
+		FadeTransition.switchPanel(mainPanel, login, main);
+	}
+
+	public void showLogin() {
+		// layout.show(mainPanel, "login");
+		// mainPanel.revalidate();
+		// mainPanel.repaint();
+		// setSize(login.getPreferredSize());
+		// setLocationRelativeTo(null);
+		setMinimumSize(login.getMinimumSize());
+		FadeTransition.switchPanel(mainPanel, main, login);
+	}
+
+	public void setMainGUIAccount(Account account) {
+		this.main.setAccount(account);
+		main.reloadSidebar(account);
+		System.out.println("check user: " + main.getAccount().getUsername());
 	}
 }
