@@ -13,13 +13,20 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.table.DefaultTableModel;
+
+import app.BUS.EmployeeBUS;
+import app.DTO.Employee;
+import app.DTO.Product;
+
 import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -35,6 +42,7 @@ import java.awt.Font;
 
 public class quanlynhanvien extends JPanel {
 
+	private EmployeeBUS bus;
 	// private JFrame frmQunLKho;
 	private JTable table;
 	private JTextField textField_1;
@@ -66,6 +74,7 @@ public class quanlynhanvien extends JPanel {
 	 * Create the application.
 	 */
 	public quanlynhanvien() {
+		this.bus = new EmployeeBUS();
 		initialize();
 	}
 
@@ -79,7 +88,7 @@ public class quanlynhanvien extends JPanel {
 		setLayout(new BorderLayout());
 
 		JPanel topContainer = new JPanel();
-		topContainer.setPreferredSize(new Dimension(0, 300));
+		topContainer.setPreferredSize(new Dimension(0, 200));
 		topContainer.setLayout(new GridLayout(1, 2));
 		add(topContainer, BorderLayout.NORTH);
 
@@ -118,7 +127,7 @@ public class quanlynhanvien extends JPanel {
 
 		JLabel lblNewLabel_12 = new JLabel("-");
 		lblNewLabel_12.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblNewLabel_12.setBounds(238, 86, 20, 13);
+		lblNewLabel_12.setBounds(224, 86, 20, 13);
 		panel_2.add(lblNewLabel_12);
 
 		textField_6 = new JTextField();
@@ -176,21 +185,87 @@ public class quanlynhanvien extends JPanel {
 			}
 		});
 
+		JLabel lblNewLabel_6 = new JLabel("DANH SÁCH NHÂN VIÊN");
+		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
+		// lblNewLabel_6.setBounds(812, 162, 195, 27);
+		add(lblNewLabel_6, BorderLayout.CENTER);
+
+		JPanel filterPanel = new JPanel();
+		filterPanel.setPreferredSize(new Dimension(0, 100));
+		filterPanel.setLayout(new GridLayout(3, 4));
+		filterPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+
+		add(filterPanel, BorderLayout.CENTER);
+		JLabel lblNewLabel_3 = new JLabel("Mã nhân viên:");
+		// lblNewLabel_3.setBounds(262, 216, 111, 13);
+		filterPanel.add(lblNewLabel_3);
+
+		textField_1 = new JTextField();
+		// textField_1.setEditable(false);
+		// textField_1.setBounds(383, 213, 269, 19);
+		// textField_1.setPreferredSize(new Dimension(0, 50));
+		filterPanel.add(textField_1);
+		textField_1.setColumns(10);
+
+		JLabel lblNewLabel_7 = new JLabel("Tình trạng: ");
+		// lblNewLabel_7.setBounds(262, 319, 60, 13);
+		filterPanel.add(lblNewLabel_7);
+
+		textField_2 = new JTextField();
+		// textField_2.setEditable(false);
+		// textField_2.setBounds(383, 263, 269, 19);
+		// textField_2.setPreferredSize(new Dimension(0, 50));
+		filterPanel.add(textField_2);
+		textField_2.setColumns(10);
+
+		JLabel lblNewLabel_8 = new JLabel("Ngày sinh");
+		// lblNewLabel_8.setBounds(947, 216, 60, 13);
+		filterPanel.add(lblNewLabel_8);
+
+		textField_3 = new JTextField();
+		// textField_3.setEditable(false);
+		// textField_3.setPreferredSize(new Dimension(0, 50));
+		// textField_3.setBounds(1058, 213, 230, 19);
+		filterPanel.add(textField_3);
+		textField_3.setColumns(10);
+
+		JLabel lblNewLabel_9 = new JLabel("Địa chỉ: ");
+		// lblNewLabel_9.setBounds(947, 266, 101, 13);
+		filterPanel.add(lblNewLabel_9);
+
+		textField_4 = new JTextField();
+		// textField_4.setEditable(false);
+		// textField_4.setPreferredSize(new Dimension(0, 50));
+		// textField_4.setBounds(1058, 263, 230, 19);
+		filterPanel.add(textField_4);
+		textField_4.setColumns(10);
+
+		JLabel lblNewLabel_7_1 = new JLabel("Giới tính:");
+		// lblNewLabel_7_1.setBounds(262, 266, 60, 13);
+		filterPanel.add(lblNewLabel_7_1);
+
+		textField_7 = new JTextField();
+		// textField_7.setEditable(false);
+		textField_7.setColumns(10);
+		// textField_7.setBounds(383, 316, 269, 19);
+		// textField_7.setPreferredSize(new Dimension(0, 50));
+		filterPanel.add(textField_7);
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setPreferredSize(new Dimension(0, 600));
 		add(scrollPane, BorderLayout.SOUTH);
 
+		String[] columnNames = { "Mã nhân viên", "Tên nhân viên", "SĐT", "Email", "Ngày sinh" };
+		List<Employee> employeeList = bus.getAll();
+		System.out.println("check list: " + employeeList.size());
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
-				new Object[][] {
-						{ null, "", null, null, null },
-						{ null, null, null, null, null },
-						{ null, null, null, null, null },
-				},
-				new String[] {
-						"M\u00E3 nh\u00E2n vi\u00EAn", "Gi\u1EDBi t\u00EDnh", "Ng\u00E0y sinh",
-						"\u0110\u1ECBa ch\u1EC9", "T\u00ECnh tr\u1EA1ng"
-				}) {
+				employeeList.stream()
+						.map(e -> new Object[] { e.getEmployeeId(), e.getFullName(),
+								e.getPhoneNumber(), e.getEmail(), e.getDateOfBirth() })
+						.toArray(Object[][]::new),
+				columnNames) {
 			boolean[] columnEditables = new boolean[] {
 					true, true, false, false, false
 			};
@@ -203,60 +278,5 @@ public class quanlynhanvien extends JPanel {
 		table.getColumnModel().getColumn(1).setPreferredWidth(98);
 		scrollPane.setViewportView(table);
 
-		JLabel lblNewLabel_6 = new JLabel("DANH SÁCH NHÂN VIÊN");
-		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_6.setBounds(812, 162, 195, 27);
-		add(lblNewLabel_6);
-
-		JLabel lblNewLabel_3 = new JLabel("Mã nhân viên:");
-		lblNewLabel_3.setBounds(262, 216, 111, 13);
-		add(lblNewLabel_3);
-
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setBounds(383, 213, 269, 19);
-		add(textField_1);
-		textField_1.setColumns(10);
-
-		JLabel lblNewLabel_7 = new JLabel("Tình trạng: ");
-		lblNewLabel_7.setBounds(262, 319, 60, 13);
-		add(lblNewLabel_7);
-
-		textField_2 = new JTextField();
-		textField_2.setEditable(false);
-		textField_2.setBounds(383, 263, 269, 19);
-		add(textField_2);
-		textField_2.setColumns(10);
-
-		JLabel lblNewLabel_8 = new JLabel("Ngày sinh");
-		lblNewLabel_8.setBounds(947, 216, 60, 13);
-		add(lblNewLabel_8);
-
-		textField_3 = new JTextField();
-		textField_3.setEditable(false);
-		textField_3.setBounds(1058, 213, 230, 19);
-		add(textField_3);
-		textField_3.setColumns(10);
-
-		JLabel lblNewLabel_9 = new JLabel("Địa chỉ: ");
-		lblNewLabel_9.setBounds(947, 266, 101, 13);
-		add(lblNewLabel_9);
-
-		textField_4 = new JTextField();
-		textField_4.setEditable(false);
-		textField_4.setBounds(1058, 263, 230, 19);
-		add(textField_4);
-		textField_4.setColumns(10);
-
-		textField_7 = new JTextField();
-		textField_7.setEditable(false);
-		textField_7.setColumns(10);
-		textField_7.setBounds(383, 316, 269, 19);
-		add(textField_7);
-
-		JLabel lblNewLabel_7_1 = new JLabel("Giới tính:");
-		lblNewLabel_7_1.setBounds(262, 266, 60, 13);
-		add(lblNewLabel_7_1);
 	}
 }
