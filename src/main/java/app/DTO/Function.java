@@ -4,6 +4,7 @@ import app.GUI.PermissionGUI;
 import app.GUI.ProductGUI;
 import app.GUI.qlkho_phieunhap;
 import app.GUI.qltaikhoan;
+import app.GUI.quanlynhanvien;
 
 public class Function {
 
@@ -63,12 +64,24 @@ public class Function {
 
 	public Class<?> getGuiClass() {
 		switch (functionId) {
-			case 7:
+			case 1:
+				return qltaikhoan.class;
+			case 2:
+				return quanlynhanvien.class;
+			case 3:
 				return PermissionGUI.class;
-			case 11:
+			case 4:
+				return ProductGUI.class;
+			case 5:
+			case 6:
+			case 7:
+			case 8:
 				return qlkho_phieunhap.class;
+			case 9:
+			case 10:
+			case 11:
 			default:
-				return ProductGUI.class; // or a default class
+				return ProductGUI.class;
 		}
 	}
 }
