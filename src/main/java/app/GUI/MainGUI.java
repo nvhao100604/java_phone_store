@@ -53,14 +53,22 @@ public class MainGUI extends JPanel {
 		initialize();
 	}
 
+	public MainGUI(PhoneStoreApplication application, sidebar sidebar) {
+		this.application = application;
+		this.navBar = sidebar;
+		initialize();
+	}
+
 	public void initialize() {
 		setPreferredSize(new Dimension(1600, 1000));
+		setMinimumSize(new Dimension(1400, 800));
 		setLayout(new BorderLayout());
 
-		navBar = new sidebar(this);
+		// navBar = new sidebar(this);
+		// add(navBar, BorderLayout.WEST);
+
 		contentPane = new ProductGUI();
 		contentPane.setPreferredSize(new Dimension(0, 0));
-		add(navBar, BorderLayout.WEST);
 		add(contentPane, BorderLayout.CENTER);
 		setVisible(true);
 	}
@@ -75,16 +83,25 @@ public class MainGUI extends JPanel {
 
 	public void setAccount(Account newAccount) {
 		this.account = newAccount;
-		this.navBar.setAccount(newAccount);
 	}
 
-	// public void setAccount(Account userAccount) {
-	// System.out.println("Check user: " + account == null ? "" :
-	// account.getUsername());
-	// for (Component c : getComponents()) {
-	// if (c instanceof UserAware) {
-	// ((UserAware) c).onUserChanged(userAccount);
-	// }
-	// }
-	// }
+	public void SetSideBar(sidebar sidebar) {
+		this.navBar = sidebar;
+	}
+
+	public void Logout() {
+		this.account = null;
+	}
+
+	public void reloadSidebar(Account account) {
+		System.out.println("Load sidebar");
+		if (navBar != null) {
+			remove(navBar);
+		}
+		navBar = new sidebar(this);
+		navBar.setAccount(account);
+		add(navBar, BorderLayout.WEST);
+		revalidate();
+		repaint();
+	}
 }

@@ -23,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import app.BUS.EmployeeBUS;
 import app.DTO.Employee;
 import app.DTO.Product;
+import app.utils.UIUtils;
 
 import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
@@ -195,8 +196,9 @@ public class quanlynhanvien extends JPanel {
 		filterPanel.setPreferredSize(new Dimension(0, 100));
 		filterPanel.setLayout(new GridLayout(3, 4));
 		filterPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-
+		// UIUtils.setFontRecursively(filterPanel, new Font("Tahoma", Font.BOLD, 40));
 		add(filterPanel, BorderLayout.CENTER);
+
 		JLabel lblNewLabel_3 = new JLabel("Mã nhân viên:");
 		// lblNewLabel_3.setBounds(262, 216, 111, 13);
 		filterPanel.add(lblNewLabel_3);
@@ -205,8 +207,9 @@ public class quanlynhanvien extends JPanel {
 		// textField_1.setEditable(false);
 		// textField_1.setBounds(383, 213, 269, 19);
 		// textField_1.setPreferredSize(new Dimension(0, 50));
-		filterPanel.add(textField_1);
+		textField_1.setBorder(new EmptyBorder(10, 10, 10, 10));
 		textField_1.setColumns(10);
+		filterPanel.add(textField_1);
 
 		JLabel lblNewLabel_7 = new JLabel("Tình trạng: ");
 		// lblNewLabel_7.setBounds(262, 319, 60, 13);
@@ -216,8 +219,8 @@ public class quanlynhanvien extends JPanel {
 		// textField_2.setEditable(false);
 		// textField_2.setBounds(383, 263, 269, 19);
 		// textField_2.setPreferredSize(new Dimension(0, 50));
-		filterPanel.add(textField_2);
 		textField_2.setColumns(10);
+		filterPanel.add(textField_2);
 
 		JLabel lblNewLabel_8 = new JLabel("Ngày sinh");
 		// lblNewLabel_8.setBounds(947, 216, 60, 13);
@@ -227,8 +230,8 @@ public class quanlynhanvien extends JPanel {
 		// textField_3.setEditable(false);
 		// textField_3.setPreferredSize(new Dimension(0, 50));
 		// textField_3.setBounds(1058, 213, 230, 19);
-		filterPanel.add(textField_3);
 		textField_3.setColumns(10);
+		filterPanel.add(textField_3);
 
 		JLabel lblNewLabel_9 = new JLabel("Địa chỉ: ");
 		// lblNewLabel_9.setBounds(947, 266, 101, 13);
@@ -238,8 +241,8 @@ public class quanlynhanvien extends JPanel {
 		// textField_4.setEditable(false);
 		// textField_4.setPreferredSize(new Dimension(0, 50));
 		// textField_4.setBounds(1058, 263, 230, 19);
-		filterPanel.add(textField_4);
 		textField_4.setColumns(10);
+		filterPanel.add(textField_4);
 
 		JLabel lblNewLabel_7_1 = new JLabel("Giới tính:");
 		// lblNewLabel_7_1.setBounds(262, 266, 60, 13);
@@ -255,6 +258,7 @@ public class quanlynhanvien extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setPreferredSize(new Dimension(0, 600));
 		add(scrollPane, BorderLayout.SOUTH);
+		UIUtils.setFontRecursively(filterPanel, new Font("Tahoma", Font.BOLD, 15));
 
 		String[] columnNames = { "Mã nhân viên", "Tên nhân viên", "SĐT", "Email", "Ngày sinh" };
 		List<Employee> employeeList = bus.getAll();

@@ -43,12 +43,6 @@ public class sidebar extends JPanel {
 		setPreferredSize(new Dimension(250, 0));
 		setBackground(new Color(0, 64, 128));
 		setLayout(new BorderLayout());
-
-		if (userACcount == null) {
-			return;
-		}
-
-		GenerateSideBar();
 	}
 
 	public class SideBarButton extends JButton {
@@ -95,7 +89,6 @@ public class sidebar extends JPanel {
 
 	public void setAccount(Account userAccount) {
 		this.userACcount = userAccount;
-		System.out.println("check user side: " + mainGUI.getAccount().getUsername());
 		this.accountPanel = new AccountPanel(mainGUI);
 		removeAll();
 		GenerateSideBar();

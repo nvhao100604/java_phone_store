@@ -6,14 +6,9 @@ import javax.swing.*;
 
 public class FadeTransition {
 
-    /**
-     * Thực hiện hiệu ứng mờ dần giữa 2 panel (fade-out → fade-in)
-     */
     public static void switchPanel(JPanel container, JPanel currentPanel, JPanel nextPanel) {
-        // Lấy frame chứa container
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(container);
 
-        // Tạo overlay để vẽ hiệu ứng
         JPanel overlay = new JPanel() {
             float alpha = 1.0f;
 
@@ -29,7 +24,7 @@ public class FadeTransition {
 
         overlay.setOpaque(false);
         overlay.setBounds(0, 0, container.getWidth(), container.getHeight());
-        container.add(overlay, 0); // Thêm overlay đè lên
+        container.add(overlay, 0);
 
         Timer timer = new Timer(10, null);
         final float[] alpha = { 1.0f };
@@ -42,17 +37,15 @@ public class FadeTransition {
                 timer.stop();
                 container.remove(overlay);
 
-                // Thay đổi panel thật sự
                 container.remove(currentPanel);
                 container.add(nextPanel);
                 container.revalidate();
                 container.repaint();
 
-                // Sau khi đổi panel: gọi pack() và căn giữa frame
                 SwingUtilities.invokeLater(() -> {
                     if (frame != null) {
-                        frame.pack(); // Tự resize frame theo GUI mới
-                        frame.setLocationRelativeTo(null); // Căn giữa màn hình
+                        frame.pack();
+                        frame.setLocationRelativeTo(null);
                     }
                 });
             }

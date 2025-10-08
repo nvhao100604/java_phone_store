@@ -13,9 +13,13 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import app.utils.ConfirmDialog;
 
 public class AccountPanel extends JPanel {
 
@@ -66,7 +70,13 @@ public class AccountPanel extends JPanel {
         btnNewButton_13.setAlignmentX(Component.LEFT_ALIGNMENT);
         btnNewButton_13.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mainGUI.getApplication().showLogin();
+                boolean response = ConfirmDialog.confirmDialog(
+                        textPanel,
+                        "Bạn có chắc muốn thoát chương trình?",
+                        "Đăng xuất");
+                if (response) {
+                    HandleLogout();
+                }
             }
         });
 
@@ -87,5 +97,10 @@ public class AccountPanel extends JPanel {
 
     public void ChangeUserText() {
         lblNewLabel_14.setText(mainGUI.getAccount().getUsername());
+    }
+
+    public void HandleLogout() {
+        mainGUI.Logout();
+        mainGUI.getApplication().showLogin();
     }
 }
