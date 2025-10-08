@@ -84,7 +84,7 @@ public class quanlynhanvien {
 		frmQunLKho.getContentPane().add(panel);
 		
 		JButton btnPhiuNhp = new JButton("PHIẾU NHẬP");
-		btnPhiuNhp.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon phiếu nhập.jpg"));
+		btnPhiuNhp.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon phiếu nhập.jpg"));
 		btnPhiuNhp.setForeground(new Color(255, 255, 255));
 		btnPhiuNhp.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnPhiuNhp.setBounds(2, 379, 169, 60);
@@ -98,7 +98,7 @@ public class quanlynhanvien {
 		panel.setLayout(null);
 		
 		JButton btnNewButton_11 = new JButton("SẢN PHẨM");
-		btnNewButton_11.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon sản phẩm.png"));
+		btnNewButton_11.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon sản phẩm.png"));
 		btnNewButton_11.setForeground(new Color(255, 255, 255));
 		btnNewButton_11.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_11.setBorderPainted(false); 
@@ -112,7 +112,7 @@ public class quanlynhanvien {
 		panel.add(btnNewButton_11);
 		
 		JButton btnNewButton_10 = new JButton("NHÀ CUNG CẤP");
-		btnNewButton_10.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon nhà cung cấp.png"));
+		btnNewButton_10.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon nhà cung cấp.png"));
 		btnNewButton_10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -131,7 +131,7 @@ public class quanlynhanvien {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_8.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon thống kê.png"));
+		btnNewButton_8.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon thống kê.png"));
 		btnNewButton_8.setForeground(new Color(255, 255, 255));
 		btnNewButton_8.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_8.setBounds(2, 516, 167, 98);
@@ -141,7 +141,7 @@ public class quanlynhanvien {
 		panel.add(btnNewButton_8);
 		
 		JButton btnNewButton_3 = new JButton("NHÂN VIÊN");
-		btnNewButton_3.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon nhân viên.jpg"));
+		btnNewButton_3.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon nhân viên.jpg"));
 		btnNewButton_3.setForeground(new Color(255, 255, 255));
 		btnNewButton_3.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_3.setBorderPainted(false); 
@@ -159,7 +159,7 @@ public class quanlynhanvien {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_7.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon hóa đơn.png"));
+		btnNewButton_7.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon hóa đơn.png"));
 		btnNewButton_7.setForeground(new Color(255, 255, 255));
 		btnNewButton_7.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_7.setBounds(2, 448, 167, 70);
@@ -169,7 +169,7 @@ public class quanlynhanvien {
 		panel.add(btnNewButton_7);
 		
 		JLabel lblNewLabel_13 = new JLabel("");
-		lblNewLabel_13.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon tài khoản ( hiển thị ).png"));
+		lblNewLabel_13.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon tài khoản ( hiển thị ).png"));
 		lblNewLabel_13.setBounds(15, 701, 63, 55);
 		panel.add(lblNewLabel_13);
 		
@@ -199,7 +199,7 @@ public class quanlynhanvien {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_14.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon tài khoản ( chức năng ).png"));
+		btnNewButton_14.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon tài khoản ( chức năng ).png"));
 		btnNewButton_14.setBounds(2, 603, 158, 55);
 		btnNewButton_14.setBorderPainted(false); 
 		btnNewButton_14.setContentAreaFilled(false);  
@@ -212,7 +212,7 @@ public class quanlynhanvien {
 			}
 		});
 		btnNewButton_11_1.setOpaque(false);
-		btnNewButton_11_1.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon quan ly nhan vien.png"));
+		btnNewButton_11_1.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon quan ly nhan vien.png"));
 		btnNewButton_11_1.setForeground(Color.WHITE);
 		btnNewButton_11_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_11_1.setContentAreaFilled(false);
@@ -229,7 +229,7 @@ public class quanlynhanvien {
 		
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setToolTipText("");
-		btnNewButton.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon thêm.jpg"));
+		btnNewButton.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon thêm.jpg"));
 		btnNewButton.setBorderPainted(false);
 		btnNewButton.setContentAreaFilled(false);
 		btnNewButton.addActionListener(new ActionListener() {
@@ -241,7 +241,7 @@ public class quanlynhanvien {
 		panel_1.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("");
-		btnNewButton_1.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon xóa.jpg"));
+		btnNewButton_1.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon xóa.jpg"));
 		btnNewButton_1.setBorderPainted(false);
 		btnNewButton_1.setContentAreaFilled(false);
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -252,7 +252,7 @@ public class quanlynhanvien {
 		panel_1.add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("");
-		btnNewButton_2.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon chỉnh sửa.jpg"));
+		btnNewButton_2.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon chỉnh sửa.jpg"));
 		btnNewButton_2.setBorderPainted(false);
 		btnNewButton_2.setContentAreaFilled(false);
 		btnNewButton_2.setBounds(171, 33, 66, 50);
@@ -263,14 +263,14 @@ public class quanlynhanvien {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_4.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon nhập excel.jpg"));
+		btnNewButton_4.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon nhập excel.jpg"));
 		btnNewButton_4.setBorderPainted(false);
 		btnNewButton_4.setContentAreaFilled(false);
 		btnNewButton_4.setBounds(260, 33, 55, 50);
 		panel_1.add(btnNewButton_4);
 		
 		JButton btnNewButton_5 = new JButton("");
-		btnNewButton_5.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon xuất excel.jpg"));
+		btnNewButton_5.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon xuất excel.jpg"));
 		btnNewButton_5.setBorderPainted(false);
 		btnNewButton_5.setContentAreaFilled(false);
 		btnNewButton_5.setBounds(343, 33, 55, 50);
@@ -304,7 +304,7 @@ public class quanlynhanvien {
 		panel_2.setLayout(null);
 		
 		JButton btnNewButton_6 = new JButton("Làm mới\r\n");
-		btnNewButton_6.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon làm mới.jpg"));
+		btnNewButton_6.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon làm mới.jpg"));
 		btnNewButton_6.setBounds(439, 34, 140, 55);
 		panel_2.add(btnNewButton_6);
 		
@@ -339,7 +339,7 @@ public class quanlynhanvien {
 		JButton btnNewButton_9 = new JButton("");
 		btnNewButton_9.setBounds(190, 86, 68, 21);
 		panel_2.add(btnNewButton_9);
-		btnNewButton_9.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon chọn ngày.jpg"));
+		btnNewButton_9.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon chọn ngày.jpg"));
 		btnNewButton_9.setBorderPainted(false); 
 		btnNewButton_9.setContentAreaFilled(false);  
 		btnNewButton_9.setOpaque(false);
@@ -347,7 +347,7 @@ public class quanlynhanvien {
 		JButton btnNewButton_12 = new JButton("");
 		btnNewButton_12.setBounds(322, 86, 85, 21);
 		panel_2.add(btnNewButton_12);
-		btnNewButton_12.setIcon(new ImageIcon("D:\\Ngon ngu lap trinh java 2025\\java_phone_store-main\\src\\main\\resources\\Ảnh\\icon chọn ngày.jpg"));
+		btnNewButton_12.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon chọn ngày.jpg"));
 		btnNewButton_12.setBorderPainted(false); 
 		btnNewButton_12.setContentAreaFilled(false);  
 		btnNewButton_12.setOpaque(false);
