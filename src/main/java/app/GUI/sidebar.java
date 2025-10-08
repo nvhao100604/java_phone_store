@@ -2,6 +2,7 @@ package app.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -17,17 +18,24 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import app.BUS.FunctionBUS;
+import app.DTO.Account;
 import app.DTO.Function;
+import app.GUI.interfaces.UserAware;
 
 public class sidebar extends JPanel {
 	JLabel lblNewLabel_13, lblNewLabel_14;
 	private MainGUI mainGUI;
 	private final FunctionBUS bus;
+	private JPanel navPanel;
 	private AccountPanel accountPanel;
+	private Account userACcount;
 
 	public sidebar(MainGUI mainGUI) {
 		this.mainGUI = mainGUI;
 		bus = new FunctionBUS();
+		accountPanel = new AccountPanel(mainGUI);
+		navPanel = new JPanel();
+		this.userACcount = mainGUI.getAccount();
 		initialize();
 	}
 
@@ -36,27 +44,11 @@ public class sidebar extends JPanel {
 		setBackground(new Color(0, 64, 128));
 		setLayout(new BorderLayout());
 
-		JPanel navPanel = new JPanel();
-		navPanel.setLayout(new GridLayout(0, 1, 0, 0));
-		navPanel.setBackground(null);
-		List<Function> functions = bus.getAll();
-		// System.out.println(functions.size());
-		for (Function function : functions) {
-			System.out.println("check function: " + function.getFunctionName());
-			SideBarButton button = new SideBarButton(function.getFunctionName(),
-					"src\\main\\resources\\Ảnh\\" + function.getIcon());
-			button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					mainGUI.InitialGUI(function.getGuiClass());
-					System.out.println("check function: " + function.getGuiClass());
-				}
-			});
-			button.setPreferredSize(new Dimension(250, 80));
-			navPanel.add(button);
+		if (userACcount == null) {
+			return;
 		}
-		accountPanel = new AccountPanel(mainGUI.getApplication());
-		add(navPanel, BorderLayout.CENTER);
-		add(accountPanel, BorderLayout.SOUTH);
+
+		GenerateSideBar();
 	}
 
 	public class SideBarButton extends JButton {
@@ -77,5 +69,35 @@ public class sidebar extends JPanel {
 			setContentAreaFilled(false);
 			// setOpaque(false);
 		}
+	}
+
+	public void GenerateSideBar() {
+		navPanel.setLayout(new GridLayout(0, 1, 0, 0));
+		navPanel.setBackground(null);
+		List<Function> functions = bus.getFunctionsForRole(userACcount.getRoleId());
+		// System.out.println(functions.size());
+		for (Function function : functions) {
+			System.out.println("check function: " + function.getFunctionName());
+			SideBarButton button = new SideBarButton(function.getFunctionName(),
+					"src\\main\\resources\\Ảnh\\" + function.getIcon());
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					mainGUI.InitialGUI(function.getGuiClass());
+					System.out.println("check function: " + function.getGuiClass());
+				}
+			});
+			button.setPreferredSize(new Dimension(250, 80));
+			navPanel.add(button);
+		}
+		add(navPanel, BorderLayout.CENTER);
+		add(accountPanel, BorderLayout.SOUTH);
+	}
+
+	public void setAccount(Account userAccount) {
+		this.userACcount = userAccount;
+		System.out.println("check user side: " + mainGUI.getAccount().getUsername());
+		this.accountPanel = new AccountPanel(mainGUI);
+		removeAll();
+		GenerateSideBar();
 	}
 }

@@ -14,16 +14,17 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import app.PhoneStoreApplication;
 
 public class AccountPanel extends JPanel {
 
-    private PhoneStoreApplication application;
+    private MainGUI mainGUI;
+    private JLabel lblNewLabel_14;
 
-    public AccountPanel(PhoneStoreApplication application) {
-        this.application = application;
+    public AccountPanel(MainGUI mainGUI) {
+        this.mainGUI = mainGUI;
+        lblNewLabel_14 = new JLabel();
         initialize();
     }
 
@@ -43,11 +44,16 @@ public class AccountPanel extends JPanel {
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
 
-        JLabel lblNewLabel_14 = new JLabel("Tên nhân viên");
+        if (mainGUI.getAccount() == null) {
+            lblNewLabel_14.setText("Username");
+        } else {
+            ChangeUserText();
+        }
         lblNewLabel_14.setFont(new Font("Arial", Font.BOLD, 15));
         lblNewLabel_14.setForeground(new Color(255, 255, 255));
         lblNewLabel_14.setPreferredSize(new Dimension(100, 50));
         lblNewLabel_14.setAlignmentX(Component.LEFT_ALIGNMENT);
+        textPanel.add(lblNewLabel_14);
         // add(lblNewLabel_14);
 
         JButton btnNewButton_13 = new JButton("Đăng xuất");
@@ -60,11 +66,10 @@ public class AccountPanel extends JPanel {
         btnNewButton_13.setAlignmentX(Component.LEFT_ALIGNMENT);
         btnNewButton_13.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                application.showLogin();
+                mainGUI.getApplication().showLogin();
             }
         });
 
-        textPanel.add(lblNewLabel_14);
         textPanel.add(Box.createVerticalStrut(3));
         textPanel.add(btnNewButton_13);
         // btnNewButton_13.addActionListener(new ActionListener() {
@@ -78,5 +83,9 @@ public class AccountPanel extends JPanel {
         add(lblNewLabel_13);
         add(Box.createHorizontalStrut(10));
         add(textPanel);
+    }
+
+    public void ChangeUserText() {
+        lblNewLabel_14.setText(mainGUI.getAccount().getUsername());
     }
 }

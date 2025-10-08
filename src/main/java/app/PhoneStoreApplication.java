@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import app.DTO.Account;
 import app.GUI.LoginGUI;
 import app.GUI.MainGUI;
 import app.utils.FadeTransition;
@@ -81,5 +82,10 @@ public class PhoneStoreApplication extends JFrame {
 		// setLocationRelativeTo(null);
 
 		FadeTransition.switchPanel(mainPanel, main, login);
+	}
+
+	public void setMainGUIAccount(Account account) {
+		this.main.setAccount(account);
+		System.out.println("check user: " + main.getAccount().getUsername());
 	}
 }

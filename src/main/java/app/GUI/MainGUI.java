@@ -1,11 +1,15 @@
 package app.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import app.PhoneStoreApplication;
 import app.DTO.Account;
+import app.GUI.interfaces.UserAware;
 
 public class MainGUI extends JPanel {
 
@@ -71,5 +75,16 @@ public class MainGUI extends JPanel {
 
 	public void setAccount(Account newAccount) {
 		this.account = newAccount;
+		this.navBar.setAccount(newAccount);
 	}
+
+	// public void setAccount(Account userAccount) {
+	// System.out.println("Check user: " + account == null ? "" :
+	// account.getUsername());
+	// for (Component c : getComponents()) {
+	// if (c instanceof UserAware) {
+	// ((UserAware) c).onUserChanged(userAccount);
+	// }
+	// }
+	// }
 }

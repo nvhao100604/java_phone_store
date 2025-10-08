@@ -1,6 +1,7 @@
 package app.GUI;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import java.awt.Font;
@@ -12,6 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import app.PhoneStoreApplication;
+import app.BUS.AccountBUS;
+import app.DTO.Account;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -19,9 +22,10 @@ import java.awt.event.ActionEvent;
 
 public class LoginGUI extends JPanel {
 
-	// private JFrame frame;
-	private JTextField textField;
-	private JTextField textField_1;
+	private PhoneStoreApplication application;
+	private AccountBUS bus;
+	private JTextField nameField;
+	private JTextField pwdField;
 
 	/**
 	 * Launch the application.
@@ -30,7 +34,9 @@ public class LoginGUI extends JPanel {
 	/**
 	 * Create the application.
 	 */
-	public LoginGUI(PhoneStoreApplication app) {
+	public LoginGUI(PhoneStoreApplication application) {
+		this.application = application;
+		this.bus = new AccountBUS();
 		initialize();
 	}
 
@@ -56,20 +62,20 @@ public class LoginGUI extends JPanel {
 		lblNewLabel_1.setBounds(71, 74, 64, 13);
 		add(lblNewLabel_1);
 
-		textField = new JTextField();
-		textField.setBounds(145, 72, 265, 19);
-		add(textField);
-		textField.setColumns(10);
+		nameField = new JTextField();
+		nameField.setBounds(145, 72, 265, 19);
+		add(nameField);
+		nameField.setColumns(10);
 
 		JLabel lblNewLabel_2 = new JLabel("Password:");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblNewLabel_2.setBounds(70, 120, 64, 13);
 		add(lblNewLabel_2);
 
-		textField_1 = new JTextField();
-		textField_1.setBounds(145, 118, 265, 19);
-		add(textField_1);
-		textField_1.setColumns(10);
+		pwdField = new JTextField();
+		pwdField.setBounds(145, 118, 265, 19);
+		add(pwdField);
+		pwdField.setColumns(10);
 
 		JButton btnNewButton = new JButton("Quên mật khẩu?");
 		btnNewButton.setBorderPainted(false);
@@ -86,7 +92,7 @@ public class LoginGUI extends JPanel {
 		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnNewButton_1.setBounds(131, 209, 105, 21);
 		btnNewButton_1.addActionListener(e -> {
-			((PhoneStoreApplication) SwingUtilities.getWindowAncestor(this)).showMain();
+			HandleLogin();
 		});
 		add(btnNewButton_1);
 
@@ -94,5 +100,33 @@ public class LoginGUI extends JPanel {
 		btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnNewButton_2.setBounds(285, 209, 85, 21);
 		add(btnNewButton_2);
+	}
+
+	public void HandleLogin() {
+		String username = nameField.getText();
+		String password = pwdField.getText();
+		Account responseAccount = bus.Login(username, password);
+
+		if (responseAccount == null) {
+			JOptionPane.showMessageDialog(this, "Không tìm thấy tài khoản");
+			return;
+		}
+
+		JOptionPane.showMessageDialog(this, "Check name: " + responseAccount.getFullName());
+		application.setMainGUIAccount(responseAccount);
+		ClearInput();
+		Navigate();
+	}
+
+	public void ClearInput() {
+		nameField.setText("");
+		pwdField.setText("");
+		revalidate();
+		repaint();
+	}
+
+	public void Navigate() {
+		// System.out.println();
+		application.showMain();
 	}
 }
