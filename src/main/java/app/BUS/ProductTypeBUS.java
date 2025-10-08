@@ -32,6 +32,14 @@ public class ProductTypeBUS {
         return dao.deleteProductType(productTypeId);
     }
 
+    public List<ProductType> searchProductTypes(String keyword) {
+        return dao.searchProductTypes(keyword);
+    }
+
+    public List<ProductType> fillterProductTypes(int status) {
+        return dao.fillterProductTypes(status);
+    }
+
     public static void main(String[] args) {
         ProductTypeBUS bus = new ProductTypeBUS();
         List<ProductType> list = bus.getAll();
