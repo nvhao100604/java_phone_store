@@ -75,6 +75,7 @@ public class sidebar extends JPanel {
 					"src\\main\\resources\\Ảnh\\" + function.getIcon());
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					mainGUI.SetTitle("Quản lý cửa hàng điện thoại | " + function.getFunctionName());
 					mainGUI.InitialGUI(function.getGuiClass());
 					System.out.println("check function: " + function.getGuiClass());
 				}

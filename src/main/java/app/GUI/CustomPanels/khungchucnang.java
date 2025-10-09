@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
@@ -26,13 +27,14 @@ public class khungchucnang extends JPanel {
 	}
 
 	private void initialize() {
-		setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		setBorder(new CompoundBorder(
+				new TitledBorder(null, "Chức năng", TitledBorder.LEFT, TitledBorder.TOP, null, null),
+				new EmptyBorder(40, 20, 40, 20)));
 		setBackground(new Color(255, 255, 255));
 		// setBounds(229, 0, 660, 142);
 		setPreferredSize(new Dimension(500, 0));
 		setMinimumSize(new Dimension(450, 0));
 		setLayout(new GridLayout(2, 5));
-		setBorder(new EmptyBorder(40, 20, 40, 20));
 		btnNewButton = new JButton("");
 		btnNewButton.setToolTipText("");
 		btnNewButton.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon thêm.png"));
