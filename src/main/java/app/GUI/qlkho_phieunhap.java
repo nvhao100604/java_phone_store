@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.event.ActionEvent;
@@ -84,7 +85,8 @@ public class qlkho_phieunhap extends JPanel {
 		add(panel);
 
 		JButton btnPhiuNhp = new JButton("PHIẾU NHẬP");
-		btnPhiuNhp.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon phiếu nhập.png"));
+		URL duongdananh = getClass().getResource("/Ảnh/icon phiếu nhập.png");
+		btnPhiuNhp.setIcon(new ImageIcon(duongdananh));
 		btnPhiuNhp.setForeground(new Color(255, 255, 255));
 		btnPhiuNhp.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnPhiuNhp.setBounds(12, 207, 169, 60);
@@ -98,7 +100,8 @@ public class qlkho_phieunhap extends JPanel {
 		panel.setLayout(null);
 
 		JButton btnNewButton_11 = new JButton("SẢN PHẨM");
-		btnNewButton_11.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon sản phẩm.png"));
+		URL duongdananh1 = getClass().getResource("/Ảnh/icon sản phẩm.png");
+		btnNewButton_11.setIcon(new ImageIcon(duongdananh1));
 		btnNewButton_11.setForeground(new Color(255, 255, 255));
 		btnNewButton_11.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton_11.setBorderPainted(false);
