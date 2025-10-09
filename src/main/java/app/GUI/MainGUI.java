@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import app.PhoneStoreApplication;
 import app.DTO.Account;
+import app.GUI.CustomPanels.sidebar;
 import app.GUI.interfaces.UserAware;
 
 public class MainGUI extends JPanel {

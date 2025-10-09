@@ -16,6 +16,10 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+
+import app.GUI.CustomPanels.khungchucnang;
+import app.GUI.interfaces.FunctionPanel;
+
 import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
@@ -31,7 +35,7 @@ import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import java.awt.Font;
 
-public class qltaikhoan extends JPanel {
+public class qltaikhoan extends JPanel implements FunctionPanel {
 
 	private JTable table;
 	private JTextField textField;
@@ -74,231 +78,7 @@ public class qltaikhoan extends JPanel {
 		topContainer.setLayout(new GridLayout(1, 2));
 		add(topContainer, BorderLayout.NORTH);
 
-
-		JButton btnPhiuNhp = new JButton("PHIẾU NHẬP");
-		URL duongdananh = getClass().getResource("/Ảnh/icon phiếu nhập.png");
-		btnPhiuNhp.setIcon(new ImageIcon(duongdananh));
-		btnPhiuNhp.setForeground(new Color(255, 255, 255));
-		btnPhiuNhp.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnPhiuNhp.setBounds(12, 207, 169, 60);
-		btnPhiuNhp.setBorderPainted(false);
-		btnPhiuNhp.setContentAreaFilled(false);
-		btnPhiuNhp.setOpaque(false);
-		btnPhiuNhp.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		setLayout(null);
-
-		JButton btnNewButton_11 = new JButton("SẢN PHẨM");
-		URL duongdananh1 = getClass().getResource("/Ảnh/icon sản phẩm.png");
-		btnNewButton_11.setIcon(new ImageIcon(duongdananh1));
-		btnNewButton_11.setForeground(new Color(255, 255, 255));
-		btnNewButton_11.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnNewButton_11.setBorderPainted(false);
-		btnNewButton_11.setContentAreaFilled(false);
-		btnNewButton_11.setOpaque(false);
-		btnNewButton_11.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_11.setBounds(12, 135, 157, 76);
-		add(btnNewButton_11);
-		add(btnPhiuNhp);
-
-		JButton btnNewButton_8 = new JButton("THỐNG KÊ");
-		btnNewButton_8.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_8.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon thống kê.png"));
-		btnNewButton_8.setForeground(new Color(255, 255, 255));
-		btnNewButton_8.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnNewButton_8.setBounds(2, 315, 167, 98);
-		btnNewButton_8.setBorderPainted(false);
-		btnNewButton_8.setContentAreaFilled(false);
-		btnNewButton_8.setOpaque(false);
-		add(btnNewButton_8);
-
-		JButton btnNewButton_3 = new JButton("NHÂN VIÊN");
-		btnNewButton_3.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon nhân viên.png"));
-		btnNewButton_3.setForeground(new Color(255, 255, 255));
-		btnNewButton_3.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnNewButton_3.setBorderPainted(false);
-		btnNewButton_3.setContentAreaFilled(false);
-		btnNewButton_3.setOpaque(false);
-		btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_3.setBounds(10, 73, 171, 76);
-		add(btnNewButton_3);
-
-		JButton btnNewButton_7 = new JButton("HÓA ĐƠN");
-		btnNewButton_7.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_7.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon hóa đơn.png"));
-		btnNewButton_7.setForeground(new Color(255, 255, 255));
-		btnNewButton_7.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnNewButton_7.setBounds(2, 265, 167, 70);
-		btnNewButton_7.setBorderPainted(false);
-		btnNewButton_7.setContentAreaFilled(false);
-		btnNewButton_7.setOpaque(false);
-		add(btnNewButton_7);
-
-		JLabel lblNewLabel_13 = new JLabel("");
-		lblNewLabel_13.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon tài khoản ( hiển thị ).png"));
-		lblNewLabel_13.setBounds(25, 691, 63, 55);
-		add(lblNewLabel_13);
-
-		JLabel lblNewLabel_14 = new JLabel("Admin");
-		lblNewLabel_14.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_14.setForeground(new Color(255, 255, 255));
-		lblNewLabel_14.setBounds(90, 701, 45, 13);
-		add(lblNewLabel_14);
-
-		JButton btnNewButton_13 = new JButton("Đăng xuất");
-		btnNewButton_13.setBorderPainted(false);
-		btnNewButton_13.setContentAreaFilled(false);
-		btnNewButton_13.setOpaque(false);
-		btnNewButton_13.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_13.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnNewButton_13.setForeground(new Color(255, 255, 255));
-		btnNewButton_13.setBounds(43, 724, 149, 21);
-		add(btnNewButton_13);
-
-		JButton btnNewButton_14 = new JButton("TÀI KHOẢN");
-		btnNewButton_14.setForeground(new Color(255, 255, 255));
-		btnNewButton_14.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnNewButton_14.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// try {
-				// giaodientaikhoan = new qltaikhoan();
-				// giaodientaikhoan.frmQunTaikhoan.setVisible(true);
-				// } catch (Exception e1) {
-				// e1.printStackTrace();
-				// }
-			}
-		});
-		btnNewButton_14.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon tài khoản ( chức năng ).png"));
-		btnNewButton_14.setBounds(11, 395, 158, 55);
-		btnNewButton_14.setBorderPainted(false);
-		btnNewButton_14.setContentAreaFilled(false);
-		btnNewButton_14.setOpaque(false);
-		add(btnNewButton_14);
-
-		JButton btnNewButton_10 = new JButton("PHÂN QUYỀN");
-		btnNewButton_10.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_10.setBackground(new Color(255, 255, 255));
-		btnNewButton_10.setForeground(new Color(255, 255, 255));
-		btnNewButton_10.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnNewButton_10.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon phân quyền.png"));
-		btnNewButton_10.setBounds(24, 450, 157, 70);
-		btnNewButton_10.setBorderPainted(false);
-		btnNewButton_10.setContentAreaFilled(false);
-		btnNewButton_10.setOpaque(false);
-		add(btnNewButton_10);
-
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEFT, TitledBorder.TOP, null, null));
-		panel_1.setBackground(new Color(255, 255, 255));
-		panel_1.setBounds(229, 0, 660, 142);
-		add(panel_1);
-		panel_1.setLayout(null);
-
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setToolTipText("");
-		btnNewButton.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon thêm.jpg"));
-		btnNewButton.setBorderPainted(false);
-		btnNewButton.setContentAreaFilled(false);
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					giaodienthem = new qltaikhoan_gdthem();
-					giaodienthem.frmThmTiKhon.setVisible(true);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		btnNewButton.setBounds(20, 33, 55, 50);
-		panel_1.add(btnNewButton);
-
-		JButton btnNewButton_1 = new JButton("");
-		btnNewButton_1.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon xóa.jpg"));
-		btnNewButton_1.setBorderPainted(false);
-		btnNewButton_1.setContentAreaFilled(false);
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_1.setBounds(85, 33, 66, 50);
-		panel_1.add(btnNewButton_1);
-
-		JButton btnNewButton_2 = new JButton("");
-		btnNewButton_2.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon chỉnh sửa.jpg"));
-		btnNewButton_2.setBorderPainted(false);
-		btnNewButton_2.setContentAreaFilled(false);
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					giaodienchinhsua = new qltaikhoan_gdchinhsua();
-					giaodienchinhsua.frmThmTiKhon.setVisible(true);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		btnNewButton_2.setBounds(171, 33, 66, 50);
-		panel_1.add(btnNewButton_2);
-
-		JButton btnNewButton_4 = new JButton("");
-		btnNewButton_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_4.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon nhập excel.jpg"));
-		btnNewButton_4.setBorderPainted(false);
-		btnNewButton_4.setContentAreaFilled(false);
-		btnNewButton_4.setBounds(260, 33, 55, 50);
-		panel_1.add(btnNewButton_4);
-
-		JButton btnNewButton_5 = new JButton("");
-		btnNewButton_5.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon xuất excel.jpg"));
-		btnNewButton_5.setBorderPainted(false);
-		btnNewButton_5.setContentAreaFilled(false);
-		btnNewButton_5.setBounds(343, 33, 55, 50);
-		panel_1.add(btnNewButton_5);
-
-		JLabel lblNewLabel = new JLabel("Thêm");
-		lblNewLabel.setBounds(30, 89, 33, 28);
-		panel_1.add(lblNewLabel);
-
-		JLabel lblNewLabel_1 = new JLabel("Xóa");
-		lblNewLabel_1.setBounds(106, 97, 25, 13);
-		panel_1.add(lblNewLabel_1);
-
-		JLabel lblNewLabel_2 = new JLabel("Chỉnh sửa");
-		lblNewLabel_2.setBounds(171, 97, 83, 13);
-		panel_1.add(lblNewLabel_2);
-
-		JLabel lblNewLabel_4 = new JLabel("Nhập excel");
-		lblNewLabel_4.setBounds(260, 97, 84, 13);
-		panel_1.add(lblNewLabel_4);
-
-		JLabel lblNewLabel_5 = new JLabel("Xuất excel");
-		lblNewLabel_5.setBounds(343, 97, 73, 13);
-		panel_1.add(lblNewLabel_5);
-
-		khungchucnang khungchucnang = new khungchucnang();
+		khungchucnang khungchucnang = new khungchucnang(this);
 		topContainer.add(khungchucnang);
 
 
@@ -355,5 +135,25 @@ public class qltaikhoan extends JPanel {
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_6.setBounds(807, 162, 195, 27);
 		add(lblNewLabel_6);
+	}
+
+	public void Add() {
+		System.out.println("Add Account");
+	}
+
+	public void Delete() {
+		System.out.println("Delete Account");
+	}
+
+	public void Edit() {
+		System.out.println("Edit Account");
+	}
+
+	public void ImportExcel() {
+		System.out.println("Import Excel Account");
+	}
+
+	public void ExportExcel() {
+		System.out.println("Export Excel Account");
 	}
 }

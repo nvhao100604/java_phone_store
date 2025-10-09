@@ -3,7 +3,6 @@ package app;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,7 +10,6 @@ import javax.swing.JPanel;
 import app.DTO.Account;
 import app.GUI.LoginGUI;
 import app.GUI.MainGUI;
-import app.GUI.sidebar;
 import app.utils.FadeTransition;
 
 public class PhoneStoreApplication extends JFrame {
