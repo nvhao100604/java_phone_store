@@ -32,6 +32,10 @@ public class CustomerBUS {
         return dao.deleteCustomer(customerId);
     }
 
+    public List<Customer> searchCustomers(String keyword) {
+        return dao.searchCustomers(keyword);
+    } 
+
     public static void main(String[] args) {
         CustomerBUS bus = new CustomerBUS();
         List<Customer> list = bus.getAll();
