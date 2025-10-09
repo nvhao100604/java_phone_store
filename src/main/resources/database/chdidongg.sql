@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 07, 2025 at 12:18 PM
+-- Generation Time: Oct 08, 2025 at 05:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -421,10 +421,16 @@ CREATE TABLE `phanquyen` (
 
 INSERT INTO `phanquyen` (`idQUYEN`, `idCN`) VALUES
 (0, 1),
-(0, 1),
-(0, 1),
-(0, 1),
-(0, 1);
+(0, 2),
+(0, 3),
+(0, 4),
+(0, 5),
+(0, 6),
+(0, 7),
+(0, 8),
+(0, 9),
+(0, 10),
+(0, 11);
 
 -- --------------------------------------------------------
 
@@ -552,6 +558,17 @@ CREATE TABLE `taikhoan` (
   `idQUYEN` int(11) NOT NULL DEFAULT 1,
   `TRANGTHAI` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `taikhoan`
+--
+
+INSERT INTO `taikhoan` (`idTK`, `USERNAME`, `PASSWORD`, `SDT`, `EMAIL`, `HOTEN`, `idQUYEN`, `TRANGTHAI`) VALUES
+(0, 'admin', '12345', '0901234567', 'admin@myapp.com', 'Nguyễn Văn A', 0, 1),
+(1, 'manager', '5e884898da28047151d0e56f8dc6292773603d0d6aabfca13f8c053ec3f7e52b', '0911223344', 'manager@myapp.com', 'Lê Thị B', 1, 1),
+(2, 'editor', '4a2d5e751a02b374d6c4e16d4e0e572013f9f30e0b3c675c92c42c77d48d3c5b', '0887654321', 'editor@myapp.com', 'Trần Văn C', 2, 1),
+(3, 'user1', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', '0709988776', 'user1@myapp.com', 'Phạm Thu D', 2, 1),
+(4, 'guest', '9625394d60d2b1f814524c878e1b655f46995079c6d36e2cc4de40a7a012a64c', NULL, NULL, 'Vô Danh', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -772,7 +789,7 @@ ALTER TABLE `chitietsanpham`
 -- AUTO_INCREMENT for table `chucnang`
 --
 ALTER TABLE `chucnang`
-  MODIFY `idCN` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `idCN` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `danhmuc`
@@ -832,7 +849,7 @@ ALTER TABLE `sanpham`
 -- AUTO_INCREMENT for table `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `idTK` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `idTK` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `thongsokythuat`

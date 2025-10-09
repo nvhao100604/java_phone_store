@@ -23,6 +23,8 @@ import javax.swing.table.DefaultTableModel;
 import app.BUS.EmployeeBUS;
 import app.DTO.Employee;
 import app.DTO.Product;
+import app.GUI.CustomPanels.khungchucnang;
+import app.GUI.interfaces.FunctionPanel;
 import app.utils.UIUtils;
 
 import javax.swing.ImageIcon;
@@ -41,7 +43,7 @@ import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import java.awt.Font;
 
-public class quanlynhanvien extends JPanel {
+public class quanlynhanvien extends JPanel implements FunctionPanel {
 
 	private EmployeeBUS bus;
 	// private JFrame frmQunLKho;
@@ -93,7 +95,7 @@ public class quanlynhanvien extends JPanel {
 		topContainer.setLayout(new GridLayout(1, 2));
 		add(topContainer, BorderLayout.NORTH);
 
-		khungchucnang khungchucnang = new khungchucnang();
+		khungchucnang khungchucnang = new khungchucnang(this);
 		topContainer.add(khungchucnang);
 
 		JPanel panel_2 = new JPanel();
@@ -282,5 +284,25 @@ public class quanlynhanvien extends JPanel {
 		table.getColumnModel().getColumn(1).setPreferredWidth(98);
 		scrollPane.setViewportView(table);
 
+	}
+
+	public void Add() {
+		System.out.println("Add employee");
+	}
+
+	public void Delete() {
+		System.out.println("Delete employee");
+	}
+
+	public void Edit() {
+		System.out.println("Edit employee");
+	}
+
+	public void ImportExcel() {
+		System.out.println("Import Excel employee");
+	}
+
+	public void ExportExcel() {
+		System.out.println("Export Excel employee");
 	}
 }

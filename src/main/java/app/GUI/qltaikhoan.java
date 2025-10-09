@@ -15,6 +15,10 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+
+import app.GUI.CustomPanels.khungchucnang;
+import app.GUI.interfaces.FunctionPanel;
+
 import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
@@ -30,7 +34,7 @@ import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import java.awt.Font;
 
-public class qltaikhoan extends JPanel {
+public class qltaikhoan extends JPanel implements FunctionPanel {
 
 	private JTable table;
 	private JTextField textField;
@@ -73,7 +77,7 @@ public class qltaikhoan extends JPanel {
 		topContainer.setLayout(new GridLayout(1, 2));
 		add(topContainer, BorderLayout.NORTH);
 
-		khungchucnang khungchucnang = new khungchucnang();
+		khungchucnang khungchucnang = new khungchucnang(this);
 		topContainer.add(khungchucnang);
 
 		JPanel panel_2 = new JPanel();
@@ -129,5 +133,25 @@ public class qltaikhoan extends JPanel {
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_6.setBounds(807, 162, 195, 27);
 		add(lblNewLabel_6);
+	}
+
+	public void Add() {
+		System.out.println("Add Account");
+	}
+
+	public void Delete() {
+		System.out.println("Delete Account");
+	}
+
+	public void Edit() {
+		System.out.println("Edit Account");
+	}
+
+	public void ImportExcel() {
+		System.out.println("Import Excel Account");
+	}
+
+	public void ExportExcel() {
+		System.out.println("Export Excel Account");
 	}
 }
