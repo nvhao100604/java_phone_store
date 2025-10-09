@@ -11,6 +11,7 @@ import java.awt.Dimension;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
@@ -79,6 +80,7 @@ public class qltaikhoan extends JPanel implements FunctionPanel {
 
 		khungchucnang khungchucnang = new khungchucnang(this);
 		topContainer.add(khungchucnang);
+
 
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(null, "Tìm kiếm", TitledBorder.LEFT, TitledBorder.TOP, null, null));

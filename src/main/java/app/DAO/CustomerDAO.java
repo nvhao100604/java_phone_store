@@ -103,4 +103,29 @@ public class CustomerDAO {
             }
         return 0;
     }
+
+    public List<Customer> searchCustomers(String keyword) {
+        List<Customer> customers = new ArrayList<>();
+        String sql = "SELECT * FROM khachhang WHERE (hoten LIKE ? OR sdt LIKE ?) AND TRANGTHAI = 1";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql)) {
+                String likeKeyword =  "%" + keyword + "%";
+                for (int i = 1; i <= 2; i++) {
+                    st.setString(i, likeKeyword);
+                }
+                try (ResultSet rs = st.executeQuery()) {
+                    while (rs.next()) {
+                        Customer customer = new Customer();
+                        customer.setCustomerId(rs.getInt("idkh"));
+                        customer.setFullName(rs.getString("hoten"));
+                        customer.setPhoneNumber(rs.getString("sodt"));
+                        customer.setAddress(rs.getString("diachi"));
+                        customers.add(customer);
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        return customers;
+    }
 }

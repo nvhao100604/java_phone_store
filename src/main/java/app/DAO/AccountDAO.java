@@ -142,6 +142,61 @@ public class AccountDAO {
         return 0;
     }
 
+    public List<Account> searchAccounts(String keyword) {
+        List<Account> accounts = new ArrayList<>();
+        String sql = "SELECT * FROM taikhoan WHERE (USERNAME LIKE ? OR SDT LIKE ? OR EMAIL LIKE ? OR HOTEN LIKE ?) AND TRANGTHAI = 1";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql)) {
+                String likeKeyword = "%" + keyword + "%";
+                for (int i = 1; i <= 4; i++) {
+                    st.setString(i, likeKeyword);
+                }
+                try (ResultSet rs = st.executeQuery()) {
+                    while (rs.next()) {
+                        Account account = new Account();
+                        account.setAccountId(rs.getInt("idTK"));
+                        account.setUsername(rs.getString("USERNAME"));
+                        account.setPassword(rs.getString("PASSWORD"));
+                        account.setPhoneNumber(rs.getString("SDT"));
+                        account.setEmail(rs.getString("EMAIL"));
+                        account.setFullName(rs.getString("HOTEN"));
+                        account.setStatus(rs.getInt("TRANGTHAI"));
+                        account.setRoleId(rs.getInt("idQUYEN"));
+                        accounts.add(account);
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        return accounts;
+    }
+
+    public List<Account> fillterAccounts(int status) {
+        List<Account> accounts = new ArrayList<>();
+        String sql = "SELECT * FROM taikhoan WHERE TRANGTHAI = ?";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql)) {
+                st.setInt(1, status);
+                try (ResultSet rs = st.executeQuery()) {
+                    while (rs.next()) {
+                        Account account = new Account();
+                        account.setAccountId(rs.getInt("idTK"));
+                        account.setUsername(rs.getString("USERNAME"));
+                        account.setPassword(rs.getString("PASSWORD"));
+                        account.setPhoneNumber(rs.getString("SDT"));
+                        account.setEmail(rs.getString("EMAIL"));
+                        account.setFullName(rs.getString("HOTEN"));
+                        account.setRoleId(rs.getInt("idQUYEN"));
+                        account.setStatus(rs.getInt("TRANGTHAI"));
+                        accounts.add(account);
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        return accounts;
+    }
+  
     public static void main(String[] args) {
         String username = "admin";
         String password = "12345";

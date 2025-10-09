@@ -95,4 +95,46 @@ public class ProductTypeDAO {
             }
         return 0;
     }
+
+    public List<ProductType> searchProductTypes(String keyword) {
+        List<ProductType> productTypes = new ArrayList<>();
+        String sql = "SELECT * FROM danhmmuc WHERE (LOAISP LIKE ?) AND TRANGTHAI = 1";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql)) {
+                st.setString(1, "%" + keyword + "%");
+                try (ResultSet rs = st.executeQuery()) {
+                    while (rs.next()) {
+                        ProductType productType = new ProductType();
+                        productType.setProductTypeId(rs.getInt("idDM"));    
+                        productType.setProductTypeName(rs.getString("LOAISP"));
+                        productType.setProductTypeStatus(rs.getInt("TRANGTHAI"));
+                        productTypes.add(productType);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return productTypes;
+    }
+
+    public List<ProductType> fillterProductTypes(int status) {
+        List<ProductType> productTypes = new ArrayList<>();
+        String sql = "SELECT * FROM danhmuc WHERE TRANGTHAI = ?";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql)) {
+                st.setInt(1, status);
+                try (ResultSet rs = st.executeQuery()) {
+                    while (rs.next()) {
+                        ProductType productType = new ProductType();
+                        productType.setProductTypeId(rs.getInt("idDM"));    
+                        productType.setProductTypeName(rs.getString("LOAISP"));
+                        productType.setProductTypeStatus(rs.getInt("TRANGTHAI"));
+                        productTypes.add(productType);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return productTypes;
+    }
 }

@@ -95,4 +95,46 @@ public class CompanyDAO {
             }
         return 0;
     }
+
+    public List<Company> searchCompanies(String keyword) {
+        List<Company> companies = new ArrayList<>();
+        String sql = "SELECT * FROM hang WHERE (TENHANG LIKE ?) AND TRANGTHAI = 1";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql)) {
+                st.setString(1, "%" + keyword + "%");
+                try (ResultSet rs = st.executeQuery()) {
+                    while (rs.next()) {
+                        Company company = new Company();
+                        company.setCompanyId(rs.getInt("idHANG"));
+                        company.setCompanyName(rs.getString("TENHANG"));
+                        company.setCompanyStatus(rs.getInt("TRANGTHAI"));
+                        companies.add(company);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return companies;
+    }
+
+    public List<Company> fillterCompanies(int status) {
+        List<Company> companies = new ArrayList<>();
+        String sql = "SELECT * FROM hang WHERE TRANGTHAI = ?";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql)) {
+                st.setInt(1, status);
+                try (ResultSet rs = st.executeQuery()) {
+                    while (rs.next()) {
+                        Company compnay = new Company();
+                        compnay.setCompanyId(rs.getInt("idHANG"));
+                        compnay.setCompanyName(rs.getString("TENHANG"));
+                        compnay.setCompanyStatus(rs.getInt("TRANGTHAI"));
+                        companies.add(compnay);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return companies;
+    }
 }
