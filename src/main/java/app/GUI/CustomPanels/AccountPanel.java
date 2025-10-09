@@ -1,4 +1,4 @@
-package app.GUI;
+package app.GUI.CustomPanels;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import app.GUI.MainGUI;
 import app.utils.ConfirmDialog;
 
 public class AccountPanel extends JPanel {

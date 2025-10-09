@@ -1,8 +1,7 @@
-package app.GUI;
+package app.GUI.CustomPanels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -20,7 +19,7 @@ import javax.swing.SwingConstants;
 import app.BUS.FunctionBUS;
 import app.DTO.Account;
 import app.DTO.Function;
-import app.GUI.interfaces.UserAware;
+import app.GUI.MainGUI;
 
 public class sidebar extends JPanel {
 	JLabel lblNewLabel_13, lblNewLabel_14;
@@ -83,7 +82,7 @@ public class sidebar extends JPanel {
 			button.setPreferredSize(new Dimension(250, 80));
 			navPanel.add(button);
 		}
-		add(navPanel, BorderLayout.CENTER);
+		add(navPanel, BorderLayout.NORTH);
 		add(accountPanel, BorderLayout.SOUTH);
 	}
 
