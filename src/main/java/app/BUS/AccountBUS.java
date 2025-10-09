@@ -6,10 +6,14 @@ import app.DAO.AccountDAO;
 import app.DTO.Account;
 
 public class AccountBUS {
-    private AccountDAO dao;    
+    private AccountDAO dao;
 
     public AccountBUS() {
         dao = new AccountDAO();
+    }
+
+    public Account Login(String username, String password) {
+        return dao.Login(username, password);
     }
 
     public List<Account> getAll() {
@@ -19,7 +23,7 @@ public class AccountBUS {
     public Account getAccountById(int accountId) {
         return dao.getAccountById(accountId);
     }
-    
+
     public int addAccount(Account account) {
         return dao.addAccount(account);
     }
