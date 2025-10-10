@@ -21,6 +21,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -270,6 +271,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		filterButton.setBackground(Color.blue);
 		filterButton.setForeground(Color.WHITE);
 		filterButton.setVerticalAlignment(SwingConstants.CENTER);
+		filterButton.addActionListener(e -> Search());
 		processPanel.add(filterButton);
 
 		JButton refreshButton = new JButton("Làm mới");
@@ -278,6 +280,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		refreshButton.setBackground(new Color(173, 255, 47));
 		refreshButton.setForeground(Color.BLACK);
 		refreshButton.setVerticalAlignment(SwingConstants.CENTER);
+		refreshButton.addActionListener(e -> Refresh());
 		processPanel.add(refreshButton);
 
 		filterPanel.add(namePanel);
@@ -289,7 +292,6 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		JLabel title = new JLabel("Danh sách sản phẩm", SwingConstants.CENTER);
 		title.setFont(new Font("Arial", Font.BOLD, 28));
-		// title.setBackground(new Color(0, 64, 128));
 		title.setOpaque(true);
 		title.setPreferredSize(new Dimension(0, 80));
 		add(Box.createRigidArea(new Dimension(0, 10)));
@@ -298,12 +300,10 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		// Data table
 		JPanel listPanel = new JPanel();
 		listPanel.setLayout(new BorderLayout());
-		// listPanel.setBackground(new Color(255, 255, 255));
 
 		scrollPane = new JScrollPane();
 		String[] columnNames = { "Mã sản phẩm", "Tên sản phẩm", "Loại", "Hãng", "Giá bán" };
 		List<Product> productList = bus.getAll();
-		// System.out.println("Size: " + productList.size());
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 				productList.stream()
@@ -387,13 +387,18 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 	public void HandleNameChange() {
 		String name = nameSearchField.getText();
 		System.out.println("Searching for name: " + name);
-
+		if (name.isEmpty()) {
+			HandleNull();
+		}
 		List<Product> filteredProducts = bus.searchProductsByName(name);
 		SetDataTable(filteredProducts);
 	}
 
 	public void HandleBrandChange() {
 		String brandName = brandSearchField.getText();
+		if (brandName.isEmpty()) {
+			HandleNull();
+		}
 
 		List<Product> filteredProducts = bus.filterProductsByBrandName(brandName);
 		SetDataTable(filteredProducts);
@@ -422,8 +427,51 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		BigDecimal fromPrice = fromText.isEmpty() ? null : new BigDecimal(fromText);
 		BigDecimal toPrice = toText.isEmpty() ? null : new BigDecimal(toText);
 
+		if (fromPrice == null && toPrice == null || fromPrice.compareTo(toPrice) >= 0) {
+			HandleNull();
+		}
+
 		List<Product> filteredProducts = bus.filterProductsByPriceRange(fromPrice, toPrice);
 		SetDataTable(filteredProducts);
+	}
+
+	public void Search() {
+		System.out.println("Search product");
+		String keyword = nameSearchField.getText().equals("") ? null : nameSearchField.getText();
+		BigDecimal minPrice = priceFromField.getText().isEmpty() ? null
+				: new BigDecimal(priceFromField.getText());
+		BigDecimal maxPrice = priceToField.getText().isEmpty() ? null
+				: new BigDecimal(priceToField.getText());
+		int categoryId = categoryComboBox.getSelectedItem() instanceof app.DTO.Category
+				? ((app.DTO.Category) categoryComboBox.getSelectedItem()).getCategoryId()
+				: 0;
+		String brandName = brandSearchField.getText().equals("") ? null : brandSearchField.getText();
+		int sortByPriceAscending = 1;
+
+		List<Product> filteredProducts = bus.filterProducts(
+				keyword,
+				minPrice,
+				maxPrice,
+				categoryId,
+				brandName,
+				sortByPriceAscending);
+		SetDataTable(filteredProducts);
+	}
+
+	public void Refresh() {
+		nameSearchField.setText("");
+		brandSearchField.setText("");
+		priceFromField.setText("");
+		priceToField.setText("");
+		categoryComboBox.setSelectedIndex(0);
+		List<Product> allProducts = bus.getAll();
+		SetDataTable(allProducts);
+	}
+
+	public void HandleNull() {
+		List<Product> allProducts = bus.getAll();
+		SetDataTable(allProducts);
+		return;
 	}
 
 	public void SetDataTable(List<Product> products) {
@@ -449,20 +497,6 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 			model.addRow(new Object[] { p.getProductId(), p.getProductName(),
 					p.getCategory(), p.getBrand(), p.getSalePrice() });
 		}
-	}
-
-	public void Search() {
-		System.out.println("Search product");
-	}
-
-	public void Refresh() {
-		nameSearchField.setText("");
-		brandSearchField.setText("");
-		priceFromField.setText("");
-		priceToField.setText("");
-		categoryComboBox.setSelectedIndex(0);
-		List<Product> allProducts = bus.getAll();
-		SetDataTable(allProducts);
 	}
 
 	public void Add() {

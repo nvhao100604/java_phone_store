@@ -65,6 +65,22 @@ public class ProductBUS {
 		return dao.sortProductsByPrice(ascending);
 	}
 
+	public List<Product> filterProducts(
+			String keyword,
+			BigDecimal minPrice,
+			BigDecimal maxPrice,
+			int categoryId,
+			String brandName,
+			int sortByPriceAscending) {
+		return dao.filterProducts(
+				keyword,
+				minPrice,
+				maxPrice,
+				categoryId,
+				brandName,
+				sortByPriceAscending);
+	}
+
 	public static void main(String[] args) {
 		ProductBUS bus = new ProductBUS();
 		List<Product> products = bus.getAll();
