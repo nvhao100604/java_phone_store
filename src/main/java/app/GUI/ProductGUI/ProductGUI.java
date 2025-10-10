@@ -1,0 +1,521 @@
+package app.GUI.ProductGUI;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.KeyListener;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
+import java.util.Locale.Category;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.text.AbstractDocument;
+
+import app.BUS.CategoryBUS;
+import app.BUS.ProductBUS;
+import app.DTO.Product;
+import app.GUI.CustomPanels.FilterPanel;
+import app.GUI.CustomPanels.khungchucnang;
+import app.GUI.interfaces.FunctionPanel;
+import app.utils.DecimalFilter;
+
+public class ProductGUI extends JPanel implements FunctionPanel {
+
+	private JTable table;
+	private ProductBUS bus;
+	private CategoryBUS categoryBus;
+	private khungchucnang khung;
+	private JTextField nameSearchField;
+	private JTextField brandSearchField;
+	private JComboBox<app.DTO.Category> categoryComboBox;
+	private JTextField priceFromField;
+	private JTextField priceToField;
+	private JLabel noResultLabel;
+	private JScrollPane scrollPane;
+
+	public ProductGUI() {
+		// Constructor implementation
+		initialize();
+	}
+
+	public void initialize() {
+		bus = new ProductBUS();
+		categoryBus = new CategoryBUS();
+		setLayout(new BorderLayout());
+
+		JPanel topPanel = new JPanel();
+		topPanel.setPreferredSize(new Dimension(0, 250));
+		topPanel.setLayout(new BorderLayout());
+		topPanel.setBackground(new Color(0, 0, 0));
+		add(topPanel, BorderLayout.NORTH);
+
+		khung = new khungchucnang(this);
+		khung.setBorder(new EmptyBorder(50, 0, 50, 0));
+		topPanel.add(khung, BorderLayout.WEST);
+
+		FilterPanel filterPanel = new FilterPanel();
+		filterPanel.setLayout(new GridLayout(3, 4, 40, 10));
+		// filterPanel.setBackground(new Color(255, 255, 0));
+		topPanel.add(filterPanel, BorderLayout.CENTER);
+
+		JPanel namePanel = new JPanel();
+		namePanel.setLayout(new BorderLayout());
+		namePanel.setOpaque(false);
+		namePanel.setBackground(null);
+		namePanel.setBackground(new Color(255, 0, 0));
+		namePanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+		// namePanel.setPreferredSize(new Dimension(200, 100));
+
+		JLabel nameSearchLabel = new JLabel("Tên sản phẩm:");
+		nameSearchLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+		nameSearchLabel.setBorder(new EmptyBorder(0, 10, 0, 10));
+		namePanel.add(nameSearchLabel, BorderLayout.WEST);
+
+		nameSearchField = new JTextField(15);
+		nameSearchField.setFont(new Font("Arial", Font.PLAIN, 20));
+		nameSearchField.setBackground(new Color(240, 240, 240));
+		nameSearchField.setBorder(new CompoundBorder(
+				BorderFactory.createLineBorder(new Color(200, 200, 200), 2),
+				new EmptyBorder(5, 5, 5, 5)));
+		nameSearchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+			@Override
+			public void insertUpdate(javax.swing.event.DocumentEvent e) {
+				HandleNameChange();
+			}
+
+			@Override
+			public void removeUpdate(javax.swing.event.DocumentEvent e) {
+				HandleNameChange();
+			}
+
+			@Override
+			public void changedUpdate(javax.swing.event.DocumentEvent e) {
+				HandleNameChange();
+			}
+		});
+		namePanel.add(nameSearchField, BorderLayout.CENTER);
+
+		JPanel typePanel = new JPanel();
+		typePanel.setLayout(new BorderLayout());
+		typePanel.setOpaque(false);
+		typePanel.setBackground(null);
+		typePanel.setBackground(new Color(255, 0, 0));
+		typePanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+		// namePanel.setPreferredSize(new Dimension(200, 100));
+
+		JLabel typeLabel = new JLabel("Loại sản phẩm:");
+		typeLabel.setBorder(new EmptyBorder(0, 10, 0, 10));
+		typeLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+		typePanel.add(typeLabel, BorderLayout.WEST);
+
+		categoryComboBox = new JComboBox<app.DTO.Category>();
+		categoryComboBox.setEditable(false);
+		categoryComboBox.setFont(new Font("Arial", Font.PLAIN, 18));
+		categoryComboBox.setBackground(new Color(240, 240, 240));
+		categoryComboBox.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
+		categoryComboBox.setBorder(new CompoundBorder(
+				BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
+				new EmptyBorder(0, 10, 0, 10)));
+		LoadComboBoxData();
+		categoryComboBox.addActionListener(e -> {
+			Object selectedItem = categoryComboBox.getSelectedItem();
+			System.out.println("Giá trị được chọn: " + selectedItem);
+
+			handleCategoryChange(selectedItem);
+		});
+		typePanel.add(categoryComboBox, BorderLayout.CENTER);
+
+		JPanel brandPanel = new JPanel();
+		brandPanel.setLayout(new BorderLayout());
+		brandPanel.setOpaque(false);
+		brandPanel.setBackground(null);
+		brandPanel.setBackground(new Color(255, 0, 0));
+		brandPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+
+		JLabel brandLabel = new JLabel("Hãng sản xuất:");
+		brandLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+		brandLabel.setBorder(new EmptyBorder(0, 10, 0, 10));
+		brandPanel.add(brandLabel, BorderLayout.WEST);
+
+		brandSearchField = new JTextField(15);
+		brandSearchField.setFont(new Font("Arial", Font.PLAIN, 20));
+		brandSearchField.setBorder(new CompoundBorder(
+				BorderFactory.createLineBorder(new Color(200, 200, 200), 2),
+				new EmptyBorder(5, 5, 5, 5)));
+		brandSearchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+			@Override
+			public void insertUpdate(javax.swing.event.DocumentEvent e) {
+				HandleBrandChange();
+			}
+
+			@Override
+			public void removeUpdate(javax.swing.event.DocumentEvent e) {
+				HandleBrandChange();
+			}
+
+			@Override
+			public void changedUpdate(javax.swing.event.DocumentEvent e) {
+				HandleBrandChange();
+			}
+		});
+		brandSearchField.setBackground(new Color(240, 240, 240));
+		brandPanel.add(brandSearchField, BorderLayout.CENTER);
+
+		JPanel pricePanel = new JPanel(new GridBagLayout());
+		pricePanel.setOpaque(false);
+		pricePanel.setBackground(null);
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(0, 5, 0, 5);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		int col = 0;
+
+		DocumentListener documentChangeListener = new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				HandlePriceChange();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				HandlePriceChange();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				HandlePriceChange();
+			}
+		};
+
+		DecimalFilter decimalFilter = new DecimalFilter();
+
+		JLabel priceLabel = new JLabel("Giá:");
+		priceLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+		priceLabel.setBorder(new EmptyBorder(0, 10, 0, 10));
+
+		gbc.gridx = col++;
+		gbc.weightx = 0;
+		pricePanel.add(priceLabel, gbc);
+
+		priceFromField = new JTextField(15);
+		priceFromField.setFont(new Font("Arial", Font.PLAIN, 20));
+		priceFromField.setBackground(new Color(240, 240, 240));
+		priceFromField.setBorder(new CompoundBorder(
+				BorderFactory.createLineBorder(new Color(200, 200, 200), 2),
+				new EmptyBorder(5, 5, 5, 5)));
+		((AbstractDocument) priceFromField.getDocument()).setDocumentFilter(decimalFilter);
+		priceFromField.getDocument().addDocumentListener(documentChangeListener);
+
+		gbc.gridx = col++;
+		gbc.weightx = 0.5;
+		pricePanel.add(priceFromField, gbc);
+
+		JLabel line = new JLabel("-");
+		line.setFont(new Font("Arial", Font.PLAIN, 20));
+		line.setBorder(new EmptyBorder(0, 10, 0, 10));
+		line.setHorizontalAlignment(SwingConstants.CENTER);
+
+		gbc.gridx = col++;
+		gbc.weightx = 0;
+		pricePanel.add(line, gbc);
+
+		priceToField = new JTextField(15);
+		priceToField.setFont(new Font("Arial", Font.PLAIN, 20));
+		priceToField.setBackground(new Color(240, 240, 240));
+		priceToField.setBorder(new CompoundBorder(
+				BorderFactory.createLineBorder(new Color(200, 200, 200), 2),
+				new EmptyBorder(5, 5, 5, 5)));
+		((AbstractDocument) priceToField.getDocument()).setDocumentFilter(decimalFilter);
+		priceToField.getDocument().addDocumentListener(documentChangeListener);
+
+		gbc.gridx = col++;
+		gbc.weightx = 0.5;
+		pricePanel.add(priceToField, gbc);
+
+		JPanel emptyPanel = new JPanel();
+		emptyPanel.setOpaque(false);
+
+		JPanel processPanel = new JPanel();
+		processPanel.setBackground(null);
+		processPanel.setOpaque(false);
+		processPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+
+		JButton filterButton = new JButton("Tìm kiếm");
+		filterButton.setFont(new Font("Arial", Font.PLAIN, 20));
+		filterButton.setBorder(new EmptyBorder(10, 15, 10, 15));
+		filterButton.setBackground(Color.blue);
+		filterButton.setForeground(Color.WHITE);
+		filterButton.setVerticalAlignment(SwingConstants.CENTER);
+		filterButton.addActionListener(e -> Search());
+		processPanel.add(filterButton);
+
+		JButton refreshButton = new JButton("Làm mới");
+		refreshButton.setFont(new Font("Arial", Font.PLAIN, 20));
+		refreshButton.setBorder(new EmptyBorder(10, 15, 10, 15));
+		refreshButton.setBackground(new Color(173, 255, 47));
+		refreshButton.setForeground(Color.BLACK);
+		refreshButton.setVerticalAlignment(SwingConstants.CENTER);
+		refreshButton.addActionListener(e -> Refresh());
+		processPanel.add(refreshButton);
+
+		filterPanel.add(namePanel);
+		filterPanel.add(typePanel);
+		filterPanel.add(brandPanel);
+		filterPanel.add(pricePanel);
+		filterPanel.add(emptyPanel);
+		filterPanel.add(processPanel);
+
+		JLabel title = new JLabel("Danh sách sản phẩm", SwingConstants.CENTER);
+		title.setFont(new Font("Arial", Font.BOLD, 28));
+		title.setOpaque(true);
+		title.setPreferredSize(new Dimension(0, 80));
+		add(Box.createRigidArea(new Dimension(0, 10)));
+		add(title, BorderLayout.CENTER);
+
+		// Data table
+		JPanel listPanel = new JPanel();
+		listPanel.setLayout(new BorderLayout());
+
+		scrollPane = new JScrollPane();
+		String[] columnNames = { "Mã sản phẩm", "Tên sản phẩm", "Loại", "Hãng", "Giá bán" };
+		List<Product> productList = bus.getAll();
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+				productList.stream()
+						.map(p -> new Object[] { p.getProductId(), p.getProductName(),
+								p.getCategory(), p.getBrand(), p.getSalePrice() })
+						.toArray(Object[][]::new),
+				columnNames));
+		table.getColumnModel().getColumn(0).setPreferredWidth(94);
+		table.getColumnModel().getColumn(1).setPreferredWidth(98);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		table.getTableHeader().setReorderingAllowed(false);
+		table.setIntercellSpacing(new Dimension(8, 4));
+		table.setRowHeight(28);
+		table.setFont(new Font("Arial", Font.PLAIN, 15));
+		table.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200),
+				2));
+
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(new Color(0, 64, 128));
+		header.setForeground(Color.WHITE);
+		header.setFont(new Font("Arial", Font.BOLD, 16));
+		header.setPreferredSize(new Dimension(header.getWidth(), 35));
+
+		((DefaultTableCellRenderer) header.getDefaultRenderer())
+				.setHorizontalAlignment(SwingConstants.CENTER);
+
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		DefaultTableCellRenderer rightBoldRenderer = new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value,
+					boolean isSelected, boolean hasFocus,
+					int row, int column) {
+				JLabel cell = (JLabel) super.getTableCellRendererComponent(
+						table, value, isSelected, hasFocus, row, column);
+
+				cell.setHorizontalAlignment(SwingConstants.RIGHT);
+				cell.setFont(cell.getFont().deriveFont(Font.BOLD));
+				return cell;
+			}
+		};
+
+		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(4).setCellRenderer(rightBoldRenderer);
+
+		table.getColumnModel().getColumn(0).setPreferredWidth(50);
+		table.getColumnModel().getColumn(1).setPreferredWidth(300);
+		table.getColumnModel().getColumn(2).setPreferredWidth(100);
+		table.getColumnModel().getColumn(3).setPreferredWidth(100);
+		table.getColumnModel().getColumn(4).setPreferredWidth(60);
+
+		scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+		scrollPane.setViewportView(table);
+		scrollPane.setPreferredSize(new Dimension(0, 600));
+		listPanel.add(scrollPane, BorderLayout.NORTH);
+
+		noResultLabel = new JLabel("Không tìm thấy sản phẩm");
+		noResultLabel.setVisible(false);
+		noResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		noResultLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		noResultLabel.setVerticalAlignment(SwingConstants.NORTH);
+		noResultLabel.setBackground(Color.BLUE);
+		noResultLabel.setPreferredSize(new Dimension(0, 400));
+		listPanel.add(noResultLabel, BorderLayout.CENTER);
+
+		add(listPanel, BorderLayout.SOUTH);
+	}
+
+	public void LoadComboBoxData() {
+		List<app.DTO.Category> categories = categoryBus.getAllCategories();
+		categoryComboBox.removeAllItems();
+		categoryComboBox.addItem(new app.DTO.Category(0, "Tất cả"));
+		for (app.DTO.Category category : categories) {
+			categoryComboBox.addItem(category);
+		}
+		categoryComboBox.setSelectedIndex(0);
+	}
+
+	public void HandleNameChange() {
+		String name = nameSearchField.getText();
+		System.out.println("Searching for name: " + name);
+		if (name.isEmpty()) {
+			HandleNull();
+		}
+		List<Product> filteredProducts = bus.searchProductsByName(name);
+		SetDataTable(filteredProducts);
+	}
+
+	public void HandleBrandChange() {
+		String brandName = brandSearchField.getText();
+		if (brandName.isEmpty()) {
+			HandleNull();
+		}
+
+		List<Product> filteredProducts = bus.filterProductsByBrandName(brandName);
+		SetDataTable(filteredProducts);
+	}
+
+	public void handleCategoryChange(Object selectedItem) {
+		if (selectedItem instanceof app.DTO.Category) {
+			app.DTO.Category selectedCategory = (app.DTO.Category) selectedItem;
+			int categoryId = selectedCategory.getCategoryId();
+			System.out.println("Selected Category ID: " + categoryId);
+
+			List<Product> filteredProducts;
+			if (categoryId == 0) {
+				filteredProducts = bus.getAll();
+			} else {
+				filteredProducts = bus.filterProductsByCategory(categoryId);
+			}
+			SetDataTable(filteredProducts);
+		}
+	}
+
+	public void HandlePriceChange() {
+		String fromText = priceFromField.getText().trim();
+		String toText = priceToField.getText().trim();
+
+		BigDecimal fromPrice = fromText.isEmpty() ? null : new BigDecimal(fromText);
+		BigDecimal toPrice = toText.isEmpty() ? null : new BigDecimal(toText);
+
+		if (fromPrice == null && toPrice == null || fromPrice.compareTo(toPrice) >= 0) {
+			HandleNull();
+		}
+
+		List<Product> filteredProducts = bus.filterProductsByPriceRange(fromPrice, toPrice);
+		SetDataTable(filteredProducts);
+	}
+
+	public void Search() {
+		System.out.println("Search product");
+		String keyword = nameSearchField.getText().equals("") ? null : nameSearchField.getText();
+		BigDecimal minPrice = priceFromField.getText().isEmpty() ? null
+				: new BigDecimal(priceFromField.getText());
+		BigDecimal maxPrice = priceToField.getText().isEmpty() ? null
+				: new BigDecimal(priceToField.getText());
+		int categoryId = categoryComboBox.getSelectedItem() instanceof app.DTO.Category
+				? ((app.DTO.Category) categoryComboBox.getSelectedItem()).getCategoryId()
+				: 0;
+		String brandName = brandSearchField.getText().equals("") ? null : brandSearchField.getText();
+		int sortByPriceAscending = 1;
+
+		List<Product> filteredProducts = bus.filterProducts(
+				keyword,
+				minPrice,
+				maxPrice,
+				categoryId,
+				brandName,
+				sortByPriceAscending);
+		SetDataTable(filteredProducts);
+	}
+
+	public void Refresh() {
+		nameSearchField.setText("");
+		brandSearchField.setText("");
+		priceFromField.setText("");
+		priceToField.setText("");
+		categoryComboBox.setSelectedIndex(0);
+		List<Product> allProducts = bus.getAll();
+		SetDataTable(allProducts);
+	}
+
+	public void HandleNull() {
+		List<Product> allProducts = bus.getAll();
+		SetDataTable(allProducts);
+		return;
+	}
+
+	public void SetDataTable(List<Product> products) {
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.setRowCount(0);
+
+		if (products.isEmpty()) {
+			model.addRow(new Object[] { "", "", "", "", "" });
+			noResultLabel.setVisible(true);
+			scrollPane.setPreferredSize(new Dimension(0, 200));
+			revalidate();
+			repaint();
+			return;
+		}
+
+		if (noResultLabel != null) {
+			noResultLabel.setVisible(false);
+			scrollPane.setPreferredSize(new Dimension(0, 600));
+			revalidate();
+			repaint();
+		}
+		for (Product p : products) {
+			model.addRow(new Object[] { p.getProductId(), p.getProductName(),
+					p.getCategory(), p.getBrand(), p.getSalePrice() });
+		}
+	}
+
+	public void Add() {
+		System.out.println("Add product");
+	}
+
+	public void Delete() {
+		System.out.println("Delete product");
+	}
+
+	public void Edit() {
+		System.out.println("Edit product");
+	}
+
+	public void ImportExcel() {
+		System.out.println("Import Excel product");
+	}
+
+	public void ExportExcel() {
+		System.out.println("Export Excel product");
+	}
+}
