@@ -46,6 +46,7 @@ public class PhoneStoreApplication extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
 		setMinimumSize(new Dimension(500, 400));
 		layout = new CardLayout();
 		mainPanel = new JPanel(layout);

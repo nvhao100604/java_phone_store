@@ -3,6 +3,7 @@ package app.GUI;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -61,8 +62,9 @@ public class MainGUI extends JPanel {
 
 	public void initialize() {
 		application.SetTitle("Quản lý cửa hàng điện thoại");
-		setPreferredSize(new Dimension(1600, 1000));
-		setMinimumSize(new Dimension(1400, 800));
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setPreferredSize(screenSize);
+		setMinimumSize(new Dimension(1200, 600));
 		setLayout(new BorderLayout());
 
 		// navBar = new sidebar(this);
