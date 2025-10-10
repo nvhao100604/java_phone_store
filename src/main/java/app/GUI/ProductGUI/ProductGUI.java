@@ -1,4 +1,4 @@
-package app.GUI;
+package app.GUI.ProductGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
