@@ -3,6 +3,7 @@ package app.GUI;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -10,6 +11,7 @@ import javax.swing.JPanel;
 import app.PhoneStoreApplication;
 import app.DTO.Account;
 import app.GUI.CustomPanels.sidebar;
+import app.GUI.ProductGUI.ProductGUI;
 
 public class MainGUI extends JPanel {
 
@@ -61,7 +63,8 @@ public class MainGUI extends JPanel {
 
 	public void initialize() {
 		application.SetTitle("Quản lý cửa hàng điện thoại");
-		setPreferredSize(new Dimension(1600, 1000));
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setPreferredSize(new Dimension(screenSize.width - 100, screenSize.height - 100));
 		setMinimumSize(new Dimension(1400, 800));
 		setLayout(new BorderLayout());
 

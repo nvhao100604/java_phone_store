@@ -1,4 +1,4 @@
-package app.GUI;
+package app.GUI.ProductGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -501,6 +501,9 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 	public void Add() {
 		System.out.println("Add product");
+		// AddProductFrame addFrame = new AddProductFrame("Thêm sản phẩm");
+		AddProductDialog addFrame = new AddProductDialog(null);
+		addFrame.setVisible(true);
 	}
 
 	public void Delete() {
