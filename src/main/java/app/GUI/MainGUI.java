@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import app.PhoneStoreApplication;
 import app.DTO.Account;
 import app.GUI.CustomPanels.sidebar;
-import app.GUI.interfaces.UserAware;
 
 public class MainGUI extends JPanel {
 
@@ -61,6 +60,7 @@ public class MainGUI extends JPanel {
 	}
 
 	public void initialize() {
+		application.SetTitle("Quản lý cửa hàng điện thoại");
 		setPreferredSize(new Dimension(1600, 1000));
 		setMinimumSize(new Dimension(1400, 800));
 		setLayout(new BorderLayout());
@@ -104,5 +104,9 @@ public class MainGUI extends JPanel {
 		add(navBar, BorderLayout.WEST);
 		revalidate();
 		repaint();
+	}
+
+	public void SetTitle(String title) {
+		application.SetTitle(title);
 	}
 }

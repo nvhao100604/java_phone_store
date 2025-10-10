@@ -57,6 +57,10 @@ public class ProductBUS {
 		return dao.filterProductsByBrand(brandId);
 	}
 
+	public List<Product> filterProductsByBrandName(String brandName) {
+		return dao.filterProductsByBrandName(brandName);
+	}
+
 	public List<Product> sortProductsByPrice(boolean ascending) {
 		return dao.sortProductsByPrice(ascending);
 	}

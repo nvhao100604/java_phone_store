@@ -36,6 +36,14 @@ public class AccountBUS {
         return dao.deleteAccount(accountId);
     }
 
+    public List<Account> searchAccounts(String keyword) {
+        return dao.searchAccounts(keyword);
+    }
+
+    public List<Account> fillterAccounts(int status) {
+        return dao.fillterAccounts(status);
+    }
+
     public static void main(String[] args) {
         AccountBUS bus = new AccountBUS();
         List<Account> list = bus.getAll();

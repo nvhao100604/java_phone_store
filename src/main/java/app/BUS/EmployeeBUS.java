@@ -32,6 +32,14 @@ public class EmployeeBUS {
         return dao.updateEmployee(employee);
     }
 
+    public List<Employee> searchEmployees(String keyword) {
+        return dao.searchEmployees(keyword);
+    }
+
+    public List<Employee> fillterEmployeesByStatus(int status) {
+        return dao.fillterEmployeesByStatus(status);
+    }
+
     public static void main(String[] args) {
         EmployeeBUS bus = new EmployeeBUS();
         List<Employee> list = bus.getAll();

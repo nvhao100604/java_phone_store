@@ -31,6 +31,14 @@ public class CompanyBUS {
     public int deleteCompany(int companyId) {
         return dao.deleteCompany(companyId);
     }
+
+    public List<Company> searchCompanies(String keyword) {
+        return dao.searchCompanies(keyword);
+    }
+
+    public List<Company> fillterCompanies(int status) {
+        return dao.fillterCompanies(status);
+    }
     
     public static void main(String[] args) {
         CompanyBUS bus = new CompanyBUS();
