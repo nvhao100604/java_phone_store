@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import app.PhoneStoreApplication;
 import app.DTO.Account;
 import app.GUI.CustomPanels.sidebar;
+import app.GUI.ProductGUI.ProductGUI;
 
 public class MainGUI extends JPanel {
 
@@ -63,8 +64,8 @@ public class MainGUI extends JPanel {
 	public void initialize() {
 		application.SetTitle("Quản lý cửa hàng điện thoại");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setPreferredSize(screenSize);
-		setMinimumSize(new Dimension(1200, 600));
+		setPreferredSize(new Dimension(screenSize.width - 150, screenSize.height - 150));
+		setMinimumSize(new Dimension(screenSize.width - 200, screenSize.height - 200));
 		setLayout(new BorderLayout());
 
 		// navBar = new sidebar(this);

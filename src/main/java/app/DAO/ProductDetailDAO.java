@@ -1,5 +1,6 @@
 package app.DAO;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,6 +56,21 @@ public class ProductDetailDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public int addProductDetail(int productId, String color, String capacity, BigDecimal priceAdjustment) {
+        String sql = "INSERT INTO chitietsanpham (idSP, MAUSAC, DUNGLUONG, DIEUCHINHGIA) VALUES (?, ?, ?, ?)";
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement st = con.prepareStatement(sql)) {
+            st.setInt(1, productId);
+            st.setString(2, color);
+            st.setString(3, capacity);
+            st.setBigDecimal(4, priceAdjustment);
+            return st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 }
