@@ -5,12 +5,15 @@ import java.util.List;
 
 import app.DAO.ProductDAO;
 import app.DTO.Product;
+import app.DTO.ProductDetail;
 
 public class ProductBUS {
 	private final ProductDAO dao;
+	private final ProductDetailBUS detailBUS;
 
 	public ProductBUS() {
 		dao = new ProductDAO();
+		this.detailBUS = new ProductDetailBUS();
 	}
 
 	public Product getProductById(int productId) {
@@ -81,11 +84,28 @@ public class ProductBUS {
 				sortByPriceAscending);
 	}
 
-	public static void main(String[] args) {
-		ProductBUS bus = new ProductBUS();
-		List<Product> products = bus.getAll();
-		for (Product p : products) {
-			System.out.println(p.getProductName());
-		}
+	public int addProductDetail(int productId, String color, String capacity, BigDecimal priceAdjustment) {
+		return detailBUS.addProductDetail(productId, color, capacity, priceAdjustment);
 	}
+
+	public int saveProductDetails(Product product) {
+		int row = 0;
+		for (ProductDetail detail : product.getProductDetails()) {
+			int response = detailBUS.addProductDetail(
+					product.getProductId(),
+					detail.getColor(),
+					detail.getCapacity(),
+					detail.getPriceAdjustment());
+			row += response > 0 ? 1 : 0;
+		}
+		return row;
+	}
+
+	// public static void main(String[] args) {
+	// ProductBUS bus = new ProductBUS();
+	// List<Product> products = bus.getAll();
+	// for (Product p : products) {
+	// System.out.println(p.getProductName());
+	// }
+	// }
 }

@@ -10,18 +10,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.event.KeyListener;
+import java.awt.Toolkit;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
-import java.util.Locale.Category;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -46,7 +43,8 @@ import app.utils.DecimalFilter;
 
 public class ProductGUI extends JPanel implements FunctionPanel {
 
-	private JTable table;
+	private int mainWidth;
+	private int mainHeight;
 	private ProductBUS bus;
 	private CategoryBUS categoryBus;
 	private khungchucnang khung;
@@ -57,6 +55,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 	private JTextField priceToField;
 	private JLabel noResultLabel;
 	private JScrollPane scrollPane;
+	private JTable table;
 
 	public ProductGUI() {
 		// Constructor implementation
@@ -68,8 +67,12 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		categoryBus = new CategoryBUS();
 		setLayout(new BorderLayout());
 
+		mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+		mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+		// System.out.println("Main W + H = " + mainWidth + " + " + mainHeight);
+
 		JPanel topPanel = new JPanel();
-		topPanel.setPreferredSize(new Dimension(0, 250));
+		topPanel.setPreferredSize(new Dimension(0, mainHeight - 900));
 		topPanel.setLayout(new BorderLayout());
 		topPanel.setBackground(new Color(0, 0, 0));
 		add(topPanel, BorderLayout.NORTH);
@@ -293,7 +296,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		JLabel title = new JLabel("Danh sách sản phẩm", SwingConstants.CENTER);
 		title.setFont(new Font("Arial", Font.BOLD, 28));
 		title.setOpaque(true);
-		title.setPreferredSize(new Dimension(0, 80));
+		title.setPreferredSize(new Dimension(0, mainHeight - 1120));
 		add(Box.createRigidArea(new Dimension(0, 10)));
 		add(title, BorderLayout.CENTER);
 
@@ -359,7 +362,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		scrollPane.setViewportView(table);
-		scrollPane.setPreferredSize(new Dimension(0, 600));
+		scrollPane.setPreferredSize(new Dimension(0, mainHeight - 600));
 		listPanel.add(scrollPane, BorderLayout.NORTH);
 
 		noResultLabel = new JLabel("Không tìm thấy sản phẩm");
@@ -368,7 +371,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		noResultLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		noResultLabel.setVerticalAlignment(SwingConstants.NORTH);
 		noResultLabel.setBackground(Color.BLUE);
-		noResultLabel.setPreferredSize(new Dimension(0, 400));
+		noResultLabel.setPreferredSize(new Dimension(0, mainHeight - 600));
 		listPanel.add(noResultLabel, BorderLayout.CENTER);
 
 		add(listPanel, BorderLayout.SOUTH);
@@ -481,7 +484,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		if (products.isEmpty()) {
 			model.addRow(new Object[] { "", "", "", "", "" });
 			noResultLabel.setVisible(true);
-			scrollPane.setPreferredSize(new Dimension(0, 200));
+			scrollPane.setPreferredSize(new Dimension(0, mainHeight - 1000));
 			revalidate();
 			repaint();
 			return;
@@ -489,7 +492,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		if (noResultLabel != null) {
 			noResultLabel.setVisible(false);
-			scrollPane.setPreferredSize(new Dimension(0, 600));
+			scrollPane.setPreferredSize(new Dimension(0, mainHeight - 600));
 			revalidate();
 			repaint();
 		}
@@ -501,8 +504,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 	public void Add() {
 		System.out.println("Add product");
-		// AddProductFrame addFrame = new AddProductFrame("Thêm sản phẩm");
-		AddProductDialog addFrame = new AddProductDialog(null);
+		AddProductFrame addFrame = new AddProductFrame("Thêm sản phẩm");
 		addFrame.setVisible(true);
 	}
 

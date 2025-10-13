@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.DTO.Product;
+import app.DTO.ProductDetail;
 import app.database.DBConnect;
 
 public class ProductDAO {

@@ -1,17 +1,20 @@
 package app.GUI.ProductGUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.File;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -23,32 +26,48 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.NumberFormatter;
 
+import app.BUS.BrandBUS;
+import app.BUS.CategoryBUS;
+import app.BUS.ProductBUS;
+import app.DTO.Brand;
+import app.DTO.Category;
+import app.DTO.Product;
 import app.DTO.ProductDetail;
+import app.utils.ImportImage;
 
 public class AddProductFrame extends JFrame {
 
-    // --- Product Fields ---
     private JTextField productNameField;
-    private JComboBox<String> brandComboBox; // Giả sử Brand là String hoặc DTO
-    private JComboBox<String> categoryComboBox; // Giả sử Category là String hoặc DTO
+    private JComboBox<Brand> brandComboBox;
+    private JComboBox<Category> categoryComboBox;
     private JFormattedTextField importPriceField;
     private JFormattedTextField salePriceField;
     private JTextArea descriptionArea;
+    private JButton selectImageButton;
+    private Product newProduct;
+    private JLabel imagePreviewLabel;
+    private File selectedImageFile;
 
-    // --- ProductDetail Table ---
     private DefaultTableModel detailTableModel;
     private JTable detailTable;
     private List<ProductDetail> productDetailsList;
 
-    // Định dạng cho các trường tiền tệ
     private DecimalFormat currencyFormat;
     private NumberFormatter numberFormatter;
 
+    private ProductBUS productBUS;
+    private CategoryBUS categoryBUS;
+    private BrandBUS brandBUS;
+
     public AddProductFrame(String title) {
         super(title);
+        this.categoryBUS = new CategoryBUS();
+        this.brandBUS = new BrandBUS();
+        this.productBUS = new ProductBUS();
         productDetailsList = new ArrayList<>();
         initializeFormatters();
         initializeUI();
@@ -56,7 +75,6 @@ public class AddProductFrame extends JFrame {
     }
 
     private void initializeFormatters() {
-        // Định dạng tiền tệ: 1,234.56
         currencyFormat = new DecimalFormat("#,##0.00");
         numberFormatter = new NumberFormatter(currencyFormat);
         numberFormatter.setValueClass(BigDecimal.class);
@@ -65,37 +83,29 @@ public class AddProductFrame extends JFrame {
     }
 
     private void initializeUI() {
-        // Cấu hình Dialog
-        setSize(800, 700);
+        setSize(800, 800);
         setLayout(new BorderLayout(10, 10));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(getParent());
 
-        // --- 1. PRODUCT INFO PANEL (Top) ---
         JPanel productInfoPanel = createProductInfoPanel();
         add(productInfoPanel, BorderLayout.NORTH);
 
-        // --- 2. PRODUCT DETAILS TABLE (Center) ---
         JPanel detailsPanel = createProductDetailsPanel();
         add(detailsPanel, BorderLayout.CENTER);
 
-        // --- 3. ACTION BUTTONS (South) ---
         JPanel actionPanel = createActionButtonPanel();
         add(actionPanel, BorderLayout.SOUTH);
     }
 
-    // --- Hàm tạo phần thông tin cơ bản ---
     private JPanel createProductInfoPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Thông tin sản phẩm cơ bản"));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // Dùng để tạo khoảng trống giữa label và field
         Dimension labelSize = new Dimension(120, 30);
 
-        // --- Hàng 1: Tên Sản phẩm & Loại ---
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0;
@@ -109,20 +119,6 @@ public class AddProductFrame extends JFrame {
         productNameField = new JTextField(20);
         panel.add(productNameField, gbc);
 
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.weightx = 0;
-        JLabel categoryLabel = new JLabel("Loại SP:");
-        categoryLabel.setPreferredSize(labelSize);
-        panel.add(categoryLabel, gbc);
-
-        gbc.gridx = 3;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        categoryComboBox = new JComboBox<>();
-        panel.add(categoryComboBox, gbc);
-
-        // --- Hàng 2: Giá Nhập & Giá Bán ---
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 0;
@@ -137,68 +133,104 @@ public class AddProductFrame extends JFrame {
         importPriceField.setValue(BigDecimal.ZERO);
         panel.add(importPriceField, gbc);
 
-        gbc.gridx = 2;
-        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         gbc.weightx = 0;
         JLabel saleLabel = new JLabel("Giá Bán:");
         saleLabel.setPreferredSize(labelSize);
         panel.add(saleLabel, gbc);
 
-        gbc.gridx = 3;
-        gbc.gridy = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 2;
         gbc.weightx = 1.0;
         salePriceField = new JFormattedTextField(numberFormatter);
         salePriceField.setValue(BigDecimal.ZERO);
         panel.add(salePriceField, gbc);
 
-        // --- Hàng 3: Hãng & Mô tả ---
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.weightx = 0;
         JLabel brandLabel = new JLabel("Hãng SX:");
         brandLabel.setPreferredSize(labelSize);
         panel.add(brandLabel, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.weightx = 1.0;
         brandComboBox = new JComboBox<>();
         panel.add(brandComboBox, gbc);
 
-        gbc.gridx = 2;
-        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.weightx = 0;
+        JLabel categoryLabel = new JLabel("Loại SP:");
+        categoryLabel.setPreferredSize(labelSize);
+        panel.add(categoryLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.weightx = 1.0;
+        categoryComboBox = new JComboBox<>();
+        panel.add(categoryComboBox, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
         gbc.weightx = 0;
         JLabel descLabel = new JLabel("Mô tả:");
         descLabel.setPreferredSize(labelSize);
         panel.add(descLabel, gbc);
 
-        gbc.gridx = 3;
-        gbc.gridy = 2;
+        gbc.gridx = 1;
+        gbc.gridy = 5;
         gbc.weightx = 1.0;
         descriptionArea = new JTextArea(3, 20);
         JScrollPane descScrollPane = new JScrollPane(descriptionArea);
         panel.add(descScrollPane, gbc);
 
+        // Ảnh sản phẩm
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.weightx = 0.5;
+        panel.add(new JLabel("Ảnh sản phẩm:", SwingConstants.LEFT), gbc);
+
+        gbc.gridx = 2;
+        gbc.weightx = 0.5;
+        JPanel imagePanel = new JPanel(new BorderLayout(5, 5));
+        selectImageButton = new JButton("Chọn ảnh...");
+        selectImageButton.addActionListener(e -> {
+            selectedImageFile = ImportImage.chooseImage(imagePreviewLabel);
+        });
+        imagePanel.add(selectImageButton, BorderLayout.EAST);
+        panel.add(imagePanel, gbc);
+
+        // Preview ảnh
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        gbc.gridheight = 4;
+        imagePreviewLabel = new JLabel("Xem trước ảnh", SwingConstants.CENTER);
+        imagePreviewLabel.setPreferredSize(new Dimension(200, 200));
+        imagePreviewLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        panel.add(imagePreviewLabel, gbc);
+
         return panel;
     }
 
-    // --- Hàm tạo phần chi tiết sản phẩm ---
     private JPanel createProductDetailsPanel() {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
-        panel.setBorder(BorderFactory.createTitledBorder("Chi tiết sản phẩm (Màu, Dung lượng, Tồn kho)"));
+        panel.setBorder(BorderFactory.createTitledBorder("Chi tiết sản phẩm (Màu, Dung lượng)"));
 
-        // Tạo Model và Table
-        String[] columnNames = { "Màu", "Dung lượng", "Điều chỉnh Giá", "Tồn kho" };
+        String[] columnNames = { "Màu", "Dung lượng", "Điều chỉnh Giá" };
         detailTableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Cho phép chỉnh sửa tất cả các ô
                 return true;
             }
         };
         detailTable = new JTable(detailTableModel);
 
-        // Thêm một số button quản lý hàng
         JPanel detailActions = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton addButton = new JButton("Thêm Chi tiết");
         JButton removeButton = new JButton("Xóa Hàng chọn");
@@ -215,7 +247,6 @@ public class AddProductFrame extends JFrame {
         return panel;
     }
 
-    // --- Hàm tạo nút hành động ---
     private JPanel createActionButtonPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
 
@@ -230,23 +261,22 @@ public class AddProductFrame extends JFrame {
         return panel;
     }
 
-    // --- Hàm tải dữ liệu Category/Brand ban đầu ---
     private void loadInitialData() {
-        // Giả lập dữ liệu Category và Brand (thực tế nên load từ BUS)
-        categoryComboBox.addItem("Điện thoại");
-        categoryComboBox.addItem("Laptop");
-        brandComboBox.addItem("Samsung");
-        brandComboBox.addItem("Apple");
+        List<Brand> brands = brandBUS.getAllBrands();
+        for (Brand b : brands) {
+            brandComboBox.addItem(b);
+        }
+
+        List<Category> categories = categoryBUS.getAllCategories();
+        for (Category c : categories) {
+            categoryComboBox.addItem(c);
+        }
     }
 
-    // --- Logic thêm hàng chi tiết vào bảng ---
     private void addDetailRow() {
-        // Giá trị mặc định cho hàng mới: Màu, Dung lượng, Điều chỉnh giá (0.00), Tồn
-        // kho (0)
-        detailTableModel.addRow(new Object[] { "Xanh", "128GB", new BigDecimal("0.00"), 0 });
+        detailTableModel.addRow(new Object[] { "Xanh", "128GB", new BigDecimal("0.00") });
     }
 
-    // --- Logic xóa hàng chi tiết đã chọn ---
     private void removeSelectedDetailRow() {
         int selectedRow = detailTable.getSelectedRow();
         if (selectedRow != -1) {
@@ -257,34 +287,49 @@ public class AddProductFrame extends JFrame {
         }
     }
 
-    // --- Logic lưu sản phẩm ---
     private void saveProduct() {
-        // 1. Lấy thông tin Product cơ bản
         String name = productNameField.getText();
+        int brandId = brandComboBox.getSelectedItem() != null ? ((Brand) brandComboBox.getSelectedItem()).getId() : -1;
+        int categoryId = categoryComboBox.getSelectedItem() != null
+                ? ((Category) categoryComboBox.getSelectedItem()).getCategoryId()
+                : -1;
         BigDecimal importP = (BigDecimal) importPriceField.getValue();
         BigDecimal saleP = (BigDecimal) salePriceField.getValue();
+        String description = descriptionArea.getText();
+        String imageUrl = selectedImageFile != null ? selectedImageFile.getName() : "";
 
         if (name.trim().isEmpty() || importP == null || saleP == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng điền đủ thông tin cơ bản.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // 2. Lấy thông tin Product Details từ JTable
+        newProduct = new Product(name, brandId, importP, categoryId, imageUrl, description, saleP);
+        int newProductId = productBUS.AddProduct(newProduct);
+        if (newProductId > 0) {
+            newProduct.setProductId(newProductId);
+        } else {
+            return;
+        }
+
+        saveProductDetails();
+
+        JOptionPane.showMessageDialog(this, "Sản phẩm đã được lưu thành công!", "Thành công",
+                JOptionPane.INFORMATION_MESSAGE);
+        dispose();
+    }
+
+    public void saveProductDetails() {
         productDetailsList.clear();
         for (int i = 0; i < detailTableModel.getRowCount(); i++) {
             try {
                 String color = detailTableModel.getValueAt(i, 0).toString();
                 String capacity = detailTableModel.getValueAt(i, 1).toString();
-                // Giả định giá trị đã được định dạng đúng trong bảng
                 BigDecimal priceAdj = new BigDecimal(detailTableModel.getValueAt(i, 2).toString());
-                int stock = Integer.parseInt(detailTableModel.getValueAt(i, 3).toString());
 
                 ProductDetail detail = new ProductDetail();
-                // ... set các trường khác của ProductDetail ...
                 detail.setColor(color);
                 detail.setCapacity(capacity);
                 detail.setPriceAdjustment(priceAdj);
-                detail.setStock(stock);
 
                 productDetailsList.add(detail);
             } catch (Exception ex) {
@@ -294,14 +339,13 @@ public class AddProductFrame extends JFrame {
             }
         }
 
-        // 3. Gọi hàm BUS để lưu (Ví dụ)
-        // Product newProduct = new Product();
-        // ... newProduct.setProductName(name);
-        // ... newProduct.setProductDetails(productDetailsList);
-        // bus.addProduct(newProduct);
+        if (productDetailsList.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng thêm ít nhất một chi tiết sản phẩm.", "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        JOptionPane.showMessageDialog(this, "Sản phẩm đã được lưu thành công!", "Thành công",
-                JOptionPane.INFORMATION_MESSAGE);
-        dispose();
+        newProduct.setProductDetails(productDetailsList);
+        productBUS.saveProductDetails(newProduct);
     }
 }

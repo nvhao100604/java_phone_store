@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import app.DTO.Account;
 import app.GUI.LoginGUI;
@@ -22,7 +24,14 @@ public class PhoneStoreApplication extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		// UIUtils.setGlobalFont(new Font("Arial", ));
+		try {
+			String nativeLookAndFeel = UIManager.getSystemLookAndFeelClassName();
+			UIManager.setLookAndFeel(nativeLookAndFeel);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			System.err.println("Không thể thiết lập Native Look and Feel: " + e.getMessage());
+		}
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
