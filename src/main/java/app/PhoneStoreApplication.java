@@ -46,6 +46,7 @@ public class PhoneStoreApplication extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
 		setMinimumSize(new Dimension(500, 400));
 		layout = new CardLayout();
 		mainPanel = new JPanel(layout);
@@ -57,6 +58,7 @@ public class PhoneStoreApplication extends JFrame {
 		mainPanel.add(main, "main");
 
 		add(mainPanel);
+		setTitle("Đăng nhập");
 		layout.show(mainPanel, "login");
 		mainPanel.revalidate();
 		mainPanel.repaint();
@@ -74,6 +76,7 @@ public class PhoneStoreApplication extends JFrame {
 		// setSize(main.getPreferredSize());
 		// setLocationRelativeTo(null);
 		setMinimumSize(main.getMinimumSize());
+		SetTitle("Quản lý cửa hàng điện thoại");
 		FadeTransition.switchPanel(mainPanel, login, main);
 	}
 
@@ -83,6 +86,7 @@ public class PhoneStoreApplication extends JFrame {
 		// mainPanel.repaint();
 		// setSize(login.getPreferredSize());
 		// setLocationRelativeTo(null);
+		SetTitle("Đăng nhập");
 		setMinimumSize(login.getMinimumSize());
 		FadeTransition.switchPanel(mainPanel, main, login);
 	}
@@ -91,5 +95,9 @@ public class PhoneStoreApplication extends JFrame {
 		this.main.setAccount(account);
 		main.reloadSidebar(account);
 		System.out.println("check user: " + main.getAccount().getUsername());
+	}
+
+	public void SetTitle(String title) {
+		setTitle(title);
 	}
 }

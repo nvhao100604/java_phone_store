@@ -53,6 +53,7 @@ public class LoginGUI extends JPanel {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		application.SetTitle("Đăng nhập");
 		setPreferredSize(new Dimension(600, 500));
 		setMinimumSize(new Dimension(600, 500));
 		// setMinimumSize(new Dimension(300, 600));
@@ -155,11 +156,14 @@ public class LoginGUI extends JPanel {
 		btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 16));
 		processPanel.add(btnNewButton_2);
 
+		application.getRootPane().setDefaultButton(btnNewButton_1);
 	}
 
 	public void HandleLogin() {
-		String username = nameField.getText();
-		String password = pwdField.getText();
+		// String username = nameField.getText();
+		// String password = pwdField.getText();
+		String username = "admin";
+		String password = "12345";
 		Account responseAccount = bus.Login(username, password);
 
 		if (responseAccount == null) {
@@ -167,7 +171,8 @@ public class LoginGUI extends JPanel {
 			return;
 		}
 
-		JOptionPane.showMessageDialog(this, "Check name: " + responseAccount.getFullName());
+		// JOptionPane.showMessageDialog(this, "Check name: " +
+		// responseAccount.getFullName());
 		application.setMainGUIAccount(responseAccount);
 		ClearInput();
 		Navigate();

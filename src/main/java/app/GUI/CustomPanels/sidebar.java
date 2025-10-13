@@ -49,8 +49,8 @@ public class sidebar extends JPanel {
 			super(text);
 			ImageIcon originalIcon = new ImageIcon(iconPath != "" ? iconPath : "");
 			Image originalImage = originalIcon.getImage();
-			int newWidth = 40;
-			int newHeight = 40;
+			int newWidth = 20;
+			int newHeight = 20;
 			Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
 			ImageIcon scaledIcon = new ImageIcon(scaledImage);
 			setHorizontalAlignment(SwingConstants.LEFT);
@@ -75,11 +75,12 @@ public class sidebar extends JPanel {
 					"src\\main\\resources\\Ảnh\\" + function.getIcon());
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					mainGUI.SetTitle("Quản lý cửa hàng điện thoại | " + function.getFunctionName());
 					mainGUI.InitialGUI(function.getGuiClass());
 					System.out.println("check function: " + function.getGuiClass());
 				}
 			});
-			button.setPreferredSize(new Dimension(250, 80));
+			button.setPreferredSize(new Dimension(250, 40));
 			navPanel.add(button);
 		}
 		add(navPanel, BorderLayout.NORTH);
