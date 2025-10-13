@@ -19,6 +19,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -39,7 +40,10 @@ import app.DTO.Product;
 import app.GUI.CustomPanels.FilterPanel;
 import app.GUI.CustomPanels.khungchucnang;
 import app.GUI.interfaces.FunctionPanel;
+import app.utils.ConfirmDialog;
+import app.utils.DataTable;
 import app.utils.DecimalFilter;
+import app.utils.ImportExcel;
 
 public class ProductGUI extends JPanel implements FunctionPanel {
 
@@ -53,9 +57,11 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 	private JComboBox<app.DTO.Category> categoryComboBox;
 	private JTextField priceFromField;
 	private JTextField priceToField;
+	private JLabel title;
 	private JLabel noResultLabel;
 	private JScrollPane scrollPane;
 	private JTable table;
+	private DefaultTableModel tableModel;
 
 	public ProductGUI() {
 		// Constructor implementation
@@ -72,13 +78,13 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		// System.out.println("Main W + H = " + mainWidth + " + " + mainHeight);
 
 		JPanel topPanel = new JPanel();
-		topPanel.setPreferredSize(new Dimension(0, mainHeight - 900));
+		topPanel.setPreferredSize(new Dimension(0, mainHeight < 1200 ? mainHeight - 830 : mainHeight - 950));
+		topPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 		topPanel.setLayout(new BorderLayout());
-		topPanel.setBackground(new Color(0, 0, 0));
+		// topPanel.setBackground(new Color(0, 0, 0));
 		add(topPanel, BorderLayout.NORTH);
 
 		khung = new khungchucnang(this);
-		khung.setBorder(new EmptyBorder(50, 0, 50, 0));
 		topPanel.add(khung, BorderLayout.WEST);
 
 		FilterPanel filterPanel = new FilterPanel();
@@ -91,7 +97,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		namePanel.setOpaque(false);
 		namePanel.setBackground(null);
 		namePanel.setBackground(new Color(255, 0, 0));
-		namePanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+		namePanel.setBorder(new EmptyBorder(5, 0, 5, 0));
 		// namePanel.setPreferredSize(new Dimension(200, 100));
 
 		JLabel nameSearchLabel = new JLabel("Tên sản phẩm:");
@@ -128,7 +134,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		typePanel.setOpaque(false);
 		typePanel.setBackground(null);
 		typePanel.setBackground(new Color(255, 0, 0));
-		typePanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+		typePanel.setBorder(new EmptyBorder(5, 0, 5, 0));
 		// namePanel.setPreferredSize(new Dimension(200, 100));
 
 		JLabel typeLabel = new JLabel("Loại sản phẩm:");
@@ -139,7 +145,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		categoryComboBox = new JComboBox<app.DTO.Category>();
 		categoryComboBox.setEditable(false);
 		categoryComboBox.setFont(new Font("Arial", Font.PLAIN, 18));
-		categoryComboBox.setBackground(new Color(240, 240, 240));
+		// categoryComboBox.setBackground(new Color(240, 240, 240));
 		categoryComboBox.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
 		categoryComboBox.setBorder(new CompoundBorder(
 				BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
@@ -158,7 +164,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		brandPanel.setOpaque(false);
 		brandPanel.setBackground(null);
 		brandPanel.setBackground(new Color(255, 0, 0));
-		brandPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+		brandPanel.setBorder(new EmptyBorder(5, 0, 5, 0));
 
 		JLabel brandLabel = new JLabel("Hãng sản xuất:");
 		brandLabel.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -293,10 +299,10 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		filterPanel.add(emptyPanel);
 		filterPanel.add(processPanel);
 
-		JLabel title = new JLabel("Danh sách sản phẩm", SwingConstants.CENTER);
+		title = new JLabel("Danh sách sản phẩm ()", SwingConstants.CENTER);
 		title.setFont(new Font("Arial", Font.BOLD, 28));
 		title.setOpaque(true);
-		title.setPreferredSize(new Dimension(0, mainHeight - 1120));
+		title.setPreferredSize(new Dimension(0, 0));
 		add(Box.createRigidArea(new Dimension(0, 10)));
 		add(title, BorderLayout.CENTER);
 
@@ -307,13 +313,15 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		scrollPane = new JScrollPane();
 		String[] columnNames = { "Mã sản phẩm", "Tên sản phẩm", "Loại", "Hãng", "Giá bán" };
 		List<Product> productList = bus.getAll();
+		SetTitleQuantity(productList.size());
 		table = new JTable();
-		table.setModel(new DefaultTableModel(
+		tableModel = new DefaultTableModel(
 				productList.stream()
 						.map(p -> new Object[] { p.getProductId(), p.getProductName(),
 								p.getCategory(), p.getBrand(), p.getSalePrice() })
 						.toArray(Object[][]::new),
-				columnNames));
+				columnNames);
+		table.setModel(tableModel);
 		table.getColumnModel().getColumn(0).setPreferredWidth(94);
 		table.getColumnModel().getColumn(1).setPreferredWidth(98);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -371,7 +379,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		noResultLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		noResultLabel.setVerticalAlignment(SwingConstants.NORTH);
 		noResultLabel.setBackground(Color.BLUE);
-		noResultLabel.setPreferredSize(new Dimension(0, mainHeight - 600));
+		noResultLabel.setPreferredSize(new Dimension(0, mainHeight - 500));
 		listPanel.add(noResultLabel, BorderLayout.CENTER);
 
 		add(listPanel, BorderLayout.SOUTH);
@@ -387,11 +395,16 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		categoryComboBox.setSelectedIndex(0);
 	}
 
+	public void SetTitleQuantity(int quantity) {
+		title.setText("Danh sách sản phẩm (" + quantity + ")");
+	}
+
 	public void HandleNameChange() {
 		String name = nameSearchField.getText();
 		System.out.println("Searching for name: " + name);
 		if (name.isEmpty()) {
-			HandleNull();
+			HandleLoadAll();
+			return;
 		}
 		List<Product> filteredProducts = bus.searchProductsByName(name);
 		SetDataTable(filteredProducts);
@@ -400,7 +413,8 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 	public void HandleBrandChange() {
 		String brandName = brandSearchField.getText();
 		if (brandName.isEmpty()) {
-			HandleNull();
+			HandleLoadAll();
+			return;
 		}
 
 		List<Product> filteredProducts = bus.filterProductsByBrandName(brandName);
@@ -431,7 +445,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		BigDecimal toPrice = toText.isEmpty() ? null : new BigDecimal(toText);
 
 		if (fromPrice == null && toPrice == null || fromPrice.compareTo(toPrice) >= 0) {
-			HandleNull();
+			HandleLoadAll();
 		}
 
 		List<Product> filteredProducts = bus.filterProductsByPriceRange(fromPrice, toPrice);
@@ -471,7 +485,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		SetDataTable(allProducts);
 	}
 
-	public void HandleNull() {
+	public void HandleLoadAll() {
 		List<Product> allProducts = bus.getAll();
 		SetDataTable(allProducts);
 		return;
@@ -480,7 +494,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 	public void SetDataTable(List<Product> products) {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
-
+		SetTitleQuantity(products.size());
 		if (products.isEmpty()) {
 			model.addRow(new Object[] { "", "", "", "", "" });
 			noResultLabel.setVisible(true);
@@ -492,7 +506,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		if (noResultLabel != null) {
 			noResultLabel.setVisible(false);
-			scrollPane.setPreferredSize(new Dimension(0, mainHeight - 600));
+			scrollPane.setPreferredSize(new Dimension(0, mainHeight - 500));
 			revalidate();
 			repaint();
 		}
@@ -503,24 +517,61 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 	}
 
 	public void Add() {
-		System.out.println("Add product");
+		// System.out.println("Add product");
 		AddProductFrame addFrame = new AddProductFrame("Thêm sản phẩm");
 		addFrame.setVisible(true);
 	}
 
 	public void Delete() {
-		System.out.println("Delete product");
+		// System.out.println("Delete product");
+		int selectedRow = table.getSelectedRow();
+		if (selectedRow != -1) {
+			int productId = (int) DataTable.dataFromTable(selectedRow, tableModel)[0];
+			System.out.println("check id: " + productId);
+			ConfirmDelete(productId);
+		} else {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn hàng cần xóa.", "Thông báo",
+					JOptionPane.WARNING_MESSAGE);
+		}
+	}
+
+	public void ConfirmDelete(int productId) {
+		boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Bạn có chắc chắn xóa sản phẩm " + productId + " ?",
+				"Xác nhận xóa sản phẩm");
+		if (isConfirmed) {
+			bus.softDeleteProductById(productId);
+			JOptionPane.showMessageDialog(this, "Xóa sản phẩm " + productId + " thành công", "Thông báo",
+					JOptionPane.WARNING_MESSAGE);
+		}
+		HandleLoadAll();
 	}
 
 	public void Edit() {
 		System.out.println("Edit product");
+		UpdateProductFrame editFrame = new UpdateProductFrame("Cập nhật thông tin sản phẩm");
+		editFrame.setVisible(true);
 	}
 
 	public void ImportExcel() {
 		System.out.println("Import Excel product");
+		String filePath = ImportExcel.chooseFile();
+		boolean isConfirmed = ConfirmDialog.confirmDialog(this, "File sản phẩm tại  " + filePath + " ?",
+				"Xác nhận thêm danh sách sản phẩm");
+		if (isConfirmed) {
+			boolean result = bus.importDataFromExcel(filePath);
+			if (result) {
+				JOptionPane.showMessageDialog(this, "Thêm danh sách sản phẩm thành công", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				List<Product> allProducts = bus.getAllDesc();
+				SetDataTable(allProducts);
+			}
+		}
 	}
 
 	public void ExportExcel() {
-		System.out.println("Export Excel product");
+		// System.out.println("Export Excel product");
+		DataTable.exportDataToExcel(DataTable.directoryPath + "/export/productList.xlsx", table);
+		JOptionPane.showMessageDialog(this, "Xuất file Excel thành công", "Thông báo",
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 }

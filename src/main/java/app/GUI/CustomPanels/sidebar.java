@@ -86,7 +86,6 @@ public class sidebar extends JPanel {
 				}
 			});
 			button.setPreferredSize(new Dimension(mainWidth / 4 - 230, mainHeight / 10 - 40));
-			System.out.println("button size: " + (mainHeight / 10 - 50));
 			navPanel.add(button);
 		}
 		add(navPanel, BorderLayout.NORTH);

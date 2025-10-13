@@ -1,7 +1,6 @@
 package app.GUI.ProductGUI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -30,6 +28,8 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.NumberFormatter;
 
+import org.apache.poi.ss.usermodel.Color;
+
 import app.BUS.BrandBUS;
 import app.BUS.CategoryBUS;
 import app.BUS.ProductBUS;
@@ -39,8 +39,7 @@ import app.DTO.Product;
 import app.DTO.ProductDetail;
 import app.utils.ImportImage;
 
-public class AddProductFrame extends JFrame {
-
+public class UpdateProductFrame extends JFrame {
     private JTextField productNameField;
     private JComboBox<Brand> brandComboBox;
     private JComboBox<Category> categoryComboBox;
@@ -63,7 +62,7 @@ public class AddProductFrame extends JFrame {
     private CategoryBUS categoryBUS;
     private BrandBUS brandBUS;
 
-    public AddProductFrame(String title) {
+    public UpdateProductFrame(String title) {
         super(title);
         this.categoryBUS = new CategoryBUS();
         this.brandBUS = new BrandBUS();
@@ -119,69 +118,69 @@ public class AddProductFrame extends JFrame {
         productNameField = new JTextField(20);
         panel.add(productNameField, gbc);
 
-        // gbc.gridx = 0;
-        // gbc.gridy = 1;
-        // gbc.weightx = 0;
-        // JLabel importLabel = new JLabel("Giá Nhập:");
-        // importLabel.setPreferredSize(labelSize);
-        // panel.add(importLabel, gbc);
-
-        // gbc.gridx = 1;
-        // gbc.gridy = 1;
-        // gbc.weightx = 1.0;
-        // importPriceField = new JFormattedTextField(numberFormatter);
-        // importPriceField.setValue(BigDecimal.ZERO);
-        // panel.add(importPriceField, gbc);
-
-        // gbc.gridx = 0;
-        // gbc.gridy = 2;
-        // gbc.weightx = 0;
-        // JLabel saleLabel = new JLabel("Giá Bán:");
-        // saleLabel.setPreferredSize(labelSize);
-        // panel.add(saleLabel, gbc);
-
-        // gbc.gridx = 1;
-        // gbc.gridy = 2;
-        // gbc.weightx = 1.0;
-        // salePriceField = new JFormattedTextField(numberFormatter);
-        // salePriceField.setValue(BigDecimal.ZERO);
-        // panel.add(salePriceField, gbc);
-
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.weightx = 0;
+        JLabel importLabel = new JLabel("Giá Nhập:");
+        importLabel.setPreferredSize(labelSize);
+        panel.add(importLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        importPriceField = new JFormattedTextField(numberFormatter);
+        importPriceField.setValue(BigDecimal.ZERO);
+        panel.add(importPriceField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 0;
+        JLabel saleLabel = new JLabel("Giá Bán:");
+        saleLabel.setPreferredSize(labelSize);
+        panel.add(saleLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.weightx = 1.0;
+        salePriceField = new JFormattedTextField(numberFormatter);
+        salePriceField.setValue(BigDecimal.ZERO);
+        panel.add(salePriceField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
         gbc.weightx = 0;
         JLabel brandLabel = new JLabel("Hãng SX:");
         brandLabel.setPreferredSize(labelSize);
         panel.add(brandLabel, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridy = 3;
         gbc.weightx = 1.0;
         brandComboBox = new JComboBox<>();
         panel.add(brandComboBox, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 4;
         gbc.weightx = 0;
         JLabel categoryLabel = new JLabel("Loại SP:");
         categoryLabel.setPreferredSize(labelSize);
         panel.add(categoryLabel, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 2;
+        gbc.gridy = 4;
         gbc.weightx = 1.0;
         categoryComboBox = new JComboBox<>();
         panel.add(categoryComboBox, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 5;
         gbc.weightx = 0;
         JLabel descLabel = new JLabel("Mô tả:");
         descLabel.setPreferredSize(labelSize);
         panel.add(descLabel, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 3;
+        gbc.gridy = 5;
         gbc.weightx = 1.0;
         descriptionArea = new JTextArea(3, 20);
         JScrollPane descScrollPane = new JScrollPane(descriptionArea);
@@ -209,10 +208,10 @@ public class AddProductFrame extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
         gbc.weighty = 0;
-        gbc.gridheight = 3;
+        gbc.gridheight = 4;
         imagePreviewLabel = new JLabel("Xem trước ảnh", SwingConstants.CENTER);
-        imagePreviewLabel.setPreferredSize(new Dimension(150, 150));
-        imagePreviewLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        imagePreviewLabel.setPreferredSize(new Dimension(200, 200));
+        imagePreviewLabel.setBorder(BorderFactory.createLineBorder(java.awt.Color.GRAY));
         panel.add(imagePreviewLabel, gbc);
 
         return panel;

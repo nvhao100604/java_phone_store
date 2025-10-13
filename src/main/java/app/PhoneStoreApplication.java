@@ -7,11 +7,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import app.DTO.Account;
 import app.GUI.LoginGUI;
 import app.GUI.MainGUI;
+import app.utils.DataTable;
 import app.utils.FadeTransition;
 
 public class PhoneStoreApplication extends JFrame {
@@ -24,13 +24,14 @@ public class PhoneStoreApplication extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+
 		try {
-			String nativeLookAndFeel = UIManager.getSystemLookAndFeelClassName();
-			UIManager.setLookAndFeel(nativeLookAndFeel);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
-			System.err.println("Không thể thiết lập Native Look and Feel: " + e.getMessage());
+			com.formdev.flatlaf.FlatLaf.setup(null);
+			UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
+		} catch (Exception ex) {
+			System.err.println("Failed to initialize FlatLaf");
 		}
+		DataTable.createExcelFolder();
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

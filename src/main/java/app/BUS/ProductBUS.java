@@ -1,9 +1,18 @@
 package app.BUS;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import app.DAO.ProductDAO;
+import app.DTO.ImportSlip;
 import app.DTO.Product;
 import app.DTO.ProductDetail;
 
@@ -22,6 +31,10 @@ public class ProductBUS {
 
 	public List<Product> getAll() {
 		return dao.getAll();
+	}
+
+	public List<Product> getAllDesc() {
+		return dao.getAllDesc();
 	}
 
 	public int AddProduct(Product product) {
@@ -99,6 +112,40 @@ public class ProductBUS {
 			row += response > 0 ? 1 : 0;
 		}
 		return row;
+	}
+
+	public boolean importDataFromExcel(String filePath) {
+		try (FileInputStream fis = new FileInputStream(filePath);
+				Workbook workbook = new XSSFWorkbook(fis)) {
+
+			Sheet sheet = workbook.getSheetAt(0);
+
+			for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+				Row row = sheet.getRow(rowIndex);
+				if (row == null) {
+					continue;
+				}
+
+				Product newProduct = new Product(
+						row.getCell(0).toString(),
+						(int) row.getCell(1).getNumericCellValue(),
+						new BigDecimal(row.getCell(2).getNumericCellValue()),
+						(int) row.getCell(3).getNumericCellValue(),
+						row.getCell(4).toString(),
+						row.getCell(5).toString(),
+						new BigDecimal(row.getCell(6).getNumericCellValue()));
+
+				int id = dao.addProduct(newProduct);
+				System.out.println("Đã thêm sản phẩm id = " + id);
+			}
+			return true;
+		} catch (IOException e) {
+			System.err.println("Lỗi đọc file Excel: " + e.getMessage());
+			return false;
+		} catch (Exception e) {
+			System.err.println("Lỗi xử lý dữ liệu: " + e.getMessage());
+			return false;
+		}
 	}
 
 	// public static void main(String[] args) {
