@@ -1,289 +1,332 @@
 package app.GUI;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.List;
-import java.awt.event.ActionEvent;
-import javax.swing.JTable;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import app.BUS.EmployeeBUS;
 import app.DTO.Employee;
-import app.DTO.Product;
+import app.GUI.CustomPanels.FilterPanel;
 import app.GUI.CustomPanels.khungchucnang;
 import app.GUI.interfaces.FunctionPanel;
-import app.utils.UIUtils;
-
-import javax.swing.ImageIcon;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
-
-import java.awt.GridLayout;
-import javax.swing.BoxLayout;
-import java.awt.Font;
 
 public class quanlynhanvien extends JPanel implements FunctionPanel {
 
-	private EmployeeBUS bus;
-	// private JFrame frmQunLKho;
 	private JTable table;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
+	private EmployeeBUS bus;
+	private khungchucnang khung;
+	private JTextField nameSearchField;
+	private JComboBox<String> statusComboBox;
+	private JLabel noResultLabel;
+	private JScrollPane scrollPane;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					quanlynhanvien window = new quanlynhanvien();
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
 	public quanlynhanvien() {
-		this.bus = new EmployeeBUS();
 		initialize();
 	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
+	
 	private void initialize() {
-		// frmQunLKho = new JFrame();
-		setForeground(new Color(255, 255, 255));
-		setBackground(new Color(0, 64, 128));
+		bus = new EmployeeBUS();
 		setLayout(new BorderLayout());
+		noResultLabel = new JLabel("Không tìm thấy kết quả phù hợp.", SwingConstants.CENTER);
+		noResultLabel.setFont(new Font("Arial", Font.ITALIC, 16));
+		noResultLabel.setForeground(Color.RED);
+		noResultLabel.setVisible(false);
+		add(noResultLabel, BorderLayout.CENTER);
 
-		JPanel topContainer = new JPanel();
-		topContainer.setPreferredSize(new Dimension(0, 200));
-		topContainer.setLayout(new GridLayout(1, 2));
-		add(topContainer, BorderLayout.NORTH);
+		JPanel topPanel = new JPanel();
+		topPanel.setPreferredSize(new Dimension(0, 250));
+		topPanel.setLayout(new BorderLayout());
+		topPanel.setBackground(new Color(0, 0,0));
+		add(topPanel, BorderLayout.NORTH);
 
-		khungchucnang khungchucnang = new khungchucnang(this);
-		topContainer.add(khungchucnang);
+		khung = new khungchucnang(this);
+		khung.setBorder(new EmptyBorder(50, 0, 50, 0));
+		topPanel.add(khung, BorderLayout.WEST);
 
-		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new TitledBorder(null, "Tìm kiếm", TitledBorder.LEFT, TitledBorder.TOP, null, null));
-		panel_2.setBackground(new Color(255, 255, 255));
-		panel_2.setBounds(889, 0, 651, 142);
-		topContainer.add(panel_2);
-		panel_2.setLayout(null);
+		FilterPanel filterPanel = new FilterPanel();
+		filterPanel.setLayout(new GridLayout(3, 4, 40, 10));
+		topPanel.add(filterPanel, BorderLayout.CENTER);
 
-		JButton btnNewButton_6 = new JButton("Làm mới\r\n");
-		btnNewButton_6.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon làm mới.jpg"));
-		btnNewButton_6.setBounds(439, 34, 140, 55);
-		panel_2.add(btnNewButton_6);
+		JPanel namePanel = new JPanel();
+		namePanel.setLayout(new BorderLayout());
+		namePanel.setOpaque(false);
+		namePanel.setBackground(null);
+		namePanel.setBackground(new Color(255, 0, 0));
+		namePanel.setBorder(new EmptyBorder(10, 0, 10, 0));
 
-		JLabel lblNewLabel_10 = new JLabel("Mã nhân viên:");
-		lblNewLabel_10.setBounds(39, 34, 100, 13);
-		panel_2.add(lblNewLabel_10);
+		JLabel nameSearchLabel = new JLabel("Tên nhân viên:");
+		nameSearchLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+		nameSearchLabel.setBorder(new EmptyBorder(0, 10, 0, 10));
+		namePanel.add(nameSearchLabel, BorderLayout.WEST);
 
-		textField = new JTextField();
-		textField.setBounds(127, 34, 163, 19);
-		panel_2.add(textField);
-		textField.setColumns(10);
+		nameSearchField = new JTextField(15);
+		nameSearchField.setFont(new Font("Arial", Font.PLAIN, 16));
+		nameSearchField.setBackground(new Color(240, 240, 240));
+		nameSearchField.setBorder(new CompoundBorder(
+			BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+			new EmptyBorder(5, 5, 5, 5)));
+		nameSearchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+			@Override
+			public void insertUpdate(javax.swing.event.DocumentEvent e) {
+				HandleNameChange();
+			}
 
-		JLabel lblNewLabel_11 = new JLabel("Thời gian:");
-		lblNewLabel_11.setBounds(39, 89, 70, 13);
-		panel_2.add(lblNewLabel_11);
+			@Override
+			public void removeUpdate(javax.swing.event.DocumentEvent e) {
+				HandleNameChange();
+			}
 
-		textField_5 = new JTextField();
-		textField_5.setBounds(111, 86, 96, 19);
-		panel_2.add(textField_5);
-		textField_5.setColumns(10);
-
-		JLabel lblNewLabel_12 = new JLabel("-");
-		lblNewLabel_12.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblNewLabel_12.setBounds(224, 86, 20, 13);
-		panel_2.add(lblNewLabel_12);
-
-		textField_6 = new JTextField();
-		textField_6.setBounds(248, 86, 96, 19);
-		panel_2.add(textField_6);
-		textField_6.setColumns(10);
-
-		JButton btnNewButton_9 = new JButton("");
-		btnNewButton_9.setBounds(190, 86, 68, 21);
-		panel_2.add(btnNewButton_9);
-		btnNewButton_9.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon chọn ngày.jpg"));
-		btnNewButton_9.setBorderPainted(false);
-		btnNewButton_9.setContentAreaFilled(false);
-		btnNewButton_9.setOpaque(false);
-
-		JButton btnNewButton_12 = new JButton("");
-		btnNewButton_12.setBounds(322, 86, 85, 21);
-		panel_2.add(btnNewButton_12);
-		btnNewButton_12.setIcon(new ImageIcon("src\\main\\resources\\Ảnh\\icon chọn ngày.jpg"));
-		btnNewButton_12.setBorderPainted(false);
-		btnNewButton_12.setContentAreaFilled(false);
-		btnNewButton_12.setOpaque(false);
-		btnNewButton_12.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SpinnerDateModel model = new SpinnerDateModel();
-				JSpinner dateSpinner = new JSpinner(model);
-				dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd"));
-
-				int option = JOptionPane.showOptionDialog(
-						null,
-						dateSpinner,
-						"Chọn thời gian",
-						JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.PLAIN_MESSAGE,
-						null,
-						null,
-						null);
+			@Override
+			public void changedUpdate(javax.swing.event.DocumentEvent e) {
+				HandleNameChange();
 			}
 		});
-		btnNewButton_9.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SpinnerDateModel model = new SpinnerDateModel();
-				JSpinner dateSpinner = new JSpinner(model);
-				dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd"));
+		namePanel.add(nameSearchField, BorderLayout.CENTER);
 
-				int option = JOptionPane.showOptionDialog(
-						null,
-						dateSpinner,
-						"Chọn thời gian",
-						JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.PLAIN_MESSAGE,
-						null,
-						null,
-						null);
-			}
+		JPanel typePanel = new JPanel();
+		typePanel.setLayout(new BorderLayout());
+		typePanel.setOpaque(false);
+		typePanel.setBackground(null);
+		typePanel.setBackground(new Color(255, 0, 0));
+		typePanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+
+		JLabel typeLabel = new JLabel("Trạng thái:");
+		typeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+		typeLabel.setBorder(new EmptyBorder(0, 10, 0, 10));
+		typePanel.add(typeLabel, BorderLayout.WEST);
+
+		statusComboBox = new JComboBox<>(new String[] { "Tất cả", "Đang làm việc", "Đã nghỉ việc" });
+		statusComboBox.setEditable(false);
+		statusComboBox.setFont(new Font("Arial", Font.PLAIN, 16));
+		statusComboBox.setBackground(new Color(240, 240, 240));
+		statusComboBox.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
+		statusComboBox.setBorder(new CompoundBorder(
+			BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
+			new EmptyBorder(0, 10, 0, 10)));
+		
+		statusComboBox.addActionListener(e -> {
+			Object selectedItem = statusComboBox.getSelectedItem();
+			System.out.println("Selected status: " + selectedItem);
+
+			HandleStatusChange(selectedItem);
 		});
+		typePanel.add(statusComboBox, BorderLayout.CENTER);
 
-		JLabel lblNewLabel_6 = new JLabel("DANH SÁCH NHÂN VIÊN");
-		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
-		// lblNewLabel_6.setBounds(812, 162, 195, 27);
-		add(lblNewLabel_6, BorderLayout.CENTER);
+		JPanel processPanel = new JPanel();
+		processPanel.setBackground(null);
+		processPanel.setOpaque(false);
+		processPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
 
-		JPanel filterPanel = new JPanel();
-		filterPanel.setPreferredSize(new Dimension(0, 100));
-		filterPanel.setLayout(new GridLayout(3, 4));
-		filterPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-		// UIUtils.setFontRecursively(filterPanel, new Font("Tahoma", Font.BOLD, 40));
-		add(filterPanel, BorderLayout.CENTER);
+	    JButton filterButton = new JButton("Tìm kiếm");
+		filterButton.setFont(new Font("Arial", Font.PLAIN, 16));
+		filterButton.setBorder(new EmptyBorder(10, 15, 10, 15));
+		filterButton.setBackground(Color.blue);
+		filterButton.setForeground(Color.white);
+		filterButton.setVerticalAlignment(SwingConstants.CENTER);
+		filterButton.addActionListener(e -> Search());
+		processPanel.add(filterButton);
 
-		JLabel lblNewLabel_3 = new JLabel("Mã nhân viên:");
-		// lblNewLabel_3.setBounds(262, 216, 111, 13);
-		filterPanel.add(lblNewLabel_3);
+		JButton refreButton = new JButton("Làm mới");
+		refreButton.setFont(new Font("Arial", Font.PLAIN, 16));
+		refreButton.setBorder(new EmptyBorder(10, 15, 10, 15));
+		refreButton.setBackground(new Color(173, 255, 47));
+		refreButton.setForeground(Color.black);
+		refreButton.setVerticalAlignment(SwingConstants.CENTER);
+		refreButton.addActionListener(e -> Refresh());
+		processPanel.add(refreButton);
 
-		textField_1 = new JTextField();
-		// textField_1.setEditable(false);
-		// textField_1.setBounds(383, 213, 269, 19);
-		// textField_1.setPreferredSize(new Dimension(0, 50));
-		textField_1.setBorder(new EmptyBorder(10, 10, 10, 10));
-		textField_1.setColumns(10);
-		filterPanel.add(textField_1);
+		filterPanel.add(namePanel);
+		filterPanel.add(typePanel);
+		filterPanel.add(processPanel);
 
-		JLabel lblNewLabel_7 = new JLabel("Tình trạng: ");
-		// lblNewLabel_7.setBounds(262, 319, 60, 13);
-		filterPanel.add(lblNewLabel_7);
+		JLabel title = new JLabel("DANH SÁCH NHÂN VIÊN", SwingConstants.CENTER);
+		title.setFont(new Font("Arial", Font.BOLD, 28));
+		title.setOpaque(true);
+		title.setPreferredSize(new Dimension(0, 10));
+		add(Box.createRigidArea(new Dimension(0, 10)));
+		add(title, BorderLayout.CENTER);
 
-		textField_2 = new JTextField();
-		// textField_2.setEditable(false);
-		// textField_2.setBounds(383, 263, 269, 19);
-		// textField_2.setPreferredSize(new Dimension(0, 50));
-		textField_2.setColumns(10);
-		filterPanel.add(textField_2);
+		// Data table 
+		JPanel listPanel = new JPanel();
+		listPanel.setLayout(new BorderLayout());
 
-		JLabel lblNewLabel_8 = new JLabel("Ngày sinh");
-		// lblNewLabel_8.setBounds(947, 216, 60, 13);
-		filterPanel.add(lblNewLabel_8);
-
-		textField_3 = new JTextField();
-		// textField_3.setEditable(false);
-		// textField_3.setPreferredSize(new Dimension(0, 50));
-		// textField_3.setBounds(1058, 213, 230, 19);
-		textField_3.setColumns(10);
-		filterPanel.add(textField_3);
-
-		JLabel lblNewLabel_9 = new JLabel("Địa chỉ: ");
-		// lblNewLabel_9.setBounds(947, 266, 101, 13);
-		filterPanel.add(lblNewLabel_9);
-
-		textField_4 = new JTextField();
-		// textField_4.setEditable(false);
-		// textField_4.setPreferredSize(new Dimension(0, 50));
-		// textField_4.setBounds(1058, 263, 230, 19);
-		textField_4.setColumns(10);
-		filterPanel.add(textField_4);
-
-		JLabel lblNewLabel_7_1 = new JLabel("Giới tính:");
-		// lblNewLabel_7_1.setBounds(262, 266, 60, 13);
-		filterPanel.add(lblNewLabel_7_1);
-
-		textField_7 = new JTextField();
-		// textField_7.setEditable(false);
-		textField_7.setColumns(10);
-		// textField_7.setBounds(383, 316, 269, 19);
-		// textField_7.setPreferredSize(new Dimension(0, 50));
-		filterPanel.add(textField_7);
-
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setPreferredSize(new Dimension(0, 600));
-		add(scrollPane, BorderLayout.SOUTH);
-		UIUtils.setFontRecursively(filterPanel, new Font("Tahoma", Font.BOLD, 15));
-
-		String[] columnNames = { "Mã nhân viên", "Tên nhân viên", "SĐT", "Email", "Ngày sinh" };
+		scrollPane =  new JScrollPane();
+		String[] columnNames = {"Mã nhân viên", "Tên nhân viên", "Giới tính", "Ngày sinh", "SĐT", "Email", "Trạng thái"};
 		List<Employee> employeeList = bus.getAll();
-		System.out.println("check list: " + employeeList.size());
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 				employeeList.stream()
 						.map(e -> new Object[] { e.getEmployeeId(), e.getFullName(),
-								e.getPhoneNumber(), e.getEmail(), e.getDateOfBirth() })
+								e.getGender(), e.getDateOfBirth(), e.getPhoneNumber(), e.getEmail(), e.getStatus() })
 						.toArray(Object[][]::new),
-				columnNames) {
-			boolean[] columnEditables = new boolean[] {
-					true, true, false, false, false
-			};
-
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
+				columnNames));
 		table.getColumnModel().getColumn(0).setPreferredWidth(94);
 		table.getColumnModel().getColumn(1).setPreferredWidth(98);
-		scrollPane.setViewportView(table);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		table.getTableHeader().setReorderingAllowed(false);
+		table.setIntercellSpacing(new Dimension(8, 4));
+		table.setRowHeight(28);
+		table.setFont(new Font("Arial", Font.PLAIN, 15));
+		table.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2));
 
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(new Color(0, 64, 128));
+		header.setForeground(Color.WHITE);
+		header.setFont(new Font("Arial", Font.BOLD, 16));
+		header.setPreferredSize(new Dimension(header.getWidth(), 35));
+
+		((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		// DefaultTableCellRenderer rightBoldRenderer = new DefaultTableCellRenderer() {
+		// 	@Override
+		// 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		// 		JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		// 		cell.setHorizontalAlignment(SwingConstants.RIGHT);
+		// 		cell.setFont(cell.getFont().deriveFont(Font.BOLD));
+		// 		return cell;
+		// 	}
+		// };
+
+		// table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		// table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+		// table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+		// table.getColumnModel().getColumn(4).setCellRenderer(rightBoldRenderer);
+
+		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(5).setCellRenderer(centerRenderer);
+		table.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
+
+		scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+		scrollPane.setViewportView(table);
+		scrollPane.setPreferredSize(new Dimension(0, 550));
+		listPanel.add(scrollPane, BorderLayout.NORTH);
+
+		add(listPanel, BorderLayout.SOUTH);
+	}
+
+	public void HandleNameChange() {
+		String name = nameSearchField.getText();
+		System.out.println("Searching for name: " + name);
+		if (name.isEmpty()) {
+			HandleNull();
+		}
+		List<Employee> filteredEmployees = bus.searchEmployees(name);
+		SetDataTable(filteredEmployees);
+	}
+
+	public void HandleStatusChange(Object selectedItem) {
+		if (selectedItem == null || selectedItem.toString().equals("Tất cả")) {
+			HandleNull(); // hiển thị toàn bộ nhân viên
+			return;
+		}
+
+		int status;
+		switch (selectedItem.toString()) {
+			case "Đang làm việc":
+				status = 1;
+				break;
+			case "Đã nghỉ việc":
+				status = 0;
+				break;
+			default:
+				HandleNull();
+				return;
+		}
+
+		System.out.println("Filtering by status (int): " + status);
+		List<Employee> filteredEmployees = bus.fillterEmployeesByStatus(status);
+		SetDataTable(filteredEmployees);
+	}
+
+	public void Search() {
+		System.out.println("Search employees");
+		String keyword = nameSearchField.getText().equals("") ? "" : nameSearchField.getText();
+		Object selectedItem = statusComboBox.getSelectedItem();
+		String status = (selectedItem == null || selectedItem.toString().equals("Tất cả")) ? "" : selectedItem.toString();
+		System.out.println("Search keyword: " + keyword + ", status: " + status);
+		List<Employee> filteredEmployees = bus.searchEmployees(keyword);
+		if (!status.equals("")) {
+			int statusInt;
+			switch (status) {
+				case "Đang làm việc":
+					statusInt = 1;
+					break;
+				case "Đã nghỉ việc":
+					statusInt = 0;
+					break;
+				default:
+					HandleNull();
+					return;
+			}
+			filteredEmployees = filteredEmployees.stream()
+				.filter(e -> e.getStatus() == statusInt)
+				.toList();
+		}
+	}
+
+	public void Refresh() {
+		nameSearchField.setText("");
+		statusComboBox.setSelectedIndex(0);
+		List<Employee> allEmployees = bus.getAll();
+		SetDataTable(allEmployees);
+	}
+
+	public void HandleNull() {
+		List<Employee> allEmployees = bus.getAll();
+		SetDataTable(allEmployees);
+		return;
+	}
+
+	public void SetDataTable(List<Employee> employees) {
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.setRowCount(0);
+
+		if (employees.isEmpty()) {
+			model.addRow(new Object[] {"", "", "", "", "", "", ""});
+			noResultLabel.setVisible(true);
+			scrollPane.setPreferredSize(new Dimension(0, 200));
+			revalidate();
+			repaint();
+			return;
+		}
+
+		if (noResultLabel != null) {
+			noResultLabel.setVisible(false);
+			scrollPane.setPreferredSize(new Dimension(0, 600));
+			revalidate();
+			repaint();
+		}
+
+		for (Employee e : employees) {
+			model.addRow(new Object[] { e.getEmployeeId(), e.getFullName(),
+					e.getGender(), e.getDateOfBirth(), e.getPhoneNumber(), e.getEmail(), e.getStatus() });
+		}
 	}
 
 	public void Add() {

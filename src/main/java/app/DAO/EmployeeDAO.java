@@ -14,7 +14,7 @@ import app.database.DBConnect;
 public class EmployeeDAO {
     public List<Employee> getAll() {
         List<Employee> list = new ArrayList<>();
-        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, NV.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN";
+        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, NV.NGAYSINH, tk.SDT, tk.EMAIL, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql);
             ResultSet rs = st.executeQuery()) {
@@ -23,13 +23,10 @@ public class EmployeeDAO {
                         rs.getInt(1),
                         rs.getString(2),
                         rs.getString(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
-                        rs.getDate(6),
-                        rs.getString(7),
-                        rs.getString(8),
-                        rs.getBigDecimal(9),
-                        rs.getInt(10)
+                        rs.getString(6),
+                        rs.getInt(7)
                     );
                     list.add(employee);
                 }
@@ -117,11 +114,11 @@ public class EmployeeDAO {
 
     public List<Employee> searchEmployees(String keyword) {
         List<Employee> employees = new ArrayList<>();
-        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, NV.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN WHERE (tk.HOTEN LIKE ? OR tk.SDT LIKE ? OR tk.EMAIL LIKE ? OR tk.USERNAME LIKE ? OR nv.DIACHI LIKE ?) AND nv.TINHTRANG = 1";
+        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, NV.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN WHERE (tk.HOTEN LIKE ? AND tk.SDT LIKE ? AND tk.EMAIL LIKE ?) AND nv.TINHTRANG = 1";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql)) {
                 String likeKeyword = "%" + keyword + "%";
-                for (int i = 1; i <= 5; i++) {
+                for (int i = 1; i <= 3; i++) {
                     st.setString(i, likeKeyword);
                 }
                 try (ResultSet rs = st.executeQuery()) {

@@ -359,7 +359,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		scrollPane.setViewportView(table);
-		scrollPane.setPreferredSize(new Dimension(0, 600));
+		scrollPane.setPreferredSize(new Dimension(0, 500));
 		listPanel.add(scrollPane, BorderLayout.NORTH);
 
 		noResultLabel = new JLabel("Không tìm thấy sản phẩm");

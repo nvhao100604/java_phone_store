@@ -1,7 +1,7 @@
 package app.DTO;
 
 import app.GUI.PermissionGUI;
-import app.GUI.ProductGUI;
+import app.GUI.ProductGUI.ProductGUI;
 import app.GUI.qlkho_phieunhap;
 import app.GUI.qltaikhoan;
 import app.GUI.quanlynhanvien;

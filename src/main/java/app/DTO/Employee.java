@@ -32,6 +32,16 @@ public class Employee {
         this.status = status;
     }
 
+    public Employee(int employeeId, String fullName, String gender, Date dateOfBirth, String phoneNumber, String email, int status) {
+        this.employeeId = employeeId;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.status = status;
+    }
+
     public Employee(String gender, Date dateOfBirth, String address, int status) {
         this.gender = gender;
         this.dateOfBirth = dateOfBirth; 
