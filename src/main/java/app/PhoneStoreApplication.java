@@ -6,10 +6,12 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import app.DTO.Account;
 import app.GUI.LoginGUI;
 import app.GUI.MainGUI;
+import app.utils.DataTable;
 import app.utils.FadeTransition;
 
 public class PhoneStoreApplication extends JFrame {
@@ -22,7 +24,15 @@ public class PhoneStoreApplication extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		// UIUtils.setGlobalFont(new Font("Arial", ));
+
+		try {
+			com.formdev.flatlaf.FlatLaf.setup(null);
+			UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
+		} catch (Exception ex) {
+			System.err.println("Failed to initialize FlatLaf");
+		}
+		DataTable.createExcelFolder();
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -46,7 +56,7 @@ public class PhoneStoreApplication extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
+
 		setMinimumSize(new Dimension(500, 400));
 		layout = new CardLayout();
 		mainPanel = new JPanel(layout);

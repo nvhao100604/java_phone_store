@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -28,6 +29,8 @@ public class sidebar extends JPanel {
 	private JPanel navPanel;
 	private AccountPanel accountPanel;
 	private Account userACcount;
+	private int mainWidth;
+	private int mainHeight;
 
 	public sidebar(MainGUI mainGUI) {
 		this.mainGUI = mainGUI;
@@ -49,8 +52,8 @@ public class sidebar extends JPanel {
 			super(text);
 			ImageIcon originalIcon = new ImageIcon(iconPath != "" ? iconPath : "");
 			Image originalImage = originalIcon.getImage();
-			int newWidth = 20;
-			int newHeight = 20;
+			int newWidth = mainHeight / 30;
+			int newHeight = newWidth;
 			Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
 			ImageIcon scaledIcon = new ImageIcon(scaledImage);
 			setHorizontalAlignment(SwingConstants.LEFT);
@@ -65,6 +68,8 @@ public class sidebar extends JPanel {
 	}
 
 	public void GenerateSideBar() {
+		mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+		mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 		navPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		navPanel.setBackground(null);
 		List<Function> functions = bus.getFunctionsForRole(userACcount.getRoleId());
@@ -77,10 +82,10 @@ public class sidebar extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					mainGUI.SetTitle("Quản lý cửa hàng điện thoại | " + function.getFunctionName());
 					mainGUI.InitialGUI(function.getGuiClass());
-					System.out.println("check function: " + function.getGuiClass());
+					// System.out.println("check function: " + function.getGuiClass());
 				}
 			});
-			button.setPreferredSize(new Dimension(250, 40));
+			button.setPreferredSize(new Dimension(mainWidth / 4 - 230, mainHeight / 10 - 40));
 			navPanel.add(button);
 		}
 		add(navPanel, BorderLayout.NORTH);
