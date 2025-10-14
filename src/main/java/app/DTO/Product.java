@@ -40,14 +40,13 @@ public class Product {
 	}
 
 	public Product(String productName, int brandId, BigDecimal importPrice, int categoryId,
-			String imageUrl, String description, BigDecimal salePrice, int status) {
+			String imageUrl, String description, BigDecimal salePrice) {
 		this.productName = productName;
 		this.brandId = brandId;
 		this.importPrice = importPrice;
 		this.categoryId = categoryId;
 		this.imageUrl = imageUrl;
 		this.description = description;
-		this.status = status;
 		this.salePrice = salePrice;
 		this.productDetails = new ArrayList<>();
 	}
@@ -72,8 +71,8 @@ public class Product {
 		this.productName = productName;
 		this.importPrice = importPrice;
 		this.productDetails = new ArrayList<>();
-		productDetails.add(new ProductDetail(
-				productDetailId, color, capacity, stock));
+		// productDetails.add(new ProductDetail(
+		// productDetailId, color, capacity, stock));
 	}
 
 	// Getters and Setters

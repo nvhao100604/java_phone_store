@@ -41,6 +41,33 @@ public class ProductDAO {
 		return list;
 	}
 
+	public List<Product> getAllDesc() {
+		List<Product> list = new ArrayList<>();
+		String sql = "SELECT sp.idSP, sp.TENSP, sp.HANG, h.TENHANG, sp.GIANHAP,sp.idDM, d.LOAISP, sp.IMG, sp.MOTA, sp.GIABAN, sp.TRANGTHAI from sanpham sp join hang h ON sp.HANG=h.idHANG join danhmuc d on sp.idDM=d.idDM WHERE sp.TRANGTHAI=1 ORDER BY sp.idSP DESC";
+		try (Connection con = DBConnect.getConnection();
+				PreparedStatement st = con.prepareStatement(sql);
+				ResultSet rs = st.executeQuery()) {
+			while (rs.next()) {
+				Product product = new Product(
+						rs.getInt(1),
+						rs.getString(2),
+						rs.getInt(3),
+						rs.getString(4),
+						rs.getBigDecimal(5),
+						rs.getInt(6),
+						rs.getString(7),
+						rs.getString(8),
+						rs.getString(9),
+						rs.getBigDecimal(10),
+						rs.getInt(11));
+				list.add(product);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 	public Product getProductById(int productId) {
 		String sql = "SELECT sp.idSP, sp.TENSP, sp.HANG, h.TENHANG, sp.GIANHAP,sp.idDM, d.LOAISP, sp.IMG, sp.MOTA, sp.GIABAN, sp.TRANGTHAI from sanpham sp join hang h ON sp.HANG=h.idHANG join danhmuc d on sp.idDM=d.idDM WHERE sp.idSP= ? AND sp.TRANGTHAI=1";
 		try (Connection con = DBConnect.getConnection();
@@ -372,11 +399,6 @@ public class ProductDAO {
 
 		try (Connection con = DBConnect.getConnection();
 				PreparedStatement st = con.prepareStatement(sql + conditionSql + orderSql)) {
-			// st.setString(index, "%" + keyword + "%");
-			// st.setBigDecimal(2, minPrice);
-			// st.setBigDecimal(3, maxPrice);
-			// st.setInt(4, categoryId);
-			// st.setString(5, "%" + brandName + "%");
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				Product product = new Product(

@@ -83,10 +83,6 @@ public class ImportSlipBUS {
         }
     }
 
-    public void exportDataToExcel(String filePath) {
-        // Implement export logic here
-    }
-
     public List<ImportSlip> searchImportSlips(String keyword) {
         return dao.searchImportSlips(keyword);
     }

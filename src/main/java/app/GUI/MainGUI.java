@@ -64,8 +64,8 @@ public class MainGUI extends JPanel {
 	public void initialize() {
 		application.SetTitle("Quản lý cửa hàng điện thoại");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setPreferredSize(new Dimension(1400, 1000));
-		setMinimumSize(new Dimension(1400, 1000));
+		setPreferredSize(new Dimension(screenSize.width - 150, screenSize.height - 150));
+		setMinimumSize(new Dimension(screenSize.width - 200, screenSize.height - 200));
 		setLayout(new BorderLayout());
 
 		// navBar = new sidebar(this);
