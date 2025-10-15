@@ -43,12 +43,11 @@ import app.GUI.interfaces.FunctionPanel;
 import app.utils.ConfirmDialog;
 import app.utils.DataTable;
 import app.utils.DecimalFilter;
-import app.utils.ImportExcel;
 
 public class ProductGUI extends JPanel implements FunctionPanel {
 
-	private int mainWidth;
-	private int mainHeight;
+	private static final int mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+	private static final int mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 	private ProductBUS bus;
 	private CategoryBUS categoryBus;
 	private khungchucnang khung;
@@ -72,9 +71,6 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		bus = new ProductBUS();
 		categoryBus = new CategoryBUS();
 		setLayout(new BorderLayout());
-
-		mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-		mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 		// System.out.println("Main W + H = " + mainWidth + " + " + mainHeight);
 
 		JPanel topPanel = new JPanel();
@@ -518,7 +514,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 	public void Add() {
 		// System.out.println("Add product");
-		AddProductFrame addFrame = new AddProductFrame("Thêm sản phẩm");
+		AddProductFrame addFrame = new AddProductFrame("Thêm sản phẩm", this);
 		addFrame.setVisible(true);
 	}
 
@@ -554,7 +550,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 	public void ImportExcel() {
 		System.out.println("Import Excel product");
-		String filePath = ImportExcel.chooseFile();
+		String filePath = DataTable.chooseFile();
 		boolean isConfirmed = ConfirmDialog.confirmDialog(this, "File sản phẩm tại  " + filePath + " ?",
 				"Xác nhận thêm danh sách sản phẩm");
 		if (isConfirmed) {
@@ -570,7 +566,8 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 	public void ExportExcel() {
 		// System.out.println("Export Excel product");
-		DataTable.exportDataToExcel(DataTable.directoryPath + "/export/productList.xlsx", table);
+		String savePath = DataTable.chooseFolder(this, "productList.xlsx");
+		DataTable.exportDataToExcel(savePath, table);
 		JOptionPane.showMessageDialog(this, "Xuất file Excel thành công", "Thông báo",
 				JOptionPane.INFORMATION_MESSAGE);
 	}

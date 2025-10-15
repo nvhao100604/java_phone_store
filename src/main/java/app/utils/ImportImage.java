@@ -2,6 +2,7 @@ package app.utils;
 
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,6 +13,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 
 public class ImportImage {
+    private static final String directoryPath = "src/main/resources/images/products";
 
     public static File chooseImage(JLabel imagePreviewLabel) {
         File selectedFile = null;
@@ -40,8 +42,7 @@ public class ImportImage {
     }
 
     public static void copyImage(File selectedFile) {
-        String destinationFolderName = "resources/images/products";
-        File destinationDir = new File(destinationFolderName);
+        File destinationDir = new File(directoryPath);
 
         if (!destinationDir.exists()) {
             destinationDir.mkdirs();
@@ -54,6 +55,20 @@ public class ImportImage {
             Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (java.io.IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public static boolean createImagesFolder() {
+        Path images_path = Paths.get(directoryPath);
+        // Path exp_path = Paths.get(directoryPath + "/");
+        try {
+            Files.createDirectories(images_path);
+            // Files.createDirectories(exp_path);
+            System.out.println("Tạo thư mục thành công hoặc thư mục đã tồn tại: " + directoryPath);
+            return true;
+        } catch (IOException e) {
+            System.err.println("Lỗi khi tạo thư mục: " + e.getMessage());
+            return false;
         }
     }
 }

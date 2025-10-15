@@ -31,7 +31,7 @@ public class PhoneStoreApplication extends JFrame {
 		} catch (Exception ex) {
 			System.err.println("Failed to initialize FlatLaf");
 		}
-		DataTable.createExcelFolder();
+		// DataTable.createExcelFolder();
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

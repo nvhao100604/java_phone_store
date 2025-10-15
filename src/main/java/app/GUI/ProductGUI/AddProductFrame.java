@@ -62,9 +62,11 @@ public class AddProductFrame extends JFrame {
     private ProductBUS productBUS;
     private CategoryBUS categoryBUS;
     private BrandBUS brandBUS;
+    private final ProductGUI gui;
 
-    public AddProductFrame(String title) {
+    public AddProductFrame(String title, ProductGUI gui) {
         super(title);
+        this.gui = gui;
         this.categoryBUS = new CategoryBUS();
         this.brandBUS = new BrandBUS();
         this.productBUS = new ProductBUS();
@@ -293,17 +295,18 @@ public class AddProductFrame extends JFrame {
         int categoryId = categoryComboBox.getSelectedItem() != null
                 ? ((Category) categoryComboBox.getSelectedItem()).getCategoryId()
                 : -1;
-        BigDecimal importP = (BigDecimal) importPriceField.getValue();
-        BigDecimal saleP = (BigDecimal) salePriceField.getValue();
+        // BigDecimal importP = (BigDecimal) importPriceField.getValue();
+        // BigDecimal saleP = (BigDecimal) salePriceField.getValue();
         String description = descriptionArea.getText();
         String imageUrl = selectedImageFile != null ? selectedImageFile.getName() : "";
 
-        if (name.trim().isEmpty() || importP == null || saleP == null) {
+        if (name.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng điền đủ thông tin cơ bản.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        newProduct = new Product(name, brandId, importP, categoryId, imageUrl, description, saleP);
+        newProduct = new Product(name, brandId, new BigDecimal(0), categoryId, imageUrl, description,
+                new BigDecimal(0));
         int newProductId = productBUS.AddProduct(newProduct);
         if (newProductId > 0) {
             newProduct.setProductId(newProductId);
@@ -315,6 +318,7 @@ public class AddProductFrame extends JFrame {
 
         JOptionPane.showMessageDialog(this, "Sản phẩm đã được lưu thành công!", "Thành công",
                 JOptionPane.INFORMATION_MESSAGE);
+        this.gui.HandleLoadAll();
         dispose();
     }
 
