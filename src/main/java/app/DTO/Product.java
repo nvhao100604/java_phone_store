@@ -21,6 +21,7 @@ public class Product {
 
 	// Constructors
 	public Product() {
+		this.productDetails = new ArrayList<>();
 	}
 
 	public Product(int productId, String productName, int brandId, String brand, BigDecimal importPrice, int categoryId,

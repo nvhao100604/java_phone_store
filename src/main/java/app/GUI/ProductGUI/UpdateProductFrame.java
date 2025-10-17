@@ -28,8 +28,6 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.NumberFormatter;
 
-import org.apache.poi.ss.usermodel.Color;
-
 import app.BUS.BrandBUS;
 import app.BUS.CategoryBUS;
 import app.BUS.ProductBUS;
@@ -61,12 +59,15 @@ public class UpdateProductFrame extends JFrame {
     private ProductBUS productBUS;
     private CategoryBUS categoryBUS;
     private BrandBUS brandBUS;
+    private int productId;
+    private Product instanceProduct;
 
-    public UpdateProductFrame(String title) {
+    public UpdateProductFrame(String title, int productId) {
         super(title);
         this.categoryBUS = new CategoryBUS();
         this.brandBUS = new BrandBUS();
         this.productBUS = new ProductBUS();
+        this.productId = productId;
         productDetailsList = new ArrayList<>();
         initializeFormatters();
         initializeUI();
@@ -261,10 +262,13 @@ public class UpdateProductFrame extends JFrame {
     }
 
     private void loadInitialData() {
+        instanceProduct = productBUS.getProductById(productId);
+        List<ProductDetail> details = 
         List<Brand> brands = brandBUS.getAllBrands();
         for (Brand b : brands) {
             brandComboBox.addItem(b);
         }
+        brandComboBox.setSelectedItem(brands.get(0));
 
         List<Category> categories = categoryBUS.getAllCategories();
         for (Category c : categories) {
