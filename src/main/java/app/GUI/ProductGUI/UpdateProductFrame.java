@@ -263,7 +263,7 @@ public class UpdateProductFrame extends JFrame {
 
     private void loadInitialData() {
         instanceProduct = productBUS.getProductById(productId);
-        List<ProductDetail> details = 
+        List<ProductDetail> details = null;
         List<Brand> brands = brandBUS.getAllBrands();
         for (Brand b : brands) {
             brandComboBox.addItem(b);

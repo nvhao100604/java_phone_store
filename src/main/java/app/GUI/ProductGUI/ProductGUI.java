@@ -544,8 +544,16 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 	public void Edit() {
 		System.out.println("Edit product");
-		UpdateProductFrame editFrame = new UpdateProductFrame("Cập nhật thông tin sản phẩm");
-		editFrame.setVisible(true);
+		int selectedRow = table.getSelectedRow();
+		if (selectedRow != -1) {
+			int productId = (int) DataTable.dataFromTable(selectedRow, tableModel)[0];
+			System.out.println("check id: " + productId);
+			UpdateProductFrame editFrame = new UpdateProductFrame("Cập nhật thông tin sản phẩm", productId);
+			editFrame.setVisible(true);
+		} else {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn hàng cần xóa.", "Thông báo",
+					JOptionPane.WARNING_MESSAGE);
+		}
 	}
 
 	public void ImportExcel() {
