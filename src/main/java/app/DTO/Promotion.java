@@ -67,7 +67,7 @@ public class Promotion {
 		return isPercent;
 	}
 
-	public void setPercent(boolean isPercent) {
+	public void setIsPercent(boolean isPercent) {
 		this.isPercent = isPercent;
 	}
 
@@ -134,4 +134,5 @@ public class Promotion {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	
 }
