@@ -96,7 +96,7 @@ public class khungchucnang extends JPanel {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblNewLabel);
 
-		lblNewLabel_1 = new JLabel("Xóa");
+		lblNewLabel_1 = new JLabel("Xóa/Khôi phục");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblNewLabel_1);
 

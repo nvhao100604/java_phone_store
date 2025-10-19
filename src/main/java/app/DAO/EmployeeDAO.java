@@ -14,7 +14,7 @@ import app.database.DBConnect;
 public class EmployeeDAO {
     public List<Employee> getAll() {
         List<Employee> list = new ArrayList<>();
-        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, NV.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN";
+        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, NV.NGAYSINH, tk.SDT, tk.EMAIL, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql);
             ResultSet rs = st.executeQuery()) {
@@ -23,13 +23,10 @@ public class EmployeeDAO {
                         rs.getInt(1),
                         rs.getString(2),
                         rs.getString(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
-                        rs.getDate(6),
-                        rs.getString(7),
-                        rs.getString(8),
-                        rs.getBigDecimal(9),
-                        rs.getInt(10)
+                        rs.getString(6),
+                        rs.getInt(7)
                     );
                     list.add(employee);
                 }
@@ -40,37 +37,52 @@ public class EmployeeDAO {
     }
 
     public Employee getEmployeeById(int employeeId) {
-        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, NV.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN WHERE nv.idTK = ?";
+        String sql = "SELECT tk.idTk, nv.GIOITINH, nv.NGAYSINH, nv.DIACHI, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK WHERE nv.idTK = ?";
         try (Connection con = DBConnect.getConnection();
-            PreparedStatement st = con.prepareStatement(sql);
-            ResultSet rs = st.executeQuery()) {
+            PreparedStatement st = con.prepareStatement(sql)) {
                 st.setInt(1, employeeId);
-                return new Employee(
-                    rs.getInt(1),
-                    rs.getString(2),
-                    rs.getString(3),
-                    rs.getString(4),
-                    rs.getString(5),
-                    rs.getDate(6),
-                    rs.getString(7),
-                    rs.getString(8),
-                    rs.getBigDecimal(9),
-                    rs.getInt(10)
-                );
-            } catch (Exception e) {
+                try (ResultSet rs = st.executeQuery()) {
+                    if (rs.next()) {
+                        return new Employee(
+                            rs.getInt("idTk"),
+                            rs.getString("GIOITINH"),
+                            rs.getDate("NGAYSINH"),
+                            rs.getString("DIACHI"),
+                            rs.getInt("TINHTRANG")
+                        );
+                    }
+                } 
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         return null;
     }
 
+    public List<Employee> getEmployeeGenderList() {
+        List<Employee> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT GIOITINH FROM nhanvien WHERE GIOITINH IS NOT NULL";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql);
+            ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Employee employee = new Employee();
+                    employee.setGender(rs.getString(1));
+                    list.add(employee);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        return list;
+    }
+
     public int addEmployee(Employee employee) {
-        String sql = "INSERT INTO nhanvien (GIOITINH, NGAYSINH, DIACHI, TINHTRANG) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO nhanvien (idTK, GIOITINH, NGAYSINH, DIACHI) VALUES (?, ?, ?, ?)";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
-                stmt.setString(1, employee.getGender());
-                stmt.setDate(2, employee.getDateOfBirth() != null ? new java.sql.Date(employee.getDateOfBirth().getTime()) : null);
-                stmt.setString(3, employee.getAddress());
-                stmt.setInt(4, employee.getStatus());
+                stmt.setInt(1, employee.getAccountId());
+                stmt.setString(2, employee.getGender());
+                stmt.setDate(3, employee.getDateOfBirth() != null ? new java.sql.Date(employee.getDateOfBirth().getTime()) : null);
+                stmt.setString(4, employee.getAddress());
                 stmt.executeUpdate();
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -86,19 +98,19 @@ public class EmployeeDAO {
     }
 
     public int updateEmployee(Employee employee) {
-        String sql = "UPDATE nhanvien SET GIOITINH = ?, NGAYSINH = ?, DIACHI = ?, TINHTRANG = ? WHERE idTK = ?";
+        String sql = "UPDATE nhanvien SET GIOITINH = ?, NGAYSINH = ?, DIACHI = ? WHERE idTK = ?";
         try (Connection con = DBConnect.getConnection();
-            PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setString(1, employee.getGender());
-                stmt.setDate(2, employee.getDateOfBirth() != null ? new java.sql.Date(employee.getDateOfBirth().getTime()) : null);
-                stmt.setString(3, employee.getAddress());
-                stmt.setInt(4, employee.getStatus());
-                stmt.setInt(5, employee.getEmployeeId());
-                return stmt.executeUpdate();
-            } catch (Exception e) {
+            PreparedStatement st = con.prepareStatement(sql)) {
+                st.setString(1, employee.getGender());
+                st.setDate(2, (java.sql.Date) employee.getDateOfBirth());
+                st.setString(3, employee.getAddress());
+                st.setInt(4, employee.getAccountId());
+                int result = st.executeUpdate();
+                return result;
+            } catch (SQLException e) {
                 e.printStackTrace();
+                return 0;
             }
-        return 0;
     }
 
     public int deleteEmployee(int employeeId) {
@@ -115,13 +127,39 @@ public class EmployeeDAO {
         return 0;
     }
 
+    public int softDeleteEmployee(int employeeId) {
+        String sql = "UPDATE nhanvien SET TINHTRANG = 0 WHERE idTK = ?";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql)) {
+                st.setInt(1, employeeId);
+                int rowsAffected = st.executeUpdate();
+                return rowsAffected;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return 0;
+    }
+
+    public int restoreEmployee(int employeeId) {
+        String sql = "UPDATE nhanvien SET TINHTRANG = 1 WHERE idTK = ?";
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql)) {
+                st.setInt(1, employeeId);
+                int rowsAffected = st.executeUpdate();
+                return rowsAffected;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return -1;
+    }
+
     public List<Employee> searchEmployees(String keyword) {
         List<Employee> employees = new ArrayList<>();
-        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, NV.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN WHERE (tk.HOTEN LIKE ? OR tk.SDT LIKE ? OR tk.EMAIL LIKE ? OR tk.USERNAME LIKE ? OR nv.DIACHI LIKE ?) AND nv.TINHTRANG = 1";
+        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, NV.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN WHERE (tk.HOTEN LIKE ? OR tk.SDT LIKE ? OR tk.EMAIL LIKE ?) AND nv.TINHTRANG = 1";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql)) {
                 String likeKeyword = "%" + keyword + "%";
-                for (int i = 1; i <= 5; i++) {
+                for (int i = 1; i <= 3; i++) {
                     st.setString(i, likeKeyword);
                 }
                 try (ResultSet rs = st.executeQuery()) {
@@ -143,6 +181,52 @@ public class EmployeeDAO {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        return employees;
+    }
+
+    public List<Employee> searchEmployees(String keyword, int status) {
+        List<Employee> employees = new ArrayList<>();
+        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, nv.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN WHERE 1 = 1";
+        if (status >= 0) {
+            sql += " AND nv.TINHTRANG = ?";
+        }
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            sql += " AND (tk.HOTEN LIKE ? OR tk.SDT LIKE ? OR tk.EMAIL LIKE ?)";
+        }
+        try (Connection con = DBConnect.getConnection();
+            PreparedStatement st = con.prepareStatement(sql)) {
+            int paramIndex = 1;
+
+            if (status >= 0) {
+                st.setInt(paramIndex++, status);
+            }
+
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                String likeKeyword = "%" + keyword + "%";
+                st.setString(paramIndex++, likeKeyword);
+                st.setString(paramIndex++, likeKeyword);
+                st.setString(paramIndex++, likeKeyword);
+            }
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Employee employee = new Employee();
+                    employee.setEmployeeId(rs.getInt("idTk"));
+                    employee.setFullName(rs.getString("HOTEN"));
+                    employee.setGender(rs.getString("GIOITINH"));
+                    employee.setPhoneNumber(rs.getString("SDT"));
+                    employee.setEmail(rs.getString("EMAIL"));
+                    employee.setDateOfBirth(rs.getDate("NGAYSINH"));
+                    employee.setUserName(rs.getString("USERNAME"));
+                    employee.setAddress(rs.getString("DIACHI"));
+                    employee.setSalary(rs.getBigDecimal("LUONG"));
+                    employee.setStatus(rs.getInt("TINHTRANG"));
+                    employees.add(employee);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return employees;
     }
 
