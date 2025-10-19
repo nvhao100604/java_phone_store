@@ -400,11 +400,11 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel
 		add(listPanel, BorderLayout.SOUTH);
 	}
 	
-	private static String getValue(Promotion p) {
-		if(p.isPercent()) {
-			return p.getPercent();
-		}
-	}
+	// private static String getValue(Promotion p) {
+	// 	if(p.isPercent()) {
+	// 		return p.getPercent();
+	// 	}
+	// }
 
 	public void LoadComboBoxData() {
 		List<app.DTO.Category> categories = categoryBus.getAllCategories();
