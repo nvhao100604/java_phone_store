@@ -101,16 +101,16 @@ public class EmployeeDAO {
         String sql = "UPDATE nhanvien SET GIOITINH = ?, NGAYSINH = ?, DIACHI = ? WHERE idTK = ?";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql)) {
-            st.setString(1, employee.getGender());
-            st.setDate(2, (java.sql.Date) employee.getDateOfBirth());
-            st.setString(3, employee.getAddress());
-            st.setInt(4, employee.getAccountId());
-            int result = st.executeUpdate();
-            return result;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return 0;
-        }
+                st.setString(1, employee.getGender());
+                st.setDate(2, (java.sql.Date) employee.getDateOfBirth());
+                st.setString(3, employee.getAddress());
+                st.setInt(4, employee.getAccountId());
+                int result = st.executeUpdate();
+                return result;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return 0;
+            }
     }
 
     public int deleteEmployee(int employeeId) {
@@ -186,24 +186,28 @@ public class EmployeeDAO {
 
     public List<Employee> searchEmployees(String keyword, int status) {
         List<Employee> employees = new ArrayList<>();
-        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, nv.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN";
-        sql += status >= 0 ? " WHERE nv.TINHTRANG = ?" : " WHERE 1=1";
+        String sql = "SELECT nv.idTk, tk.HOTEN, nv.GIOITINH, tk.SDT, tk.EMAIL, nv.NGAYSINH, tk.USERNAME, nv.DIACHI, q.LUONG, nv.TINHTRANG FROM nhanvien nv JOIN taikhoan tk ON nv.idTK = tk.idTK JOIN quyen q ON tk.idQUYEN = q.idQUYEN WHERE 1 = 1";
+        if (status >= 0) {
+            sql += " AND nv.TINHTRANG = ?";
+        }
         if (keyword != null && !keyword.trim().isEmpty()) {
             sql += " AND (tk.HOTEN LIKE ? OR tk.SDT LIKE ? OR tk.EMAIL LIKE ?)";
         }
-        System.out.println("SQL sau khi build: " + sql);
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql)) {
+            int paramIndex = 1;
+
             if (status >= 0) {
-                st.setInt(1, status);
-            };
+                st.setInt(paramIndex++, status);
+            }
+
             if (keyword != null && !keyword.trim().isEmpty()) {
                 String likeKeyword = "%" + keyword + "%";
-                st.setString(2, likeKeyword);
-                st.setString(3, likeKeyword);
-                st.setString(4, likeKeyword);
+                st.setString(paramIndex++, likeKeyword);
+                st.setString(paramIndex++, likeKeyword);
+                st.setString(paramIndex++, likeKeyword);
             }
-            System.out.println("🔍 Thực thi truy vấn với status = " + status + (keyword != null && !keyword.trim().isEmpty() ? ", keyword = " + keyword : ""));
+
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
                     Employee employee = new Employee();

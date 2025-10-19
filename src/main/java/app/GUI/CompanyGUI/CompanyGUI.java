@@ -1,4 +1,4 @@
-package app.GUI.EmployeeGUI;
+package app.GUI.CompanyGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,8 +25,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
-import app.BUS.EmployeeBUS;
-import app.DTO.Employee;
+import app.BUS.CompanyBUS;
+import app.DTO.Company;
 import app.GUI.CustomPanels.FilterPanel;
 import app.GUI.CustomPanels.khungchucnang;
 import app.GUI.interfaces.FunctionPanel;
@@ -34,10 +34,10 @@ import app.utils.ConfirmDialog;
 import app.utils.DataTable;
 import app.utils.ImportExcel;
 
-public class quanlynhanvien extends JPanel implements FunctionPanel {
-
+public class CompanyGUI extends JPanel implements FunctionPanel {
+    
     private JTable table;
-    private EmployeeBUS bus;
+    private CompanyBUS bus;
     private khungchucnang khung;
     private JTextField nameSearchField;
     private JComboBox<String> statusComboBox;
@@ -45,12 +45,12 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
     private JScrollPane scrollPane;
     DefaultTableModel tableModel;
 
-    public quanlynhanvien() {
+    public CompanyGUI() {
         initialize();
     }
 
     private void initialize() {
-        bus = new EmployeeBUS();
+        bus = new CompanyBUS();
         setLayout(new BorderLayout());
         noResultLabel = new JLabel("Không tìm thấy kết quả phù hợp.", SwingConstants.CENTER);
         noResultLabel.setFont(new Font("Arial", Font.ITALIC, 16));
@@ -114,7 +114,7 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
         JLabel typeLabel = new JLabel("Trạng thái:");
         typeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
 
-        statusComboBox = new JComboBox<>(new String[] { "Tất cả", "Đang làm việc", "Đã nghỉ việc" });
+        statusComboBox = new JComboBox<>(new String[] { "Tất cả", "Còn hợp tác", "Ngừng hợp tác" });
         statusComboBox.setEditable(false);
         statusComboBox.setFont(new Font("Arial", Font.PLAIN, 16));
         statusComboBox.setBackground(new Color(240, 240, 240));
@@ -152,7 +152,7 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
         filterPanel.add(namePanel);
         filterPanel.add(typePanel);
 
-        JLabel title = new JLabel("DANH SÁCH NHÂN VIÊN", SwingConstants.CENTER);
+        JLabel title = new JLabel("DANH SÁCH NHÀ SẢN XUẤT", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 28));
         title.setOpaque(true);
         title.setPreferredSize(new Dimension(0, 10));
@@ -164,13 +164,12 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
         listPanel.setLayout(new BorderLayout());
 
         scrollPane = new JScrollPane();
-        String[] columnNames = { "Mã nhân viên", "Tên nhân viên", "Giới tính", "Ngày sinh", "SĐT", "Email", "Trạng thái" };
-        List<Employee> employeeList = bus.getAll();
+        String[] columnNames = { "Mã nhà sản xuất", "Tên nhà sản xuất", "Trạng thái" };
+        List<Company> companyList = bus.getAll();
         table = new JTable();
         tableModel = new DefaultTableModel(
-                employeeList.stream()
-                        .map(e -> new Object[] { e.getEmployeeId(), e.getFullName(),
-                                e.getGender(), e.getDateOfBirth(), e.getPhoneNumber(), e.getEmail(), statusToString(e.getStatus()) })
+                companyList.stream()
+                        .map(e -> new Object[] { e.getCompanyId(), e.getCompanyName(), statusToString(e.getCompanyStatus()) })
                         .toArray(Object[][]::new),
                 columnNames);
         table.setModel(tableModel);
@@ -205,12 +204,12 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
 
     public void HandleNameChange() {
         String name = nameSearchField.getText();
-        System.out.println("Searching for name: " + name);
+        System.out.println("Name changed: " + name);
         if (name.isEmpty()) {
             HandleNull();
         }
-        List<Employee> filteredEmployees = bus.searchEmployees(name);
-        // SetDataTable(filteredEmployees);
+        List<Company> companies = bus.searchCompanies(name);
+        // SetDataTable(companies);
     }
 
     public void HandleStatusChange(Object selectedItem) {
@@ -221,10 +220,10 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
 
         int status;
         switch (selectedItem.toString()) {
-            case "Đang làm việc":
+            case "Còn hợp tác":
                 status = 1;
                 break;
-            case "Đã nghỉ việc":
+            case "Ngừng hợp tác":
                 status = 0;
                 break;
             default:
@@ -233,21 +232,21 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
         }
 
         System.out.println("Filtering by status (int): " + status);
-        List<Employee> filteredEmployees = bus.fillterEmployeesByStatus(status);
-        // SetDataTable(filteredEmployees);
+        List<Company> filteredCompanies = bus.fillterCompanies(status);
+        // SetDataTable(filteredCompanies);
     }
 
     public void Search() {
-        System.out.println("Search employees");
+        System.out.println("Search company");
         String keyword = nameSearchField.getText().equals("") ? "" : nameSearchField.getText();
         Object selectedItem = statusComboBox.getSelectedItem();
         int statusInt = -1;
         if (selectedItem != null && !selectedItem.toString().equals("Tất cả")) {
             switch (selectedItem.toString()) {
-                case "Đang làm việc":
+                case "Còn hợp tác":
                     statusInt = 1;
                     break;
-                case "Đã nghỉ việc":
+                case "Ngừng hợp tác":
                     statusInt = 0;
                     break;
                 default:
@@ -256,27 +255,27 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
             }
         }
         System.out.println("Search keyword: " + keyword + ", status: " + statusInt);
-        List<Employee> filteredEmployees = bus.searchEmployees(keyword, statusInt);
-        SetDataTable(filteredEmployees);
+        List<Company> filteredCompanies = bus.searchCompanies(keyword, statusInt);
+        SetDataTable(filteredCompanies);
     }
 
     public void Refresh() {
         nameSearchField.setText("");
         statusComboBox.setSelectedIndex(0);
-        List<Employee> allEmployees = bus.getAll();
-        SetDataTable(allEmployees);
+        List<Company> allCompanies = bus.getAll();
+        SetDataTable(allCompanies);
     }
 
     public void HandleNull() {
-        List<Employee> allEmployees = bus.getAll();
-        SetDataTable(allEmployees);
+        List<Company> allCompanies = bus.getAll();
+        SetDataTable(allCompanies);
     }
 
-    public void SetDataTable(List<Employee> employees) {
+    public void SetDataTable(List<Company> companies) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
-        if (employees.isEmpty()) {
+        if (companies.isEmpty()) {
             model.addRow(new Object[] { "", "", "", "", "", "", "" });
             noResultLabel.setVisible(true);
             scrollPane.setPreferredSize(new Dimension(0, 500));
@@ -292,69 +291,62 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
             repaint();
         }
 
-        for (Employee e : employees) {
-            model.addRow(new Object[] { e.getEmployeeId(), e.getFullName(),
-                    e.getGender(), e.getDateOfBirth(), e.getPhoneNumber(), e.getEmail(), statusToString(e.getStatus()) });
+        for (Company c : companies) {
+            model.addRow(new Object[] { c.getCompanyId(), c.getCompanyName(), statusToString(c.getCompanyStatus()) });
         }
     }
 
-	public String statusToString(int status) {
+    public String statusToString(int status) {
 		switch (status) {
 			case 1:
-				return "Đang làm việc";
+				return "Còn hợp tác";
 			case 0:
-				return "Đã nghỉ việc";
+				return "Ngừng hợp tác";
 			default:
 				return "Không xác định";
 		}
 	}
 
     public void Add() {
-        AddEmployeeFrame addFrame = new AddEmployeeFrame("Thêm nhân viên");
+        AddCompanyFrame addFrame = new AddCompanyFrame("Thêm nhà sản xuất");
         addFrame.setVisible(true);
     }
 
     public void Delete() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow != -1) {
-            int employeeId = (int) DataTable.dataFromTable(selectedRow, tableModel)[0];
-            String status = (String) DataTable.dataFromTable(selectedRow, tableModel)[6]; 
+       int selectedRow = table.getSelectedRow();
+       if (selectedRow != -1) {
+            int companyId = (int) DataTable.dataFromTable(selectedRow, tableModel)[0];
+            String status = (String) DataTable.dataFromTable(selectedRow, tableModel)[2];
 
-            if (status.equals("Đang làm việc")) {
-                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa", 
-                    "Bạn có chắc chắn muốn xóa nhân viên này?");
+            if (status.equals("Còn hợp tác")) {
+                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa", "Bạn có chắc chắn muốn xóa nhà sản xuất này không?");
                 if (isConfirmed) {
-                    bus.softDeleteEmployee(employeeId);
-                    JOptionPane.showMessageDialog(this, "Đã chuyển nhân viên vào danh sách nghỉ việc.", 
-                        "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    bus.softDeleteCompany(companyId);
+                    JOptionPane.showMessageDialog(this, "Xóa nhà sản xuất thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
                 }
-            } else if (status.equals("Đã nghỉ việc")) {
-                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Khôi phục nhân viên", 
-                    "Nhân viên này đang nghỉ việc. Bạn có muốn khôi phục không?");
+            } else if (status.equals("Ngừng hợp tác")) {
+                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận khôi phục", "Bạn có chắc chắn muốn khôi phục nhà sản xuất này không?");
                 if (isConfirmed) {
-                    int rows = bus.restoreEmployee(employeeId);
+                    int rows = bus.restoreCompany(companyId);
                     if (rows > 0) {
-                        JOptionPane.showMessageDialog(this, "Khôi phục nhân viên thành công.", 
-                            "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Khôi phục nhà sản xuất thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
                     } else {
-                        JOptionPane.showMessageDialog(this, "Khôi phục thất bại.", 
-                            "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Khôi phục nhà sản xuất thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
 
             HandleNull();
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên để thao tác.", 
-                "Thông báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhà sản xuất để xóa/khôi phục.", "Chú ý", JOptionPane.WARNING_MESSAGE);
         }
     }
 
-    public void ConfirmDelete(int employeeId) {
-        boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa", "Bạn có chắc chắn muốn xóa nhân viên này?");
-        if (isConfirmed) { 
-            bus.softDeleteEmployee(employeeId);
-            JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    public void ConfirmDelete(int companyId) {
+        boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa", "Bạn có chắc chắn muốn xóa nhà sản xuất này không?");
+        if (isConfirmed) {
+            bus.softDeleteCompany(companyId);
+            JOptionPane.showMessageDialog(this, "Xóa nhà sản xuất thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
         }
         HandleNull();
     }
@@ -362,33 +354,32 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
     public void Edit() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên để cập nhật.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhà sản xuất để chỉnh sửa.", "Chú ý", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        int employeeId = (int) table.getValueAt(selectedRow, 0);
-        UpdateEmployeeFrame updateFrame = new UpdateEmployeeFrame("Cập nhật nhân viên", this, employeeId);
+        int companyId = (int) table.getValueAt(selectedRow, 0);
+        UpdateCompanyFrame updateFrame = new UpdateCompanyFrame("Cập nhật nhà sản xuất", this, companyId);
         updateFrame.setVisible(true);
     }
 
     public void ImportExcel() {
         String filePath = ImportExcel.chooseFile();
-        boolean isConfirmed = ConfirmDialog.confirmDialog(this, "File nhân viên tại  " + filePath + " ?",
-				"Xác nhận thêm danh sách nhân viên");
+        boolean isConfirmed = ConfirmDialog.confirmDialog(this, "File nhà sản xuất tại  " + filePath + " ?",
+				"Xác nhận thêm danh sách nhà sản xuất");
         if (isConfirmed) {
             boolean result = bus.importDataFromExcel(filePath);
             if (result) {
-                JOptionPane.showMessageDialog(this, "Thêm danh sách nhân viên thành công!", "Thông báo",
+                JOptionPane.showMessageDialog(this, "Thêm danh sách nhà sản xuất thành công!", "Thông báo",
                         JOptionPane.INFORMATION_MESSAGE);
-                List<Employee> allEmployees = bus.getAll();
-                SetDataTable(allEmployees);
+                List<Company> allCompanies = bus.getAll();
+                SetDataTable(allCompanies);
             }
         }
     }
 
     public void ExportExcel() {
-        DataTable.exportDataToExcel(DataTable.directoryPath + "employee.xlsx", table);
-        JOptionPane.showMessageDialog(this, "Xuất dữ liệu nhân viên ra Excel thành công!", "Thông báo",
-                JOptionPane.INFORMATION_MESSAGE);
+        DataTable.exportDataToExcel(DataTable.directoryPath + "company.xlsx", table);
+        JOptionPane.showMessageDialog(this, "Xuất dữ liệu thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
     }
 }

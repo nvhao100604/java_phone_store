@@ -6,9 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.math.BigDecimal;
 import java.sql.Date;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -22,7 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.text.NumberFormatter;
 
 import app.BUS.EmployeeBUS;
 import app.BUS.PermissionBUS;
@@ -32,7 +29,7 @@ import app.DTO.Permission;
 import app.DTO.Account;
 
 
-public class AddEmployeeFrame extends JFrame{
+public class AddEmployeeFrame extends JFrame {
 
     private JTextField txtUsername;
     private JTextField txtPassword;

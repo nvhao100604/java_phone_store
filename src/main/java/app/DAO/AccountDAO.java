@@ -20,7 +20,6 @@ public class AccountDAO {
             st.setString(1, username);
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
-            // System.out.println("logged in");
             if (rs.next()) {
                 return new Account(
                         rs.getInt(1),
@@ -33,8 +32,7 @@ public class AccountDAO {
                         rs.getInt(8));
             }
         } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println("Loi may");
+            System.out.println("Lỗi đăng nhập");
             e.printStackTrace();
         }
         return null;

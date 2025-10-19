@@ -24,13 +24,12 @@ public class PhoneStoreApplication extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-
-		try {
-			com.formdev.flatlaf.FlatLaf.setup(null);
-			UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
-		} catch (Exception ex) {
-			System.err.println("Failed to initialize FlatLaf");
-		}
+		// try {
+		// 	com.formdev.flatlaf.FlatLaf.setup(null);
+		// 	UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
+		// } catch (Exception ex) {
+		// 	System.err.println("Failed to initialize FlatLaf");
+		// }
 		DataTable.createExcelFolder();
 
 		EventQueue.invokeLater(new Runnable() {
