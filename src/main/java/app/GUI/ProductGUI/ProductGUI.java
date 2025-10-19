@@ -75,10 +75,11 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
 		mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-		// System.out.println("Main W + H = " + mainWidth + " + " + mainHeight);
+		
+		System.out.println("Main W + H = " + mainWidth + " + " + mainHeight);
 
 		JPanel topPanel = new JPanel();
-		topPanel.setPreferredSize(new Dimension(0, mainHeight < 1200 ? mainHeight - 830 : mainHeight - 950));
+		topPanel.setPreferredSize(new Dimension(0, mainHeight < 1200 ? mainHeight - 580 : mainHeight - 950));
 		topPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 		topPanel.setLayout(new BorderLayout());
 		// topPanel.setBackground(new Color(0, 0, 0));
@@ -370,7 +371,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		scrollPane.setViewportView(table);
-		scrollPane.setPreferredSize(new Dimension(0, mainHeight - 600));
+		scrollPane.setPreferredSize(new Dimension(0, mainHeight - 400));
 		listPanel.add(scrollPane, BorderLayout.NORTH);
 
 		noResultLabel = new JLabel("Không tìm thấy sản phẩm");
@@ -379,7 +380,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		noResultLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		noResultLabel.setVerticalAlignment(SwingConstants.NORTH);
 		noResultLabel.setBackground(Color.BLUE);
-		noResultLabel.setPreferredSize(new Dimension(0, mainHeight - 500));
+		noResultLabel.setPreferredSize(new Dimension(0, mainHeight - 100));
 		listPanel.add(noResultLabel, BorderLayout.CENTER);
 
 		add(listPanel, BorderLayout.SOUTH);
@@ -498,7 +499,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		if (products.isEmpty()) {
 			model.addRow(new Object[] { "", "", "", "", "" });
 			noResultLabel.setVisible(true);
-			scrollPane.setPreferredSize(new Dimension(0, mainHeight - 1000));
+			scrollPane.setPreferredSize(new Dimension(0, 400));
 			revalidate();
 			repaint();
 			return;
@@ -506,7 +507,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		if (noResultLabel != null) {
 			noResultLabel.setVisible(false);
-			scrollPane.setPreferredSize(new Dimension(0, mainHeight - 500));
+			scrollPane.setPreferredSize(new Dimension(0, 500));
 			revalidate();
 			repaint();
 		}

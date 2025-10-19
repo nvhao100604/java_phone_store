@@ -4,7 +4,7 @@ import app.GUI.PermissionGUI;
 import app.GUI.ProductGUI.ProductGUI;
 import app.GUI.qlkho_phieunhap;
 import app.GUI.qltaikhoan;
-import app.GUI.quanlynhanvien;
+import app.GUI.EmployeeGUI.quanlynhanvien;
 
 public class Function {
 

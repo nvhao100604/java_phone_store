@@ -24,8 +24,20 @@ public class EmployeeBUS {
         return dao.getEmployeeById(employeeId);
     }
 
+    public List<Employee> getEmployeeGenderList() {
+        return dao.getEmployeeGenderList();
+    }
+
     public int deleteEmployee(int employeeId) {
         return dao.deleteEmployee(employeeId);
+    }
+
+    public int softDeleteEmployee(int employeeId) {
+        return dao.softDeleteEmployee(employeeId);
+    }
+
+    public int restoreEmployee(int employeeId) {
+        return dao.restoreEmployee(employeeId);
     }
 
     public int updateEmployee(Employee employee) {
@@ -36,15 +48,11 @@ public class EmployeeBUS {
         return dao.searchEmployees(keyword);
     }
 
-    public List<Employee> fillterEmployeesByStatus(int status) {
-        return dao.fillterEmployeesByStatus(status);
+    public List<Employee> searchEmployees(String keyword, int status) {
+        return dao.searchEmployees(keyword, status);
     }
 
-    public static void main(String[] args) {
-        EmployeeBUS bus = new EmployeeBUS();
-        List<Employee> list = bus.getAll();
-        for (Employee emp : list) {
-            System.out.println("Employee check: " + emp.toString());
-        }
+    public List<Employee> fillterEmployeesByStatus(int status) {
+        return dao.fillterEmployeesByStatus(status);
     }
 }

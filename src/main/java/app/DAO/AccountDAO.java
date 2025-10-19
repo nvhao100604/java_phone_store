@@ -67,21 +67,24 @@ public class AccountDAO {
     public Account getAccountById(int accountId) { // tìm kiếm tài khoản
         String sql = "SELECT * FROM taikhoan WHERE idTK = ?";
         try (Connection con = DBConnect.getConnection();
-                PreparedStatement st = con.prepareStatement(sql)) {
-            st.setInt(1, accountId);
-            ResultSet rs = st.executeQuery();
-            return new Account(
-                    rs.getInt(1),
-                    rs.getString(2),
-                    rs.getString(3),
-                    rs.getString(4),
-                    rs.getString(5),
-                    rs.getString(6),
-                    rs.getInt(7),
-                    rs.getInt(8));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            PreparedStatement st = con.prepareStatement(sql)) {
+                st.setInt(1, accountId);
+                try (ResultSet rs = st.executeQuery()) {
+                    if (rs.next()) {
+                        return new Account(
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4),
+                            rs.getString(5),
+                            rs.getString(6),
+                            rs.getInt(7),
+                            rs.getInt(8));
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         return null;
     }
 
@@ -110,21 +113,20 @@ public class AccountDAO {
     }
 
     public int updateAccount(Account account) { // chỉnh sửa tài khoản hiện tại
-        String sql = "UPDATE taikhoan SET USERNAME = ?, PASSWORD = ?, SDT = ?, EMAIL = ?, HOTEN = ?, idQUYEN = ?, TRANGTHAI = ? WHERE idTK = ?";
+        String sql = "UPDATE taikhoan SET USERNAME = ?, PASSWORD = ?, SDT = ?, EMAIL = ?, HOTEN = ?, idQUYEN = ? WHERE idTK = ?";
         try (Connection con = DBConnect.getConnection();
-                PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setString(1, account.getUsername());
-            stmt.setString(2, account.getPassword());
-            stmt.setString(3, account.getPhoneNumber());
-            stmt.setString(4, account.getEmail());
-            stmt.setString(5, account.getFullName());
-            stmt.setInt(6, account.getRoleId());
-            stmt.setInt(7, account.getStatus());
-            stmt.setInt(8, account.getAccountId());
-            return stmt.executeUpdate();
-        } catch (Exception e) {
+            PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setString(1, account.getUsername());
+                stmt.setString(2, account.getPassword());
+                stmt.setString(3, account.getPhoneNumber());
+                stmt.setString(4, account.getEmail());
+                stmt.setString(5, account.getFullName());
+                stmt.setInt(6, account.getRoleId());
+                stmt.setInt(7, account.getAccountId());
+                return stmt.executeUpdate();
+            } catch (Exception e) {
             e.printStackTrace();
-        }
+            }
         return 0;
     }
 

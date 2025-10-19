@@ -13,7 +13,7 @@ import app.database.DBConnect;
 public class PermissionDAO {
     public List<Permission> getAll() {
         List<Permission> list = new ArrayList<>();
-        String sql = "SELECT * FROM quyen";
+        String sql = "SELECT * FROM quyen WHERE TRANGTHAI = 1";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql);
             ResultSet rs = st.executeQuery()) {
@@ -34,7 +34,7 @@ public class PermissionDAO {
 
     public List<Permission> getRole() {
         List<Permission> list = new ArrayList<>();
-        String sql = "SELECT idQUYEN, TENQUYEN FROM quyen";
+        String sql = "SELECT idQUYEN, TENQUYEN FROM quyen WHERE TRANGTHAI = 1";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql);
             ResultSet rs = st.executeQuery()) {
@@ -45,7 +45,7 @@ public class PermissionDAO {
                     );
                     list.add(permission);
                 }
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         return list;

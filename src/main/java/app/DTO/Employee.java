@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Employee {
     private int employeeId;
+    private int accountId;
     private String fullName;
     private String gender;
     private String phoneNumber;
@@ -15,44 +16,29 @@ public class Employee {
     private BigDecimal salary;
     private int status;
 
-    // Constructors
     public Employee() {}
 
-    public Employee(int employeeId, String fullName, String gender, String phoneNumber, String email, Date dateOfBirth,
-                    String userName, String address, BigDecimal salary, int status) {
+    public Employee(int employeeId, String fullName, String gender, Date dateOfBirth, String phoneNumber, String email, int status) {
         this.employeeId = employeeId;
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.email = email; 
         this.dateOfBirth = dateOfBirth;
-        this.userName = userName;
-        this.address = address;
-        this.salary = salary;
         this.status = status;
     }
 
-    public Employee(int employeeId, String fullName, String gender, Date dateOfBirth, String phoneNumber, String email, int status) {
-        this.employeeId = employeeId;
-        this.fullName = fullName;
-        this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.status = status;
-    }
-
-    public Employee(String gender, Date dateOfBirth, String address, int status) {
+    public Employee(int accountId, String gender, Date dateOfBirth, String address) {
+        this.accountId = accountId;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth; 
         this.address = address;
-        this.status = status;
     }
 
-    public Employee(int employeeId, String gender, Date dateOfBirth, String address, int status) {
-        this.employeeId = employeeId;
+    public Employee(int accountId, String gender, Date dateOfBirth, String address, int status) {
+        this.accountId = accountId;
         this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
+        this.dateOfBirth = dateOfBirth; 
         this.address = address;
         this.status = status;
     }
@@ -64,6 +50,14 @@ public class Employee {
 
     public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     public String getFullName() {
@@ -140,17 +134,6 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee{" +
-                "employeeId=" + employeeId +
-                ", fullName=" + fullName +
-                ", dateOfBirth=" + dateOfBirth +
-                ", gender=" + gender +
-                ", phoneNumber=" + phoneNumber +
-                ", email=" + email +    
-                ", userName=" + userName +
-                ", address=" + address +
-                ", salary=" + salary +
-                ", status=" + status +
-                '}';
+        return gender;
     }
 }
