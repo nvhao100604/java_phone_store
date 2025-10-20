@@ -97,6 +97,10 @@ public class ProductBUS {
 				sortByPriceAscending);
 	}
 
+	public List<ProductDetail> getProductDetailsById(int productId) {
+		return detailBUS.getProductDetailById(productId);
+	}
+
 	public int addProductDetail(int productId, String color, String capacity, BigDecimal priceAdjustment) {
 		return detailBUS.addProductDetail(productId, color, capacity, priceAdjustment);
 	}

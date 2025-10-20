@@ -548,10 +548,11 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		if (selectedRow != -1) {
 			int productId = (int) DataTable.dataFromTable(selectedRow, tableModel)[0];
 			System.out.println("check id: " + productId);
-			UpdateProductFrame editFrame = new UpdateProductFrame("Cập nhật thông tin sản phẩm", productId);
+			UpdateProductFrame editFrame = new UpdateProductFrame("Cập nhật thông tin sản phẩm: " + productId,
+					productId);
 			editFrame.setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(this, "Vui lòng chọn hàng cần xóa.", "Thông báo",
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn hàng cần cập nhật.", "Thông báo",
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
