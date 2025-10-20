@@ -10,7 +10,7 @@ public class Brand {
         this.id = id;
         this.brandName = brandName;
     }
-    
+
     public Brand(int id) {
         this.id = id;
     }
@@ -38,12 +38,29 @@ public class Brand {
     public void setStatus(boolean status) {
         this.status = status;
     }
-    
+
     public String getBrandNameById(int id) {
-    	if(this.id == id){
-    		return this.brandName;
-    	}
-    	return null;
+        if (this.id == id) {
+            return this.brandName;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Brand brand = (Brand) o;
+        return id == brand.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
     }
 
     @Override

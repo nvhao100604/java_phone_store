@@ -17,14 +17,13 @@ public class ProductDetail {
 	}
 
 	public ProductDetail(int productDetailId, int productId, String color, String capacity, BigDecimal priceAdjustment,
-			int stock, String imageUrl) {
+			int stock) {
 		this.productDetailId = productDetailId;
 		this.productId = productId;
 		this.color = color;
 		this.capacity = capacity;
 		this.priceAdjustment = priceAdjustment;
 		this.stock = stock;
-		this.imageUrl = imageUrl;
 	}
 
 	public ProductDetail(int productId, String color, String capacity,

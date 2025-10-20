@@ -50,10 +50,8 @@ import app.GUI.interfaces.FunctionPanel;
 import app.utils.ConfirmDialog;
 import app.utils.DataTable;
 import app.utils.DecimalFilter;
-import app.utils.ImportExcel;
 
-public class qlkhuyenmai extends JPanel implements FunctionPanel
-{
+public class qlkhuyenmai extends JPanel implements FunctionPanel {
 	private int mainWidth;
 	private int mainHeight;
 	private PromotionBUS bus;
@@ -71,15 +69,14 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel
 	private JTable table;
 	private DefaultTableModel tableModel;
 
-	public qlkhuyenmai() 
-	{
+	public qlkhuyenmai() {
 		initialize();
 	}
 
 	public void initialize() {
 		bus = new PromotionBUS();
 		categoryBus = new CategoryBUS();
-		brandbus =new BrandBUS();
+		brandbus = new BrandBUS();
 		setLayout(new BorderLayout());
 
 		mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -320,20 +317,24 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel
 		listPanel.setLayout(new BorderLayout());
 
 		scrollPane = new JScrollPane();
-		String[] columnNames = { "Mã khuyến mãi", "Code Khuyến Mãi", "Giá Trị", "Số Lượng", "Ngày Áp Dụng", "Hạn Sử Dụng", "Hãng", "Danh Mục", "Trạng Thái"};
+		String[] columnNames = { "Mã khuyến mãi", "Code Khuyến Mãi", "Giá Trị", "Số Lượng", "Ngày Áp Dụng",
+				"Hạn Sử Dụng", "Hãng", "Danh Mục", "Trạng Thái" };
 		List<Promotion> productList = bus.getAllPromotions();
 		List<Brand> brandList = brandbus.getAllBrands();
 		Map<Integer, String> brandMap = brandList.stream()
-		        .collect(Collectors.toMap(Brand::getId, Brand::getBrandName));
+				.collect(Collectors.toMap(Brand::getId, Brand::getBrandName));
 		List<Category> categoryList = categoryBus.getAllCategories();
 		Map<Integer, String> brandMap2 = categoryList.stream()
-		        .collect(Collectors.toMap(Category::getCategoryId, Category::getCategoryName));
+				.collect(Collectors.toMap(Category::getCategoryId, Category::getCategoryName));
 		SetTitleQuantity(productList.size());
 		table = new JTable();
 		tableModel = new DefaultTableModel(
 				productList.stream()
-						.map(p -> new Object[] { p.getPromotionId(), p.getCode(), p.isPercent()? p.getPercent()+"%" : p.getValue() +" VND", p.getQuantity(), p.getStartDate(),
-								p.getExpirationDate(), brandMap.get(p.getBrandId()), brandMap2.get(p.getCategoryId()), p.getStatus() }) // add dữ liệu bên CSDL
+						.map(p -> new Object[] { p.getPromotionId(), p.getCode(),
+								p.isPercent() ? p.getPercent() + "%" : p.getValue() + " VND", p.getQuantity(),
+								p.getStartDate(),
+								p.getExpirationDate(), brandMap.get(p.getBrandId()), brandMap2.get(p.getCategoryId()),
+								p.getStatus() }) // add dữ liệu bên CSDL
 						.toArray(Object[][]::new),
 				columnNames);
 		table.setModel(tableModel);
@@ -399,12 +400,13 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel
 
 		add(listPanel, BorderLayout.SOUTH);
 	}
-	
-	// private static String getValue(Promotion p) {
-	// 	if(p.isPercent()) {
-	// 		return p.getPercent();
-	// 	}
-	// }
+
+	private static int getValue(Promotion p) {
+		if (p.isPercent()) {
+			return p.getPercent();
+		}
+		return 0;
+	}
 
 	public void LoadComboBoxData() {
 		List<app.DTO.Category> categories = categoryBus.getAllCategories();
@@ -427,8 +429,8 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel
 			HandleLoadAll();
 			return;
 		}
-		//List<Promotion> filteredProducts = bus.searchProductsByName(name);
-		//SetDataTable(filteredProducts);
+		// List<Promotion> filteredProducts = bus.searchProductsByName(name);
+		// SetDataTable(filteredProducts);
 	}
 
 	public void HandleBrandChange() {
@@ -438,8 +440,8 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel
 			return;
 		}
 
-		//List<Product> filteredProducts = bus.filterProductsByBrandName(brandName);
-		//SetDataTable(filteredProducts);
+		// List<Product> filteredProducts = bus.filterProductsByBrandName(brandName);
+		// SetDataTable(filteredProducts);
 	}
 
 	public void handleCategoryChange(Object selectedItem) {
@@ -448,13 +450,13 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel
 			int categoryId = selectedCategory.getCategoryId();
 			System.out.println("Selected Category ID: " + categoryId);
 
-			//List<Product> filteredProducts;
+			// List<Product> filteredProducts;
 			if (categoryId == 0) {
-				//filteredProducts = bus.getAll();
+				// filteredProducts = bus.getAll();
 			} else {
-				//filteredProducts = bus.filterProductsByCategory(categoryId);
+				// filteredProducts = bus.filterProductsByCategory(categoryId);
 			}
-			//SetDataTable(filteredProducts);
+			// SetDataTable(filteredProducts);
 		}
 	}
 
@@ -469,8 +471,9 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel
 			HandleLoadAll();
 		}
 
-		//List<Product> filteredProducts = bus.filterProductsByPriceRange(fromPrice, toPrice);
-		//SetDataTable(filteredProducts);
+		// List<Product> filteredProducts = bus.filterProductsByPriceRange(fromPrice,
+		// toPrice);
+		// SetDataTable(filteredProducts);
 	}
 
 	public void Search() {
@@ -486,13 +489,13 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel
 		String brandName = brandSearchField.getText().equals("") ? null : brandSearchField.getText();
 		int sortByPriceAscending = 1;
 
-		//List<Product> filteredProducts = bus.filterProducts(
-			//	keyword,
-			//	minPrice,
-			//	maxPrice,
-			//	categoryId,
-			//	brandName,
-			//	sortByPriceAscending);
+		// List<Product> filteredProducts = bus.filterProducts(
+		// keyword,
+		// minPrice,
+		// maxPrice,
+		// categoryId,
+		// brandName,
+		// sortByPriceAscending);
 		// SetDataTable(filteredProducts);
 	}
 
@@ -533,14 +536,14 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel
 		}
 		for (Promotion p : products) {
 			// model.addRow(new Object[] { p.getProductId(), p.getProductName(),
-				//	p.getCategory(), p.getBrand(), p.getSalePrice() });
+			// p.getCategory(), p.getBrand(), p.getSalePrice() });
 		}
 	}
 
 	public void Add() {
 		// System.out.println("Add product");
-		AddProductFrame addFrame = new AddProductFrame("Thêm sản phẩm");
-		addFrame.setVisible(true);
+		// AddProductFrame addFrame = new AddProductFrame("Thêm sản phẩm");
+		// addFrame.setVisible(true);
 	}
 
 	public void Delete() {
@@ -569,25 +572,26 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel
 
 	public void Edit() {
 		System.out.println("Edit product");
-		UpdateProductFrame editFrame = new UpdateProductFrame("Cập nhật thông tin sản phẩm");
-		editFrame.setVisible(true);
+		// UpdateProductFrame editFrame = new UpdateProductFrame("Cập nhật thông tin sản
+		// phẩm");
+		// editFrame.setVisible(true);
 	}
 
 	public void ImportExcel() {
 		System.out.println("Import Excel product");
-		String filePath = ImportExcel.chooseFile();
+		String filePath = null;
 		boolean isConfirmed = ConfirmDialog.confirmDialog(this, "File sản phẩm tại  " + filePath + " ?",
 				"Xác nhận thêm danh sách sản phẩm");
 		if (isConfirmed) {
 			// boolean result = bus.importDataFromExcel(filePath);
-		//	if (result) {
-				JOptionPane.showMessageDialog(this, "Thêm danh sách sản phẩm thành công", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-			//	List<Product> allProducts = bus.getAllDesc();
-			//	SetDataTable(allProducts);
-			}
+			// if (result) {
+			JOptionPane.showMessageDialog(this, "Thêm danh sách sản phẩm thành công", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			// List<Product> allProducts = bus.getAllDesc();
+			// SetDataTable(allProducts);
 		}
-//	}
+	}
+	// }
 
 	public void ExportExcel() {
 		// System.out.println("Export Excel product");

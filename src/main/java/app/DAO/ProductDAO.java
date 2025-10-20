@@ -96,7 +96,7 @@ public class ProductDAO {
 	}
 
 	public int addProduct(Product product) {
-		String sql = "INSERT INTO sanpham (TENSP, HANG, GIANHAP, idDM, IMG, MOTA, GIABAN, TRANGTHAI) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO sanpham (TENSP, HANG, GIANHAP, idDM, IMG, MOTA, GIABAN) VALUES(?, ?, ?, ?, ?, ?, ?)";
 		try (Connection con = DBConnect.getConnection();
 				PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
 			stmt.setString(1, product.getProductName());
@@ -106,7 +106,6 @@ public class ProductDAO {
 			stmt.setString(5, product.getImageUrl());
 			stmt.setString(6, product.getDescription());
 			stmt.setBigDecimal(7, product.getSalePrice());
-			stmt.setInt(8, product.getStatus());
 			stmt.executeUpdate();
 			try (ResultSet rs = stmt.getGeneratedKeys()) {
 				if (rs.next()) {
