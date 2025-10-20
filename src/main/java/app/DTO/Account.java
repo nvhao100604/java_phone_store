@@ -13,8 +13,7 @@ public class Account {
 	// Constructors
 	public Account() {}
 
-	public Account(int accountId, String username, String password, String phoneNumber, String email, String fullName,
-			int roleId, int status) {
+	public Account(int accountId, String username, String password, String phoneNumber, String email, String fullName, int roleId, int status) {
 		this.accountId = accountId;
 		this.username = username;
 		this.password = password;
@@ -26,6 +25,16 @@ public class Account {
 	}
 
 	public Account(String username, String password, String phoneNumber, String email, String fullName, int roleId) {
+		this.username = username;
+		this.password = password;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.fullName = fullName;
+		this.roleId = roleId;
+	}
+
+	public Account(int accountId, String username, String password, String phoneNumber, String email, String fullName, int roleId) {
+		this.accountId = accountId;
 		this.username = username;
 		this.password = password;
 		this.phoneNumber = phoneNumber;
