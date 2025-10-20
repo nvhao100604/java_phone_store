@@ -400,7 +400,6 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel {
 
 		add(listPanel, BorderLayout.SOUTH);
 	}
-<<<<<<< HEAD
 
 	private static int getValue(Promotion p) {
 		if (p.isPercent()) {
@@ -408,14 +407,6 @@ public class qlkhuyenmai extends JPanel implements FunctionPanel {
 		}
 		return 0;
 	}
-=======
-	
-	// private static String getValue(Promotion p) {
-	// 	if(p.isPercent()) {
-	// 		return p.getPercent();
-	// 	}
-	// }
->>>>>>> 1f5957672dc9e3bb61570eae53a3579948ade847
 
 	public void LoadComboBoxData() {
 		List<app.DTO.Category> categories = categoryBus.getAllCategories();

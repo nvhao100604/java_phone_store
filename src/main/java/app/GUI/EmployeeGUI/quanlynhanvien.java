@@ -32,7 +32,6 @@ import app.GUI.CustomPanels.khungchucnang;
 import app.GUI.interfaces.FunctionPanel;
 import app.utils.ConfirmDialog;
 import app.utils.DataTable;
-import app.utils.ImportExcel;
 
 public class quanlynhanvien extends JPanel implements FunctionPanel {
 
@@ -60,8 +59,8 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
 
         JPanel topPanel = new JPanel();
         topPanel.setPreferredSize(new Dimension(0, 250));
-		topPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
-		topPanel.setLayout(new BorderLayout());
+        topPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
+        topPanel.setLayout(new BorderLayout());
         add(topPanel, BorderLayout.NORTH);
 
         khung = new khungchucnang(this);
@@ -86,8 +85,8 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
         nameSearchField.setFont(new Font("Arial", Font.PLAIN, 16));
         nameSearchField.setBackground(new Color(240, 240, 240));
         nameSearchField.setBorder(new CompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
-            new EmptyBorder(5, 5, 5, 5)));
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+                new EmptyBorder(5, 5, 5, 5)));
         nameSearchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) {
@@ -120,8 +119,8 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
         statusComboBox.setBackground(new Color(240, 240, 240));
         statusComboBox.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         statusComboBox.setBorder(new CompoundBorder(
-            BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
-            new EmptyBorder(0, 0, 0, 0)));
+                BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
+                new EmptyBorder(0, 0, 0, 0)));
 
         statusComboBox.addActionListener(e -> {
             Object selectedItem = statusComboBox.getSelectedItem();
@@ -164,13 +163,15 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
         listPanel.setLayout(new BorderLayout());
 
         scrollPane = new JScrollPane();
-        String[] columnNames = { "Mã nhân viên", "Tên nhân viên", "Giới tính", "Ngày sinh", "SĐT", "Email", "Trạng thái" };
+        String[] columnNames = { "Mã nhân viên", "Tên nhân viên", "Giới tính", "Ngày sinh", "SĐT", "Email",
+                "Trạng thái" };
         List<Employee> employeeList = bus.getAll();
         table = new JTable();
         tableModel = new DefaultTableModel(
                 employeeList.stream()
                         .map(e -> new Object[] { e.getEmployeeId(), e.getFullName(),
-                                e.getGender(), e.getDateOfBirth(), e.getPhoneNumber(), e.getEmail(), statusToString(e.getStatus()) })
+                                e.getGender(), e.getDateOfBirth(), e.getPhoneNumber(), e.getEmail(),
+                                statusToString(e.getStatus()) })
                         .toArray(Object[][]::new),
                 columnNames);
         table.setModel(tableModel);
@@ -294,20 +295,21 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
 
         for (Employee e : employees) {
             model.addRow(new Object[] { e.getEmployeeId(), e.getFullName(),
-                    e.getGender(), e.getDateOfBirth(), e.getPhoneNumber(), e.getEmail(), statusToString(e.getStatus()) });
+                    e.getGender(), e.getDateOfBirth(), e.getPhoneNumber(), e.getEmail(),
+                    statusToString(e.getStatus()) });
         }
     }
 
-	public String statusToString(int status) {
-		switch (status) {
-			case 1:
-				return "Đang làm việc";
-			case 0:
-				return "Đã nghỉ việc";
-			default:
-				return "Không xác định";
-		}
-	}
+    public String statusToString(int status) {
+        switch (status) {
+            case 1:
+                return "Đang làm việc";
+            case 0:
+                return "Đã nghỉ việc";
+            default:
+                return "Không xác định";
+        }
+    }
 
     public void Add() {
         AddEmployeeFrame addFrame = new AddEmployeeFrame("Thêm nhân viên");
@@ -318,43 +320,45 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
             int employeeId = (int) DataTable.dataFromTable(selectedRow, tableModel)[0];
-            String status = (String) DataTable.dataFromTable(selectedRow, tableModel)[6]; 
+            String status = (String) DataTable.dataFromTable(selectedRow, tableModel)[6];
 
             if (status.equals("Đang làm việc")) {
-                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa", 
-                    "Bạn có chắc chắn muốn xóa nhân viên này?");
+                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa",
+                        "Bạn có chắc chắn muốn xóa nhân viên này?");
                 if (isConfirmed) {
                     bus.softDeleteEmployee(employeeId);
-                    JOptionPane.showMessageDialog(this, "Đã chuyển nhân viên vào danh sách nghỉ việc.", 
-                        "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Đã chuyển nhân viên vào danh sách nghỉ việc.",
+                            "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 }
             } else if (status.equals("Đã nghỉ việc")) {
-                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Khôi phục nhân viên", 
-                    "Nhân viên này đang nghỉ việc. Bạn có muốn khôi phục không?");
+                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Khôi phục nhân viên",
+                        "Nhân viên này đang nghỉ việc. Bạn có muốn khôi phục không?");
                 if (isConfirmed) {
                     int rows = bus.restoreEmployee(employeeId);
                     if (rows > 0) {
-                        JOptionPane.showMessageDialog(this, "Khôi phục nhân viên thành công.", 
-                            "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Khôi phục nhân viên thành công.",
+                                "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                     } else {
-                        JOptionPane.showMessageDialog(this, "Khôi phục thất bại.", 
-                            "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Khôi phục thất bại.",
+                                "Lỗi", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
 
             HandleNull();
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên để thao tác.", 
-                "Thông báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên để thao tác.",
+                    "Thông báo", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     public void ConfirmDelete(int employeeId) {
-        boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa", "Bạn có chắc chắn muốn xóa nhân viên này?");
-        if (isConfirmed) { 
+        boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa",
+                "Bạn có chắc chắn muốn xóa nhân viên này?");
+        if (isConfirmed) {
             bus.softDeleteEmployee(employeeId);
-            JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công.", "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
         HandleNull();
     }
@@ -362,7 +366,8 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
     public void Edit() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên để cập nhật.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên để cập nhật.", "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -372,9 +377,9 @@ public class quanlynhanvien extends JPanel implements FunctionPanel {
     }
 
     public void ImportExcel() {
-        String filePath = ImportExcel.chooseFile();
+        String filePath = DataTable.chooseFile();
         boolean isConfirmed = ConfirmDialog.confirmDialog(this, "File nhân viên tại  " + filePath + " ?",
-				"Xác nhận thêm danh sách nhân viên");
+                "Xác nhận thêm danh sách nhân viên");
         if (isConfirmed) {
             boolean result = bus.importDataFromExcel(filePath);
             if (result) {

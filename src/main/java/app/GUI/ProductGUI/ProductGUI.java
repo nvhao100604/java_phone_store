@@ -71,15 +71,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		bus = new ProductBUS();
 		categoryBus = new CategoryBUS();
 		setLayout(new BorderLayout());
-<<<<<<< HEAD
 		// System.out.println("Main W + H = " + mainWidth + " + " + mainHeight);
-=======
-
-		mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-		mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-		
-		System.out.println("Main W + H = " + mainWidth + " + " + mainHeight);
->>>>>>> 1f5957672dc9e3bb61570eae53a3579948ade847
 
 		JPanel topPanel = new JPanel();
 		topPanel.setPreferredSize(new Dimension(0, mainHeight < 1200 ? mainHeight - 580 : mainHeight - 950));
