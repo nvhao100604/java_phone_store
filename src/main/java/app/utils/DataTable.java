@@ -1,11 +1,14 @@
 package app.utils;
 
+import java.awt.Component;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -32,6 +35,21 @@ public class DataTable {
         }
     }
 
+    public static String chooseFolder(Component parentComponent, String defaultFileName) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn Thư mục và Tên File Lưu");
+
+        fileChooser.setSelectedFile(new File(defaultFileName));
+
+        int userSelection = fileChooser.showSaveDialog(parentComponent);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile().getAbsolutePath();
+        } else {
+            return null;
+        }
+    }
+
     public static Object[] dataFromTable(int selectedRow, DefaultTableModel tableModel) {
         int columnCount = tableModel.getColumnCount();
         Object[] rowData = new Object[columnCount];
@@ -39,6 +57,24 @@ public class DataTable {
             rowData[i] = tableModel.getValueAt(selectedRow, i);
         }
         return rowData;
+    }
+
+    public static String chooseFile() {
+        File selectedFile = null;
+        String selectedImagePath = null;
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn file danh sách");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.addChoosableFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                "File Excel (*.xlsx, *.xls)", "xlsx", "xls"));
+
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fileChooser.getSelectedFile();
+            selectedImagePath = selectedFile.getAbsolutePath();
+        }
+        return selectedImagePath;
     }
 
     public static void exportDataToExcel(String filePath, JTable table) {

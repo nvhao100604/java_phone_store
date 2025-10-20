@@ -24,6 +24,16 @@ public class PhoneStoreApplication extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+<<<<<<< HEAD
+
+		try {
+			com.formdev.flatlaf.FlatLaf.setup(null);
+			UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
+		} catch (Exception ex) {
+			System.err.println("Failed to initialize FlatLaf");
+		}
+		// DataTable.createExcelFolder();
+=======
 		// try {
 		// 	com.formdev.flatlaf.FlatLaf.setup(null);
 		// 	UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
@@ -31,6 +41,7 @@ public class PhoneStoreApplication extends JFrame {
 		// 	System.err.println("Failed to initialize FlatLaf");
 		// }
 		DataTable.createExcelFolder();
+>>>>>>> 1f5957672dc9e3bb61570eae53a3579948ade847
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
