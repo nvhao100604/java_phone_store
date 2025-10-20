@@ -32,10 +32,9 @@ import app.GUI.CustomPanels.khungchucnang;
 import app.GUI.interfaces.FunctionPanel;
 import app.utils.ConfirmDialog;
 import app.utils.DataTable;
-import app.utils.ImportExcel;
 
 public class CompanyGUI extends JPanel implements FunctionPanel {
-    
+
     private JTable table;
     private CompanyBUS bus;
     private khungchucnang khung;
@@ -60,8 +59,8 @@ public class CompanyGUI extends JPanel implements FunctionPanel {
 
         JPanel topPanel = new JPanel();
         topPanel.setPreferredSize(new Dimension(0, 250));
-		topPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
-		topPanel.setLayout(new BorderLayout());
+        topPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
+        topPanel.setLayout(new BorderLayout());
         add(topPanel, BorderLayout.NORTH);
 
         khung = new khungchucnang(this);
@@ -86,8 +85,8 @@ public class CompanyGUI extends JPanel implements FunctionPanel {
         nameSearchField.setFont(new Font("Arial", Font.PLAIN, 16));
         nameSearchField.setBackground(new Color(240, 240, 240));
         nameSearchField.setBorder(new CompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
-            new EmptyBorder(5, 5, 5, 5)));
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+                new EmptyBorder(5, 5, 5, 5)));
         nameSearchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) {
@@ -120,8 +119,8 @@ public class CompanyGUI extends JPanel implements FunctionPanel {
         statusComboBox.setBackground(new Color(240, 240, 240));
         statusComboBox.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         statusComboBox.setBorder(new CompoundBorder(
-            BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
-            new EmptyBorder(0, 0, 0, 0)));
+                BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
+                new EmptyBorder(0, 0, 0, 0)));
 
         statusComboBox.addActionListener(e -> {
             Object selectedItem = statusComboBox.getSelectedItem();
@@ -169,7 +168,8 @@ public class CompanyGUI extends JPanel implements FunctionPanel {
         table = new JTable();
         tableModel = new DefaultTableModel(
                 companyList.stream()
-                        .map(e -> new Object[] { e.getCompanyId(), e.getCompanyName(), statusToString(e.getCompanyStatus()) })
+                        .map(e -> new Object[] { e.getCompanyId(), e.getCompanyName(),
+                                statusToString(e.getCompanyStatus()) })
                         .toArray(Object[][]::new),
                 columnNames);
         table.setModel(tableModel);
@@ -297,15 +297,15 @@ public class CompanyGUI extends JPanel implements FunctionPanel {
     }
 
     public String statusToString(int status) {
-		switch (status) {
-			case 1:
-				return "Còn hợp tác";
-			case 0:
-				return "Ngừng hợp tác";
-			default:
-				return "Không xác định";
-		}
-	}
+        switch (status) {
+            case 1:
+                return "Còn hợp tác";
+            case 0:
+                return "Ngừng hợp tác";
+            default:
+                return "Không xác định";
+        }
+    }
 
     public void Add() {
         AddCompanyFrame addFrame = new AddCompanyFrame("Thêm nhà sản xuất");
@@ -313,40 +313,48 @@ public class CompanyGUI extends JPanel implements FunctionPanel {
     }
 
     public void Delete() {
-       int selectedRow = table.getSelectedRow();
-       if (selectedRow != -1) {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
             int companyId = (int) DataTable.dataFromTable(selectedRow, tableModel)[0];
             String status = (String) DataTable.dataFromTable(selectedRow, tableModel)[2];
 
             if (status.equals("Còn hợp tác")) {
-                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa", "Bạn có chắc chắn muốn xóa nhà sản xuất này không?");
+                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa",
+                        "Bạn có chắc chắn muốn xóa nhà sản xuất này không?");
                 if (isConfirmed) {
                     bus.softDeleteCompany(companyId);
-                    JOptionPane.showMessageDialog(this, "Xóa nhà sản xuất thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Xóa nhà sản xuất thành công.", "Thành công",
+                            JOptionPane.INFORMATION_MESSAGE);
                 }
             } else if (status.equals("Ngừng hợp tác")) {
-                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận khôi phục", "Bạn có chắc chắn muốn khôi phục nhà sản xuất này không?");
+                boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận khôi phục",
+                        "Bạn có chắc chắn muốn khôi phục nhà sản xuất này không?");
                 if (isConfirmed) {
                     int rows = bus.restoreCompany(companyId);
                     if (rows > 0) {
-                        JOptionPane.showMessageDialog(this, "Khôi phục nhà sản xuất thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Khôi phục nhà sản xuất thành công.", "Thành công",
+                                JOptionPane.INFORMATION_MESSAGE);
                     } else {
-                        JOptionPane.showMessageDialog(this, "Khôi phục nhà sản xuất thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Khôi phục nhà sản xuất thất bại.", "Lỗi",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
 
             HandleNull();
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhà sản xuất để xóa/khôi phục.", "Chú ý", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhà sản xuất để xóa/khôi phục.", "Chú ý",
+                    JOptionPane.WARNING_MESSAGE);
         }
     }
 
     public void ConfirmDelete(int companyId) {
-        boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa", "Bạn có chắc chắn muốn xóa nhà sản xuất này không?");
+        boolean isConfirmed = ConfirmDialog.confirmDialog(this, "Xác nhận xóa",
+                "Bạn có chắc chắn muốn xóa nhà sản xuất này không?");
         if (isConfirmed) {
             bus.softDeleteCompany(companyId);
-            JOptionPane.showMessageDialog(this, "Xóa nhà sản xuất thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Xóa nhà sản xuất thành công.", "Thành công",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
         HandleNull();
     }
@@ -354,7 +362,8 @@ public class CompanyGUI extends JPanel implements FunctionPanel {
     public void Edit() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhà sản xuất để chỉnh sửa.", "Chú ý", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhà sản xuất để chỉnh sửa.", "Chú ý",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -364,9 +373,9 @@ public class CompanyGUI extends JPanel implements FunctionPanel {
     }
 
     public void ImportExcel() {
-        String filePath = ImportExcel.chooseFile();
+        String filePath = DataTable.chooseFile();
         boolean isConfirmed = ConfirmDialog.confirmDialog(this, "File nhà sản xuất tại  " + filePath + " ?",
-				"Xác nhận thêm danh sách nhà sản xuất");
+                "Xác nhận thêm danh sách nhà sản xuất");
         if (isConfirmed) {
             boolean result = bus.importDataFromExcel(filePath);
             if (result) {
