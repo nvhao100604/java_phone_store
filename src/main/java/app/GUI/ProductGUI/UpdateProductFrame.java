@@ -68,7 +68,6 @@ public class UpdateProductFrame extends JFrame {
         this.brandBUS = new BrandBUS();
         this.productBUS = new ProductBUS();
         this.productId = productId;
-        productDetailsList = new ArrayList<>();
         initializeFormatters();
         initializeUI();
         loadInitialData();
@@ -184,6 +183,8 @@ public class UpdateProductFrame extends JFrame {
         gbc.gridy = 5;
         gbc.weightx = 1.0;
         descriptionArea = new JTextArea(3, 20);
+        descriptionArea.setLineWrap(true);
+        descriptionArea.setWrapStyleWord(true);
         JScrollPane descScrollPane = new JScrollPane(descriptionArea);
         panel.add(descScrollPane, gbc);
 
@@ -222,7 +223,7 @@ public class UpdateProductFrame extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Chi tiết sản phẩm (Màu, Dung lượng)"));
 
-        String[] columnNames = { "Màu", "Dung lượng", "Điều chỉnh Giá" };
+        String[] columnNames = { "Màu", "Dung lượng", "Điều chỉnh Giá", "Số lượng" };
         detailTableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -263,21 +264,52 @@ public class UpdateProductFrame extends JFrame {
 
     private void loadInitialData() {
         instanceProduct = productBUS.getProductById(productId);
-        List<ProductDetail> details = null;
+        productDetailsList = productBUS.getProductDetailsById(productId);
+        // Set data
+        productNameField.setText(instanceProduct.getProductName());
+        importPriceField.setValue(instanceProduct.getImportPrice());
+        salePriceField.setValue(instanceProduct.getSalePrice());
+
         List<Brand> brands = brandBUS.getAllBrands();
         for (Brand b : brands) {
             brandComboBox.addItem(b);
         }
-        brandComboBox.setSelectedItem(brands.get(0));
+        brandComboBox.setSelectedItem(new Brand(instanceProduct.getBrandId(), instanceProduct.getBrand()));
 
         List<Category> categories = categoryBUS.getAllCategories();
         for (Category c : categories) {
             categoryComboBox.addItem(c);
         }
+        categoryComboBox.setSelectedItem(new Category(instanceProduct.getCategoryId(), instanceProduct.getCategory()));
+
+        descriptionArea.setText(instanceProduct.getDescription());
+        ImportImage.setPreviewImage(
+                "src/main/resources/images/products/" + instanceProduct.getImageUrl(),
+                imagePreviewLabel);
+        // instanceProduct.setProductDetails(productDetailsList);
+        loadInitialDetail();
+    }
+
+    public void loadInitialDetail() {
+        List<ProductDetail> details = productDetailsList;
+        DefaultTableModel model = (DefaultTableModel) detailTable.getModel();
+        model.setRowCount(0);
+
+        if (productDetailsList == null) {
+            return;
+        }
+        for (ProductDetail productDetail : details) {
+            model.addRow(new Object[] {
+                    productDetail.getColor(),
+                    productDetail.getCapacity(),
+                    productDetail.getPriceAdjustment(),
+                    productDetail.getStock() <= 0 ? "Hết hàng" : productDetail.getStock()
+            });
+        }
     }
 
     private void addDetailRow() {
-        detailTableModel.addRow(new Object[] { "Xanh", "128GB", new BigDecimal("0.00") });
+        detailTableModel.addRow(new Object[] { "Xanh", "128GB", new BigDecimal("0.00"), 0 });
     }
 
     private void removeSelectedDetailRow() {
