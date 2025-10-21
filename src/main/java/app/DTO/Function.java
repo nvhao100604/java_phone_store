@@ -2,7 +2,6 @@ package app.DTO;
 
 import app.GUI.PermissionGUI;
 import app.GUI.qlkho_phieunhap;
-import app.GUI.qlkhuyenmai;
 import app.GUI.qltaikhoan;
 import app.GUI.quanlynhanvien;
 import app.GUI.ProductGUI.ProductGUI;
@@ -80,7 +79,6 @@ public class Function {
 				return qlkho_phieunhap.class;
 			case 9:
 			case 10:
-				return qlkhuyenmai.class;
 			case 11:
 			default:
 				return ProductGUI.class;
