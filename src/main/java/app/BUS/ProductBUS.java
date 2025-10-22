@@ -108,11 +108,12 @@ public class ProductBUS {
 	public int saveProductDetails(Product product) {
 		int row = 0;
 		for (ProductDetail detail : product.getProductDetails()) {
-			int response = detailBUS.addProductDetail(
+			int response = detail.getProductDetailId() == 0 ? detailBUS.addProductDetail(
 					product.getProductId(),
 					detail.getColor(),
 					detail.getCapacity(),
-					detail.getPriceAdjustment());
+					detail.getPriceAdjustment())
+					: detailBUS.updateProductDetail(detail);
 			row += response > 0 ? 1 : 0;
 		}
 		return row;
