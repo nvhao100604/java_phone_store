@@ -232,13 +232,13 @@ public class UpdateEmployeeFrame extends JFrame {
     private JPanel updateActionButtonPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
 
-        JButton btnSave = new JButton("Lưu");
+        JButton btnUpdate = new JButton("Cập nhật");
         JButton btnCancel = new JButton("Hủy");
 
-        btnSave.addActionListener(e -> onSave());
+        btnUpdate.addActionListener(e -> onSave());
         btnCancel.addActionListener(e -> dispose());
 
-        panel.add(btnSave);
+        panel.add(btnUpdate);
         panel.add(btnCancel);
         return panel;
     }

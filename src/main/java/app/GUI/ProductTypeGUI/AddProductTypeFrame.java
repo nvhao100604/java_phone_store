@@ -1,4 +1,4 @@
-package app.GUI.CompanyGUI;
+package app.GUI.ProductTypeGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -15,20 +15,20 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import app.BUS.CompanyBUS;
-import app.DTO.Company;
+import app.BUS.ProductTypeBUS;
+import app.DTO.ProductType;
 
-public class AddCompanyFrame extends JFrame {
+public class AddProductTypeFrame extends JFrame {
     
-    private JTextField txtCompanyName;
+    private JTextField txtProductTypeName;
 
-    public Company newCompany;
+    public ProductType newProductType;
 
-    private CompanyBUS companyBUS;
+    private ProductTypeBUS productTypeBUS;
 
-    public AddCompanyFrame(String title) {
+    public AddProductTypeFrame(String title) {
         super(title);
-        this.companyBUS = new CompanyBUS();
+        this.productTypeBUS = new ProductTypeBUS();
         initializeUI();
     }
 
@@ -38,16 +38,16 @@ public class AddCompanyFrame extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(getParent());
 
-        JPanel CompanyInfoPanel = createCompanyInfoPanel();
-        add(CompanyInfoPanel, BorderLayout.NORTH);
+        JPanel ProductTypeInfoPanel = createProductTypeInfoPanel();
+        add(ProductTypeInfoPanel, BorderLayout.NORTH);
 
         JPanel ActionButtonPanel = createActionButtonPanel();
         add(ActionButtonPanel, BorderLayout.SOUTH);
     }
 
-    private JPanel createCompanyInfoPanel() {
+    private JPanel createProductTypeInfoPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Thông tin nhà sản xuất"));
+        panel.setBorder(BorderFactory.createTitledBorder("Thông tin loại sản phẩm"));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -56,15 +56,15 @@ public class AddCompanyFrame extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0;
-        JLabel lblCompanyName = new JLabel("Tên nhà sản xuất:");
-        lblCompanyName.setPreferredSize(labelSize);
-        panel.add(lblCompanyName, gbc);
+        JLabel lblProductTypeName = new JLabel("Tên loại sản phẩm:");
+        lblProductTypeName.setPreferredSize(labelSize);
+        panel.add(lblProductTypeName, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;  
         gbc.weightx = 1;
-        txtCompanyName = new JTextField(20);
-        panel.add(txtCompanyName, gbc);
+        txtProductTypeName = new JTextField(20);
+        panel.add(txtProductTypeName, gbc);
 
         return panel;
     }
@@ -84,21 +84,21 @@ public class AddCompanyFrame extends JFrame {
     }
 
     private void onSave() {
-        String companyname = txtCompanyName.getText().trim();
+        String productTypeName = txtProductTypeName.getText().trim();
 
-        if (companyname.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên nhà sản xuất.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        if (productTypeName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên loại sản phẩm.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        newCompany = new Company(companyname);
-        int newCompanyId = companyBUS.addCompany(newCompany);
-        if (newCompanyId != -1) {
-            newCompany.setCompanyId(newCompanyId);
-            JOptionPane.showMessageDialog(this, "Thêm nhà sản xuất thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+        newProductType = new ProductType(productTypeName);
+        int newProductTypeId = productTypeBUS.addProductType(newProductType);
+        if (newProductTypeId != -1) {
+            newProductType.setProductTypeId(newProductTypeId);
+            JOptionPane.showMessageDialog(this, "Thêm loại sản phẩm thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, "Thêm nhà sản xuất thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            newCompany = null;
+            JOptionPane.showMessageDialog(this, "Thêm loại sản phẩm thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            newProductType = null;
         }
         dispose();
     }
