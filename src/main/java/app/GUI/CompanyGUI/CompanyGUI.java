@@ -388,7 +388,8 @@ public class CompanyGUI extends JPanel implements FunctionPanel {
     }
 
     public void ExportExcel() {
-        DataTable.exportDataToExcel(DataTable.directoryPath + "company.xlsx", table);
+        String savePath = DataTable.chooseFolder(this, "company.xlsx");
+        DataTable.exportDataToExcel(savePath, table);
         JOptionPane.showMessageDialog(this, "Xuất dữ liệu thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
     }
 }

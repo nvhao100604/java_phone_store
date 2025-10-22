@@ -25,6 +25,11 @@ public class Permission {
 		this.permissionName = permissionName;
 	}
 
+	public Permission(String permissionName, BigDecimal salary) {
+		this.permissionName = permissionName;
+		this.salary = salary;
+	}
+
 	// Getters and Setters
 	public int getPermissionId() {
 		return permissionId;
