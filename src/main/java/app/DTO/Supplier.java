@@ -19,6 +19,12 @@ public class Supplier {
 		this.status = status;
 	}
 
+	public Supplier(String nameSupplier, String phoneNumber, String address) {
+		this.nameSupplier = nameSupplier;
+		this.phoneNumber = phoneNumber;
+		this.address = address;
+	}
+
 	// Getters and Setters
 	public int getIdSupplier() {
 		return idSupplier;

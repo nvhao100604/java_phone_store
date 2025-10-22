@@ -112,7 +112,6 @@ public class CompanyDAO {
         return 0;
     }
 
-
     public int restoreCompany(int companyId) {
         String sql = "UPDATE hang SET TRANGTHAI = 1 WHERE idHANG = ?";
         try (Connection con = DBConnect.getConnection();

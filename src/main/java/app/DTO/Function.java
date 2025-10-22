@@ -1,11 +1,13 @@
 package app.DTO;
 
-import app.GUI.PermissionGUI;
 import app.GUI.ProductGUI.ProductGUI;
+import app.GUI.ProductTypeGUI.ProductTypeGUI;
+import app.GUI.SupplierGUI.SupplierGUI;
 import app.GUI.qlkho_phieunhap;
 import app.GUI.qlkhuyenmai;
 import app.GUI.qltaikhoan;
 import app.GUI.EmployeeGUI.quanlynhanvien;
+import app.GUI.PermissionGUI.PermissionGUI;
 import app.GUI.CompanyGUI.CompanyGUI;
 
 public class Function {
@@ -75,7 +77,9 @@ public class Function {
 			case 4:
 				return ProductGUI.class;
 			case 5:
+				return ProductTypeGUI.class;
 			case 6:
+				return SupplierGUI.class;
 			case 7:
 				return CompanyGUI.class;
 			case 8:

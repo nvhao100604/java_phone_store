@@ -111,6 +111,14 @@ public class khungchucnang extends JPanel {
 		lblNewLabel_5 = new JLabel("Xuất excel");
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblNewLabel_5);
+
+		// Nếu là PermissionGUI thì ẩn các nút không cần thiết
+		if (mainPanelClass instanceof app.GUI.PermissionGUI.PermissionGUI) {
+			btnNewButton_1.setVisible(false); 
+			btnNewButton_4.setVisible(false); 
+			lblNewLabel_1.setVisible(false); 
+			lblNewLabel_4.setVisible(false); 
+		}
 	}
 
 	public void Add() {
