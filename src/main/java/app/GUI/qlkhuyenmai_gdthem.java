@@ -129,8 +129,6 @@ public class qlkhuyenmai_gdthem{
         DefaultTableModel model = new DefaultTableModel(columns, 0);
         tableChiTiet = new JTable(new DefaultTableModel(
         	new Object[][] {
-        		{null, null, null, null},
-        		{null, null, null, null},
         	},
         	new String[] {
         		"H\u00E3ng", "Danh M\u1EE5c", "Tr\u1EA1ng Th\u00E1i", "M\u00F4 T\u1EA3"
