@@ -78,13 +78,13 @@ public class UpdateCompanyFrame extends JFrame {
     private JPanel createActionButtonPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
 
-        JButton btnAdd = new JButton("Thêm");
+        JButton btnUpdate = new JButton("Cập nhật");
         JButton btnCancel = new JButton("Hủy");
 
-        btnAdd.addActionListener(e -> onSave());
+        btnUpdate.addActionListener(e -> onSave());
         btnCancel.addActionListener(e -> dispose());
 
-        panel.add(btnAdd);
+        panel.add(btnUpdate);
         panel.add(btnCancel);
         return panel;
     }

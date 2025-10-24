@@ -31,4 +31,12 @@ public class PermissionBUS {
     public int removePermission(int roleId, int functionId) {
         return dao.removePermission(roleId, functionId);
     }
+
+    public int addNewRole(Permission permission) {
+        return dao.addNewRole(permission);
+    }
+
+    public int updateRole(Permission permission) {
+        return dao.updateRole(permission);
+    }
 }

@@ -7,19 +7,19 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.text.DateFormatter;
+
+import com.toedter.calendar.JDateChooser;
 
 import app.BUS.EmployeeBUS;
 import app.BUS.AccountBUS;
@@ -31,12 +31,12 @@ import app.DTO.Permission;
 public class UpdateEmployeeFrame extends JFrame {
 
     private JTextField txtUsername;
-    private JTextField txtPassword;
+    private JPasswordField txtPassword;
     private JComboBox<Permission> permissionComboBox;
 
     private JTextField txtFullName;
     private JComboBox<Employee> genderComboBox;
-    private JFormattedTextField txtDOB;
+    private JDateChooser dateChooserDOB;
     private JTextField txtPhone;
     private JTextField txtEmail;
     private JTextField txtAddress;
@@ -99,6 +99,7 @@ public class UpdateEmployeeFrame extends JFrame {
         gbc.weightx = 1;
         txtUsername = new JTextField(20);
         panel.add(txtUsername, gbc);
+        txtUsername.setEnabled(false);
 
         // Password
         gbc.gridx = 2;
@@ -111,8 +112,9 @@ public class UpdateEmployeeFrame extends JFrame {
         gbc.gridx = 3;
         gbc.gridy = 0;
         gbc.weightx = 1;
-        txtPassword = new JTextField(20);
+        txtPassword = new JPasswordField(20);
         panel.add(txtPassword, gbc);
+        txtPassword.setEnabled(false);
 
         // Permission
         gbc.gridx = 4;
@@ -192,11 +194,10 @@ public class UpdateEmployeeFrame extends JFrame {
         gbc.gridx = 3;
         gbc.gridy = 0;
         gbc.weightx = 1;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        DateFormatter dateFormatter = new DateFormatter(sdf);
-        txtDOB = new JFormattedTextField(dateFormatter);
-        txtDOB.setColumns(20);
-        panel.add(txtDOB, gbc);
+        dateChooserDOB = new JDateChooser(); 
+        dateChooserDOB.setDateFormatString("yyyy-MM-dd");
+        dateChooserDOB.setPreferredSize(new Dimension(200, 25));
+        panel.add(dateChooserDOB, gbc);
 
         // Phone (2)
         gbc.gridx = 2;
@@ -232,13 +233,13 @@ public class UpdateEmployeeFrame extends JFrame {
     private JPanel updateActionButtonPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
 
-        JButton btnSave = new JButton("Lưu");
+        JButton btnUpdate = new JButton("Cập nhật");
         JButton btnCancel = new JButton("Hủy");
 
-        btnSave.addActionListener(e -> onSave());
+        btnUpdate.addActionListener(e -> onSave());
         btnCancel.addActionListener(e -> dispose());
 
-        panel.add(btnSave);
+        panel.add(btnUpdate);
         panel.add(btnCancel);
         return panel;
     }
@@ -256,7 +257,7 @@ public class UpdateEmployeeFrame extends JFrame {
 
         updatedEmployee = employeeBUS.getEmployeeById(employeeId);
         if (updatedEmployee != null) {
-            txtDOB.setValue(updatedEmployee.getDateOfBirth());
+            dateChooserDOB.setDate(updatedEmployee.getDateOfBirth());
             txtAddress.setText(updatedEmployee.getAddress());
 
             for (int i = 0; i < genderComboBox.getItemCount(); i++) {
@@ -296,7 +297,7 @@ public class UpdateEmployeeFrame extends JFrame {
         }
 
         String newUsername = txtUsername.getText().trim();
-        String newPassword = txtPassword.getText();
+        String newPassword = new String(txtPassword.getPassword());
         String newFullName = txtFullName.getText().trim();
         String newPhone = txtPhone.getText().trim();
         String newEmail = txtEmail.getText().trim();
@@ -321,19 +322,12 @@ public class UpdateEmployeeFrame extends JFrame {
         
         Date newDOB = null;
         try {
-            Object dateValue = txtDOB.getValue();
-            if (dateValue instanceof java.util.Date) {
-                newDOB = new Date(((java.util.Date) dateValue).getTime());
-            } else if (dateValue != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                java.util.Date parsedDate = sdf.parse(dateValue.toString());
-                newDOB = new Date(parsedDate.getTime());
-            }
+            newDOB = new Date(dateChooserDOB.getDate().getTime());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Định dạng ngày sinh không hợp lệ. Vui lòng nhập theo định dạng yyyy-MM-dd", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         if (newAddress.isEmpty() || newDOB == null || newGender == null) {
             JOptionPane.showMessageDialog(this, "Địa chỉ, Ngày sinh và Giới tính không được để trống.", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;

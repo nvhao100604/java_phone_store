@@ -14,12 +14,15 @@ import javax.swing.BorderFactory;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import com.toedter.calendar.JDateChooser;
+import java.text.ParseException;
 
 import app.BUS.EmployeeBUS;
 import app.BUS.PermissionBUS;
@@ -32,12 +35,12 @@ import app.DTO.Account;
 public class AddEmployeeFrame extends JFrame {
 
     private JTextField txtUsername;
-    private JTextField txtPassword;
+    private JPasswordField txtPassword;
     private JComboBox<Permission> permissionComboBox;
 
     private JTextField txtFullName;
     private JComboBox<Employee> genderComboBox;
-    private JFormattedTextField txtDOB;
+    private JDateChooser dateChooserDOB;
     private JTextField txtPhone;
     private JTextField txtEmail;
     private JTextField txtAddress;
@@ -107,7 +110,7 @@ public class AddEmployeeFrame extends JFrame {
         gbc.gridx = 3;
         gbc.gridy = 0;
         gbc.weightx = 1;
-        txtPassword = new JTextField(20);
+        txtPassword = new JPasswordField(20);
         panel.add(txtPassword, gbc);
 
         // Permission
@@ -188,9 +191,10 @@ public class AddEmployeeFrame extends JFrame {
         gbc.gridx = 3;
         gbc.gridy = 0;
         gbc.weightx = 1;
-        txtDOB = new JFormattedTextField(new SimpleDateFormat("yyyy-MM-dd"));
-        txtDOB.setColumns(20);
-        panel.add(txtDOB, gbc);
+        dateChooserDOB = new JDateChooser(); 
+        dateChooserDOB.setDateFormatString("yyyy-MM-dd");
+        dateChooserDOB.setPreferredSize(new Dimension(200, 25));
+        panel.add(dateChooserDOB, gbc);
 
         // Phone (2)
         gbc.gridx = 2;
@@ -251,16 +255,39 @@ public class AddEmployeeFrame extends JFrame {
 
     private void onSave() {
         String username = txtUsername.getText();
-        String password = txtPassword.getText();
+        String password = new String(txtPassword.getPassword());
         int permissionId = permissionComboBox.getSelectedItem() != null ? ((Permission) permissionComboBox.getSelectedItem()).getPermissionId() : -1;
         String fullName = txtFullName.getText();
         String gender = genderComboBox.getSelectedItem() != null ? ((Employee) genderComboBox.getSelectedItem()).getGender() : "";
-        Date dob = Date.valueOf(txtDOB.getText());
+        Date dob = dateChooserDOB.getDate() != null ? new Date(dateChooserDOB.getDate().getTime()) : null;
         String phone = txtPhone.getText();
         String email = txtEmail.getText();
         String address = txtAddress.getText();
-        if (username.isEmpty() || password.isEmpty() || permissionId == -1 || fullName.isEmpty() || gender.isEmpty() || dob == null || phone.isEmpty() || email.isEmpty() || address.isEmpty()) {
+
+        if (username.isEmpty() || password.isEmpty() || permissionId == -1 ||
+            fullName.isEmpty() || gender.isEmpty() || dob == null ||
+            phone.isEmpty() || email.isEmpty() || address.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+        try {
+            String dobString = sdf.format(dob);
+            sdf.parse(dobString);
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(this, "Ngày sinh không đúng định dạng yyyy-MM-dd!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!phone.matches("^0[0-9]{9}$")) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ! (phải có 10 chữ số và bắt đầu bằng 0)", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!email.matches("^[\\w._%+-]+@[\\w.-]+\\.[A-Za-z]{2,6}$")) {
+            JOptionPane.showMessageDialog(this, "Địa chỉ email không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
