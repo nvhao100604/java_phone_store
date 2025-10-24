@@ -40,7 +40,7 @@ public class UpdateSupplierFrame extends JFrame {
     }
 
     private void initializeUI() {
-        setSize(400, 300);
+        setSize(600, 300);
         setLayout(new BorderLayout(10, 10));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(getParent());
