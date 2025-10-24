@@ -22,11 +22,26 @@ public class OrderBUS {
         return dao.getAllActiveOrders();
     }
 
+    public BigDecimal getTotalRevenue() {
+        return dao.getTotalRevenue();
+    }
+
+    public List<BigDecimal> getTotalRevenueByMonth(int year) {
+        return dao.getTotalRevenueByMonth(year);
+    }
+
+    public List<Integer> getAllYear() {
+        return dao.getAllYear();
+    }
+
     public int addOrder(Order order) {
         return dao.addOrder(order);
     }
 
     public int updateOrder(Order order) {
+        if (order.getOrderId() == 0) {
+            return -1;
+        }
         return dao.updateOrder(order);
     }
 

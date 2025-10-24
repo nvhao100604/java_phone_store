@@ -1,10 +1,10 @@
 package app.DTO;
 
 import app.GUI.PermissionGUI;
+import app.GUI.StatisticGUI;
 import app.GUI.ProductGUI.ProductGUI;
 import app.GUI.qlkho_phieunhap;
 import app.GUI.qlkhuyenmai;
-import app.GUI.qltaikhoan;
 import app.GUI.EmployeeGUI.quanlynhanvien;
 import app.GUI.CompanyGUI.CompanyGUI;
 
@@ -66,8 +66,6 @@ public class Function {
 
 	public Class<?> getGuiClass() {
 		switch (functionId) {
-			case 1:
-				return qltaikhoan.class;
 			case 2:
 				return quanlynhanvien.class;
 			case 3:
@@ -81,6 +79,7 @@ public class Function {
 			case 8:
 				return qlkho_phieunhap.class;
 			case 9:
+				return StatisticGUI.class;
 			case 10:
 				return qlkhuyenmai.class;
 			case 11:

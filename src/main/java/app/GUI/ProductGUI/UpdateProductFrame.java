@@ -227,13 +227,13 @@ public class UpdateProductFrame extends JFrame {
         detailTableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column != 0;
+                return column != 0 && column != 4;
             }
 
             @Override
             public void setValueAt(Object aValue, int row, int column) {
-                Object productId = getValueAt(row, 0);
-                String columnName = getColumnName(column);
+                // Object productId = getValueAt(row, 0);
+                // String columnName = getColumnName(column);
 
                 // System.out.println("Cập nhật: ID " + productId + ", Cột " + columnName + ",
                 // Giá trị: " + aValue);
