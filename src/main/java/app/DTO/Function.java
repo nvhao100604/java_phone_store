@@ -7,6 +7,7 @@ import app.GUI.qlkho_phieunhap;
 import app.GUI.qlkhuyenmai;
 import app.GUI.qltaikhoan;
 import app.GUI.EmployeeGUI.quanlynhanvien;
+import app.GUI.ImportSlipGUI.ImportSlipGUI;
 import app.GUI.PermissionGUI.PermissionGUI;
 import app.GUI.CompanyGUI.CompanyGUI;
 
@@ -83,7 +84,7 @@ public class Function {
 			case 7:
 				return CompanyGUI.class;
 			case 8:
-				return qlkho_phieunhap.class;
+				return ImportSlipGUI.class;
 			case 9:
 			case 10:
 				return qlkhuyenmai.class;
