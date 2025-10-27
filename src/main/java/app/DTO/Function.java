@@ -82,9 +82,10 @@ public class Function {
 			case 6:
 				return SupplierGUI.class;
 			case 7:
-				return CompanyGUI.class;
-			case 8:
+				// return CompanyGUI.class;
 				return ImportSlipGUI.class;
+			case 8:
+				// return ImportSlipGUI.class;
 			case 9:
 			case 10:
 				return qlkhuyenmai.class;

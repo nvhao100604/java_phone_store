@@ -6,7 +6,7 @@ public class Account {
 	private String password;
 	private String phoneNumber;
 	private String email;
-	private String fullName;
+	private String fullName; // Họ và Tên
 	private int roleId;
 	private int status;
 
