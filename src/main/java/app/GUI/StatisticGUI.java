@@ -1,14 +1,26 @@
 package app.GUI;
 
 import javax.swing.*;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.AttributedString;
+import java.text.DecimalFormat;
 import java.time.Year;
 import java.util.*;
 import java.util.List;
 
 import app.BUS.ProductBUS;
+import app.utils.DecimalFilter;
 import app.BUS.EmployeeBUS;
 import app.BUS.OrderBUS;
 
@@ -42,6 +54,7 @@ public class StatisticGUI extends JPanel {
         add(createTopPanel(), BorderLayout.NORTH);
 
         JPanel chartPanel = new JPanel(new GridBagLayout());
+        chartPanel.setPreferredSize(new Dimension(0, 0));
         // chartPanel.setOpaque(false);
         chartPanel.setBackground(Color.YELLOW);
 
@@ -51,18 +64,24 @@ public class StatisticGUI extends JPanel {
 
         JPanel chartContainer = new JPanel(new BorderLayout());
         chartContainer.setOpaque(false);
-        chartContainer.add(createChartPanel(), BorderLayout.CENTER);
+        chartContainer.add(createChartPanel(), BorderLayout.NORTH);
         chartContainer.add(ControlPanel(), BorderLayout.SOUTH);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 0;
+        gbc.gridwidth = 3;
+        gbc.gridheight = 3;
+        gbc.weightx = 1;
+        // gbc.weighty = 1;
         chartPanel.add(chartContainer, gbc);
 
-        JPanel pieChartPanel = new JPanel(new BorderLayout());
-        gbc.gridx = 1;
+        Map<String, Integer> saleMap = productBUS.getBestSellingProducts("ĐÃ BÁN");
+        gbc.gridx = 3;
         gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.gridheight = 2;
         gbc.weightx = 0;
-        chartPanel.add(pieChartPanel, gbc);
+        // gbc.weighty = 1;
+        chartPanel.add(createTopProductPieChartPanel(saleMap), gbc);
 
         add(chartPanel, BorderLayout.CENTER);
 
@@ -120,8 +139,8 @@ public class StatisticGUI extends JPanel {
                 drawMockRevenueChart(g);
             }
         };
-        chartPanel.setPreferredSize(new Dimension(800, 600));
-        chartPanel.setBackground(Color.BLUE);
+        chartPanel.setPreferredSize(new Dimension(0, 600));
+        chartPanel.setBackground(Color.WHITE);
         return chartPanel;
     }
 
@@ -131,8 +150,8 @@ public class StatisticGUI extends JPanel {
         int barWidth = 40;
         int barSpacing = 50;
         int startX = 120;
-        int chartBottomY = 400;
-        int maxBarHeight = 250;
+        int chartBottomY = 450;
+        int maxBarHeight = 300;
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -142,7 +161,7 @@ public class StatisticGUI extends JPanel {
         g2.drawString("Doanh thu theo tháng (" + currentYear + ")", startX, 50);
 
         BigDecimal maxValue = revenue.stream().max(Comparator.naturalOrder()).orElse(BigDecimal.ONE);
-
+        maxValue = maxValue.multiply(new BigDecimal(5));
         if (maxValue.compareTo(BigDecimal.ZERO) == 0)
             maxValue = BigDecimal.ONE;
 
@@ -162,16 +181,107 @@ public class StatisticGUI extends JPanel {
             g2.setColor(Color.BLACK);
             g2.drawRect(x, y, barWidth, barHeight);
 
-            g2.setFont(new Font("Arial", Font.PLAIN, 12));
-            g2.drawString(value.toString(), x, y - 5);
-
-            g2.setFont(new Font("Arial", Font.BOLD, 13));
+            g2.setFont(new Font("Arial", Font.PLAIN, 11));
             g2.setColor(Color.BLACK);
-            g2.drawString(String.valueOf(i + 1), x + 8, chartBottomY + 20);
+            String valueText = DecimalFilter.PriceFormatter().format(value);
+            FontMetrics fm = g2.getFontMetrics();
+            int textWidth = fm.stringWidth(valueText);
+            g2.drawString(valueText, x + (barWidth - textWidth) / 2, y - 5);
+
+            g2.setFont(new Font("Arial", Font.BOLD, 12));
+            g2.drawString("T" + (i + 1), x + 10, chartBottomY + 20);
         }
 
         g2.setColor(Color.GRAY);
+        g2.setStroke(new BasicStroke(2));
         g2.drawLine(startX - 10, chartBottomY, startX + revenue.size() * barSpacing, chartBottomY);
+
+        g2.drawLine(startX - 10, chartBottomY, startX - 10, chartBottomY - maxBarHeight - 20);
+
+        g2.setFont(new Font("Arial", Font.PLAIN, 10));
+        for (int i = 0; i <= 5; i++) {
+            int yPos = chartBottomY - (maxBarHeight * i / 5);
+            BigDecimal scaleValue = maxValue.multiply(BigDecimal.valueOf(i)).divide(BigDecimal.valueOf(5),
+                    RoundingMode.HALF_UP);
+
+            g2.drawLine(startX - 15, yPos, startX - 5, yPos);
+
+            String scaleText = DecimalFilter.PriceFormatter().format(scaleValue);
+            FontMetrics fm = g2.getFontMetrics();
+            int textWidth = fm.stringWidth(scaleText);
+            g2.drawString(scaleText, startX - textWidth - 20, yPos + 4);
+        }
+    }
+
+    private static JPanel createTopProductPieChartPanel(Map<String, Integer> data) {
+        JPanel chartPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (data == null || data.isEmpty())
+                    return;
+
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int total = data.values().stream().mapToInt(Integer::intValue).sum();
+                int startAngle = 0;
+                int x = 50, y = 50, diameter = 300;
+                int centerX = x + diameter / 2;
+                int centerY = y + diameter / 2;
+
+                Color[] colors = {
+                        new Color(52, 152, 219),
+                        new Color(46, 204, 113),
+                        new Color(231, 76, 60),
+                        new Color(241, 196, 15),
+                        new Color(155, 89, 182)
+                };
+
+                int i = 0;
+                for (Map.Entry<String, Integer> entry : data.entrySet()) {
+                    int value = entry.getValue();
+                    int angle = (int) Math.round(360.0 * value / total);
+                    double percent = (value * 100.0) / total;
+
+                    g2.setColor(colors[i % colors.length]);
+                    g2.fillArc(x, y, diameter, diameter, startAngle, angle);
+
+                    double midAngle = Math.toRadians(startAngle + angle / 2.0);
+                    int labelRadius = diameter / 3; // Khoảng cách từ tâm đến label
+                    int labelX = centerX + (int) (labelRadius * Math.cos(-midAngle));
+                    int labelY = centerY + (int) (labelRadius * Math.sin(-midAngle));
+
+                    g2.setColor(Color.WHITE);
+                    g2.setFont(new Font("Arial", Font.BOLD, 16));
+                    String percentText = String.format("%.1f%%", percent);
+                    FontMetrics fm = g2.getFontMetrics();
+                    int textWidth = fm.stringWidth(percentText);
+                    int textHeight = fm.getHeight();
+                    g2.drawString(percentText, labelX - textWidth / 2, labelY + textHeight / 4);
+
+                    g2.setColor(Color.BLACK);
+                    g2.setFont(new Font("Arial", Font.PLAIN, 14));
+                    g2.drawString(String.format("%s (%d - %.1f%%)", entry.getKey(), value, percent),
+                            380, 80 + i * 20);
+
+                    startAngle += angle;
+                    i++;
+                }
+
+                g2.setFont(new Font("Arial", Font.BOLD, 18));
+                FontMetrics fm = g2.getFontMetrics();
+                String title = "Top 10 sản phẩm bán chạy nhất";
+                int titleWidth = fm.stringWidth(title);
+                g2.drawString(title, (getWidth() - titleWidth) / 2, 30);
+            }
+        };
+
+        chartPanel.setPreferredSize(new Dimension(550, 400));
+        chartPanel.setOpaque(true);
+        chartPanel.setBackground(Color.WHITE);
+
+        return chartPanel;
     }
 
     private void loadData() {
@@ -182,7 +292,8 @@ public class StatisticGUI extends JPanel {
         lblTotalProduct.setText(
                 "<html><div style='text-align:center;'><h3>Sản phẩm</h3><h2>" + totalProduct + "</h2></div></html>");
         lblTotalRevenue.setText(
-                "<html><div style='text-align:center;'><h3>Doanh thu</h3><h2>" + totalRevenue
+                "<html><div style='text-align:center;'><h3>Doanh thu</h3><h2>"
+                        + DecimalFilter.PriceFormatter().format(totalRevenue)
                         + " VNĐ</h2></div></html>");
         lblTotalEmployee.setText(
                 "<html><div style='text-align:center;'><h3>Nhân viên</h3><h2>" + totalEmployee + "</h2></div></html>");

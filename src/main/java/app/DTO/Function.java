@@ -68,25 +68,26 @@ public class Function {
 
 	public Class<?> getGuiClass() {
 		switch (functionId) {
-			case 2:
+			case 1:
 				return quanlynhanvien.class;
-			case 3:
+			case 2:
 				return PermissionGUI.class;
-			case 4:
+			case 3:
 				return ProductGUI.class;
-			case 5:
+			case 4:
 				return ProductTypeGUI.class;
-			case 6:
+			case 5:
 				return SupplierGUI.class;
-			case 7:
+			case 6:
 				return CompanyGUI.class;
-			case 8:
+			case 7:
 				return qlkho_phieunhap.class;
-			case 9:
+			case 8:
 				return StatisticGUI.class;
-			case 10:
+			case 9:
 				return qlkhuyenmai.class;
-			case 11:
+			case 10:
+				return StatisticGUI.class;
 			default:
 				return ProductGUI.class;
 		}

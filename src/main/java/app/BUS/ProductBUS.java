@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -35,6 +36,10 @@ public class ProductBUS {
 
 	public List<Product> getAllDesc() {
 		return dao.getAllDesc();
+	}
+
+	public Map<String, Integer> getBestSellingProducts(String status) {
+		return dao.getBestSellingProducts(status);
 	}
 
 	public int AddProduct(Product product) {
