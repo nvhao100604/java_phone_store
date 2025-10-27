@@ -16,7 +16,7 @@ import app.DTO.ImportSlip;
 
 public class ImportSlipBUS {
     private ImportSlipDAO dao;
-
+    
     public ImportSlipBUS() {
         dao = new ImportSlipDAO();
     }
@@ -65,6 +65,7 @@ public class ImportSlipBUS {
                 Date importDate = new java.sql.Date(row.getCell(1).getDateCellValue().getTime());
                 BigDecimal totalAmount = new BigDecimal(row.getCell(2).getNumericCellValue());
                 int profit = (int) row.getCell(3).getNumericCellValue();
+                int status = 1;
 
                 ImportSlip newSlip = new ImportSlip(
                         supplierId,
@@ -93,6 +94,27 @@ public class ImportSlipBUS {
 
     public List<ImportSlip> sortImportSlips(String sortBy, boolean ascending) {
         return dao.sortImportSlips(sortBy, ascending);
+    }
+ // ==================== SEARCH FUNCTION ====================
+    public List<ImportSlip> searchImportSlipsAdvanced(String keyword) {
+        keyword = keyword.toLowerCase().trim();
+        List<ImportSlip> results = new java.util.ArrayList<>();
+
+        List<ImportSlip> allSlips = getAllImportSlips(); // Lấy toàn bộ danh sách phiếu nhập từ DAO
+
+        for (ImportSlip slip : allSlips) {
+            boolean matchSupplier = String.valueOf(slip.getSupplierId()).contains(keyword);
+            boolean matchTotal = slip.getTotalAmount() != null &&
+                                 slip.getTotalAmount().toPlainString().toLowerCase().contains(keyword);
+            boolean matchDate = slip.getImportDate() != null &&
+                                slip.getImportDate().toString().contains(keyword);
+
+            if (matchSupplier || matchTotal || matchDate) {
+                results.add(slip);
+            }
+        }
+
+        return results;
     }
 
     public static void main(String[] args) {

@@ -34,6 +34,16 @@ public class SupplierBUS {
         return dao.getSupplierById(supplierId);
     }
 
+    public String getSupplierNameById(int supplierId) {
+        List<Supplier> list = getAllSuppliers();
+        for (Supplier s : list) {
+            if (s.getIdSupplier() == supplierId) {
+                return s.getNameSupplier();
+            }
+        }
+        return null;
+    }
+    
     public int addSupplier(Supplier supplier) {
         return dao.addSupplier(supplier);
     }
