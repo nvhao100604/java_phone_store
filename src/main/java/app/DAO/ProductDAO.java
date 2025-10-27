@@ -89,7 +89,6 @@ public class ProductDAO {
 						rs.getInt(11));
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return null;
@@ -115,7 +114,6 @@ public class ProductDAO {
 				}
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return 0;
@@ -140,7 +138,6 @@ public class ProductDAO {
 			stmt.setInt(9, product.getProductId());
 			return stmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return 0;
@@ -155,7 +152,6 @@ public class ProductDAO {
 			System.out.println("Rows: " + rowsAffect);
 			return rowsAffect;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return 0;
@@ -167,10 +163,8 @@ public class ProductDAO {
 				PreparedStatement st = con.prepareStatement(sql)) {
 			st.setInt(1, productId);
 			int rowsAffect = st.executeUpdate();
-			// System.out.println("Rows: " + rowsAffect);
 			return rowsAffect;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return 0;
@@ -182,7 +176,6 @@ public class ProductDAO {
 				PreparedStatement st = con.prepareStatement(sql)) {
 			st.setInt(1, productId);
 			int rowsAffect = st.executeUpdate();
-			// System.out.println("Rows: " + rowsAffect);
 			return rowsAffect;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -2,10 +2,9 @@ package app.DTO;
 
 import app.GUI.ProductGUI.ProductGUI;
 import app.GUI.ProductTypeGUI.ProductTypeGUI;
+import app.GUI.PromotionGUI.qlkhuyenmai;
 import app.GUI.SupplierGUI.SupplierGUI;
 import app.GUI.qlkho_phieunhap;
-import app.GUI.qlkhuyenmai;
-import app.GUI.qltaikhoan;
 import app.GUI.EmployeeGUI.quanlynhanvien;
 import app.GUI.ImportSlipGUI.ImportSlipGUI;
 import app.GUI.PermissionGUI.PermissionGUI;
@@ -70,26 +69,23 @@ public class Function {
 	public Class<?> getGuiClass() {
 		switch (functionId) {
 			case 1:
-				return qltaikhoan.class;
-			case 2:
 				return quanlynhanvien.class;
-			case 3:
+			case 2:
 				return PermissionGUI.class;
-			case 4:
+			case 3:
 				return ProductGUI.class;
-			case 5:
+			case 4:
 				return ProductTypeGUI.class;
-			case 6:
+			case 5:
 				return SupplierGUI.class;
 			case 7:
-				// return CompanyGUI.class;
-				return ImportSlipGUI.class;
+				return CompanyGUI.class;
+// 				return ImportSlipGUI.class;
 			case 8:
-				// return ImportSlipGUI.class;
+				return ImportSlipGUI.class;
 			case 9:
-			case 10:
 				return qlkhuyenmai.class;
-			case 11:
+			case 10:
 			default:
 				return ProductGUI.class;
 		}

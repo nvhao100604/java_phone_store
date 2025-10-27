@@ -12,21 +12,19 @@ import app.database.DBConnect;
 public class CategoryDAO {
 
     public List<Category> getAllCategories() {
-        String sql = "SELECT * FROM danhmuc";
+        List<Category> category_list = new ArrayList<>();
+        String sql = "SELECT * FROM danhmuc WHERE TRANGTHAI = 1";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement st = con.prepareStatement(sql);
                 ResultSet rs = st.executeQuery()) {
-            List<Category> category_list = new ArrayList<>();
             while (rs.next()) {
-                category_list.add(
-                        new Category(
-                                rs.getInt(1),
-                                rs.getString(2)));
+                category_list.add(new Category(
+                    rs.getInt(1),
+                    rs.getString(2)));
             }
-            return category_list;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return category_list;
     }
 }
