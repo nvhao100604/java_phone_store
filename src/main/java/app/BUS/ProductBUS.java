@@ -3,7 +3,6 @@ package app.BUS;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -12,7 +11,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import app.DAO.ProductDAO;
-import app.DTO.ImportSlip;
 import app.DTO.Product;
 import app.DTO.ProductDetail;
 
