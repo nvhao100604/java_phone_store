@@ -50,6 +50,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 	private static final int mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 	private ProductBUS bus;
 	private CategoryBUS categoryBus;
+
 	private khungchucnang khung;
 	private JTextField nameSearchField;
 	private JTextField brandSearchField;
@@ -74,7 +75,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		// System.out.println("Main W + H = " + mainWidth + " + " + mainHeight);
 
 		JPanel topPanel = new JPanel();
-		topPanel.setPreferredSize(new Dimension(0, mainHeight < 1200 ? mainHeight - 580 : mainHeight - 950));
+		topPanel.setPreferredSize(new Dimension(0, 250));
 		topPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 		topPanel.setLayout(new BorderLayout());
 		// topPanel.setBackground(new Color(0, 0, 0));
@@ -238,6 +239,8 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		gbc.gridx = col++;
 		gbc.weightx = 0.5;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
 		pricePanel.add(priceFromField, gbc);
 
 		JLabel line = new JLabel("-");
@@ -260,6 +263,8 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		gbc.gridx = col++;
 		gbc.weightx = 0.5;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
 		pricePanel.add(priceToField, gbc);
 
 		JPanel emptyPanel = new JPanel();
@@ -304,6 +309,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		// Data table
 		JPanel listPanel = new JPanel();
+		listPanel.setOpaque(false);
 		listPanel.setLayout(new BorderLayout());
 
 		scrollPane = new JScrollPane();
@@ -366,7 +372,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		scrollPane.setViewportView(table);
-		scrollPane.setPreferredSize(new Dimension(0, mainHeight - 400));
+		scrollPane.setPreferredSize(new Dimension(0, 600));
 		listPanel.add(scrollPane, BorderLayout.NORTH);
 
 		noResultLabel = new JLabel("Không tìm thấy sản phẩm");
@@ -374,8 +380,8 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		noResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
 		noResultLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		noResultLabel.setVerticalAlignment(SwingConstants.NORTH);
-		noResultLabel.setBackground(Color.BLUE);
-		noResultLabel.setPreferredSize(new Dimension(0, mainHeight - 100));
+		noResultLabel.setOpaque(false);
+		noResultLabel.setPreferredSize(new Dimension(0, 500));
 		listPanel.add(noResultLabel, BorderLayout.CENTER);
 
 		add(listPanel, BorderLayout.SOUTH);
@@ -437,10 +443,12 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		String fromText = priceFromField.getText().trim();
 		String toText = priceToField.getText().trim();
 
-		BigDecimal fromPrice = fromText.isEmpty() ? null : new BigDecimal(fromText);
-		BigDecimal toPrice = toText.isEmpty() ? null : new BigDecimal(toText);
+		BigDecimal fromPrice = fromText.isEmpty() ? BigDecimal.ZERO : new BigDecimal(fromText);
+		BigDecimal toPrice = toText.isEmpty() ? BigDecimal.ZERO : new BigDecimal(toText);
 
-		if (fromPrice == null && toPrice == null || fromPrice.compareTo(toPrice) >= 0) {
+		if (fromPrice == null && toPrice == null
+				|| fromPrice.compareTo(toPrice) >= 0
+				|| toPrice.compareTo(BigDecimal.ZERO) >= 0) {
 			HandleLoadAll();
 		}
 
@@ -494,7 +502,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 		if (products.isEmpty()) {
 			model.addRow(new Object[] { "", "", "", "", "" });
 			noResultLabel.setVisible(true);
-			scrollPane.setPreferredSize(new Dimension(0, 400));
+			scrollPane.setPreferredSize(new Dimension(0, 100));
 			revalidate();
 			repaint();
 			return;
@@ -502,7 +510,7 @@ public class ProductGUI extends JPanel implements FunctionPanel {
 
 		if (noResultLabel != null) {
 			noResultLabel.setVisible(false);
-			scrollPane.setPreferredSize(new Dimension(0, 500));
+			scrollPane.setPreferredSize(new Dimension(0, 600));
 			revalidate();
 			repaint();
 		}

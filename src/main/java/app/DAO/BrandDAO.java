@@ -23,7 +23,6 @@ public class BrandDAO {
                         rs.getString(2)));
             }
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
         return brands;

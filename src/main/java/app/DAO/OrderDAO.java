@@ -1,10 +1,14 @@
 package app.DAO;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import app.DTO.Order;
 import app.DTO.PaymentMethod;
@@ -63,6 +67,108 @@ public class OrderDAO {
         return orders;
     }
 
+    public BigDecimal getTotalRevenue() {
+        String sql = "SELECT SUM(d.THANHTIEN) AS TONGDOANHTHU FROM `donhang` d";
+        try (Connection connection = DBConnect.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery()) {
+
+            if (rs.next())
+                return rs.getBigDecimal(1);
+            else
+                return BigDecimal.ZERO;
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            return BigDecimal.ZERO;
+        }
+    }
+
+    public BigDecimal getAverageOrderValue() {
+        String sql = "SELECT AVG(d.THANHTIEN) AS TONGDOANHTHU FROM `donhang` d";
+        try (Connection connection = DBConnect.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery()) {
+
+            if (rs.next())
+                return rs.getBigDecimal(1);
+            else
+                return BigDecimal.ZERO;
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            return BigDecimal.ZERO;
+        }
+    }
+
+    public List<BigDecimal> getTotalRevenueByMonth(int year) {
+        List<BigDecimal> revenues = new ArrayList<>();
+        String sql = "WITH months AS (\r\n" +
+                "  SELECT 1 AS month\r\n" +
+                "  UNION SELECT 2 UNION SELECT 3 UNION SELECT 4\r\n" +
+                "  UNION SELECT 5 UNION SELECT 6 UNION SELECT 7\r\n" +
+                "  UNION SELECT 8 UNION SELECT 9 UNION SELECT 10\r\n" +
+                "  UNION SELECT 11 UNION SELECT 12\r\n" +
+                ")\r\n" +
+                "SELECT \r\n" +
+                "    IFNULL(SUM(d.THANHTIEN), 0) AS TongDoanhThu\r\n" +
+                "FROM months m\r\n" +
+                "LEFT JOIN donhang d \r\n" +
+                "    ON MONTH(d.NGAYMUA) = m.month AND YEAR(d.NGAYMUA) = ?\r\n" +
+                "GROUP BY m.month\r\n" +
+                "ORDER BY m.month;";
+        try (Connection connection = DBConnect.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, year);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                revenues.add(rs.getBigDecimal(1));
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return revenues;
+    }
+
+    public List<Integer> getAllYear() {
+        List<Integer> months = new ArrayList<>();
+        String sql = "SELECT YEAR(d.NGAYMUA) AS YEAR FROM `donhang` d GROUP BY YEAR(d.NGAYMUA)";
+        try (Connection connection = DBConnect.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery()) {
+            while (rs.next())
+                months.add(rs.getInt(1));
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+
+        return months;
+    }
+
+    public Map<String, BigDecimal> getRevenueByCategory(int categoryId) {
+        Map<String, BigDecimal> data = new LinkedHashMap<>();
+        String sql = "SELECT sp.TENSP, COALESCE(SUM(d.THANHTIEN), 0) AS TONGDOANHTHU FROM `donhang` d RIGHT JOIN chitiethoadon ct ON ct.idHD=d.idHD"
+                + "\nRIGHT JOIN chitietsanpham ctsp ON ct.idCTSP=ctsp.idCTSP\n"
+                + "\nJOIN sanpham sp ON ctsp.idSP=sp.idSP JOIN danhmuc dm ON sp.idDM = dm.idDM\n"
+                + "\nWHERE sp.idDM = ? GROUP BY sp.idSP\n"
+                + "ORDER BY COALESCE(SUM(d.THANHTIEN), 0) DESC LIMIT 5\n";
+        try (Connection connection = DBConnect.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, categoryId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                data.put(rs.getString(1), rs.getBigDecimal(2));
+                System.out.println();
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return data;
+    }
+
     public int addOrder(Order order) {
         String sql = "INSERT INTO donhang (idTK, idkh, THANHTIEN, NGAYMUA, DIACHI, MAKHUYENMAI, PTTHANHTOAN) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnect.getConnection();
@@ -98,10 +204,6 @@ public class OrderDAO {
     }
 
     public int updateOrder(Order order) {
-        if (order.getOrderId() == 0) {
-            return -1;
-        }
-
         String sql = "UPDATE donhang SET idTK=?, idkh=?, THANHTIEN=?, NGAYMUA=?, DIACHI=?, MAKHUYENMAI=?, TRANGTHAI=?, PTTHANHTOAN=? WHERE idHD=?";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {

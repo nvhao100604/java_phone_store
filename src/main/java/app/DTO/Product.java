@@ -61,8 +61,8 @@ public class Product {
 		this.categoryId = categoryId;
 		this.imageUrl = imageUrl;
 		this.description = description;
-		this.status = status;
 		this.salePrice = salePrice;
+		this.status = status;
 		this.productDetails = new ArrayList<>();
 	}
 

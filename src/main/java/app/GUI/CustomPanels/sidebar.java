@@ -75,7 +75,7 @@ public class sidebar extends JPanel {
 		List<Function> functions = bus.getFunctionsForRole(userACcount.getRoleId());
 		// System.out.println(functions.size());
 		for (Function function : functions) {
-			System.out.println("check function: " + function.getFunctionName());
+			// System.out.println("check function: " + function.getFunctionName());
 			SideBarButton button = new SideBarButton(function.getFunctionName(),
 					"src\\main\\resources\\Ảnh\\" + function.getIcon());
 			button.addActionListener(new ActionListener() {
