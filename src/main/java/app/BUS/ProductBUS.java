@@ -30,6 +30,14 @@ public class ProductBUS {
 		return dao.getProductById(productId);
 	}
 
+	public int getQuantityById(int productId, String status) {
+		return dao.getQuantityById(productId, status);
+	}
+
+	public int getQuantityByName(String productName, String status) {
+		return dao.getQuantityByName(productName, status);
+	}
+
 	public List<Product> getAll() {
 		return dao.getAll();
 	}

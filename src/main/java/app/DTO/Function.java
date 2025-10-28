@@ -7,6 +7,7 @@ import app.GUI.SupplierGUI.SupplierGUI;
 import app.GUI.qlkho_phieunhap;
 import app.GUI.qlkhuyenmai;
 import app.GUI.EmployeeGUI.quanlynhanvien;
+import app.GUI.ImportSlipGUI.ImportSlipGUI;
 import app.GUI.PermissionGUI.PermissionGUI;
 import app.GUI.CompanyGUI.CompanyGUI;
 
@@ -80,10 +81,8 @@ public class Function {
 				return SupplierGUI.class;
 			case 6:
 				return CompanyGUI.class;
-			case 7:
-				return qlkho_phieunhap.class;
 			case 8:
-				return StatisticGUI.class;
+				return ImportSlipGUI.class;
 			case 9:
 				return qlkhuyenmai.class;
 			case 10:

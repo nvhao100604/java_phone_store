@@ -5,7 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import app.DTO.Order;
 import app.DTO.PaymentMethod;
@@ -81,6 +84,23 @@ public class OrderDAO {
         }
     }
 
+    public BigDecimal getAverageOrderValue() {
+        String sql = "SELECT AVG(d.THANHTIEN) AS TONGDOANHTHU FROM `donhang` d";
+        try (Connection connection = DBConnect.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery()) {
+
+            if (rs.next())
+                return rs.getBigDecimal(1);
+            else
+                return BigDecimal.ZERO;
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            return BigDecimal.ZERO;
+        }
+    }
+
     public List<BigDecimal> getTotalRevenueByMonth(int year) {
         List<BigDecimal> revenues = new ArrayList<>();
         String sql = "WITH months AS (\r\n" +
@@ -125,6 +145,28 @@ public class OrderDAO {
         }
 
         return months;
+    }
+
+    public Map<String, BigDecimal> getRevenueByCategory(int categoryId) {
+        Map<String, BigDecimal> data = new LinkedHashMap<>();
+        String sql = "SELECT sp.TENSP, COALESCE(SUM(d.THANHTIEN), 0) AS TONGDOANHTHU FROM `donhang` d RIGHT JOIN chitiethoadon ct ON ct.idHD=d.idHD"
+                + "\nRIGHT JOIN chitietsanpham ctsp ON ct.idCTSP=ctsp.idCTSP\n"
+                + "\nJOIN sanpham sp ON ctsp.idSP=sp.idSP JOIN danhmuc dm ON sp.idDM = dm.idDM\n"
+                + "\nWHERE sp.idDM = ? GROUP BY sp.idSP\n"
+                + "ORDER BY COALESCE(SUM(d.THANHTIEN), 0) DESC LIMIT 5\n";
+        try (Connection connection = DBConnect.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, categoryId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                data.put(rs.getString(1), rs.getBigDecimal(2));
+                System.out.println();
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return data;
     }
 
     public int addOrder(Order order) {

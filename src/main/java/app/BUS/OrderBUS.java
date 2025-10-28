@@ -2,6 +2,7 @@ package app.BUS;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import app.DAO.OrderDAO;
 import app.DTO.Order;
@@ -26,8 +27,16 @@ public class OrderBUS {
         return dao.getTotalRevenue();
     }
 
+    public BigDecimal getAverageOrderValue() {
+        return dao.getAverageOrderValue();
+    }
+
     public List<BigDecimal> getTotalRevenueByMonth(int year) {
         return dao.getTotalRevenueByMonth(year);
+    }
+
+    public Map<String, BigDecimal> getRevenueByCategory(int categoryId) {
+        return dao.getRevenueByCategory(categoryId);
     }
 
     public List<Integer> getAllYear() {
