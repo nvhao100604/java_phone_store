@@ -1,29 +1,18 @@
-package app.GUI;
+package app.GUI.StatisticGUI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
-
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.Year;
 import java.util.*;
 import java.util.List;
 
 import app.BUS.ProductBUS;
 import app.DTO.Category;
-import app.DTO.Product;
 import app.utils.DecimalFilter;
 import app.BUS.CategoryBUS;
 import app.BUS.EmployeeBUS;
