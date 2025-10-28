@@ -25,6 +25,10 @@ public class ProductDetailBUS {
 		return dao.addProductDetail(productId, color, capacity, priceAdjustment);
 	}
 
+	public int updateProductDetail(ProductDetail detail) {
+		return dao.updateProductDetail(detail);
+	}
+
 	public static void main(String[] args) {
 		// ProductDetailBUS bus = new ProductDetailBUS();
 		// List<ProductDetail> list = bus.getProductDetailById(1);

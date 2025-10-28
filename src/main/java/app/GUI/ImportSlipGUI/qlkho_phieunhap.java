@@ -1,4 +1,4 @@
-package app.GUI;
+package app.GUI.ImportSlipGUI;
 
 import java.awt.EventQueue;
 

@@ -7,7 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import app.DTO.Product;
 import app.database.DBConnect;
@@ -66,6 +69,54 @@ public class ProductDAO {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	public Map<String, Integer> getBestSellingProducts(String status) {
+		Map<String, Integer> list = new LinkedHashMap<>();
+		String sql = "SELECT s.TENSP, COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE i.STATUS= ? GROUP BY s.idSP ORDER BY COUNT(i.imei) DESC";
+		try (Connection con = DBConnect.getConnection();
+				PreparedStatement st = con.prepareStatement(sql)) {
+			st.setString(1, status);
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				list.put(rs.getString(1), rs.getInt(2));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public int getQuantityById(int productId, String status) {
+		String sql = "SELECT COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE s.idSP= ? AND i.STATUS= ? GROUP BY s.idSP";
+		try (Connection con = DBConnect.getConnection();
+				PreparedStatement st = con.prepareStatement(sql)) {
+			st.setInt(1, productId);
+			st.setString(2, status);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	public int getQuantityByName(String productName, String status) {
+		String sql = "SELECT COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE s.TENSP= ? AND i.STATUS= ? GROUP BY s.idSP";
+		try (Connection con = DBConnect.getConnection();
+				PreparedStatement st = con.prepareStatement(sql)) {
+			st.setString(1, productName);
+			st.setString(2, status);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	public Product getProductById(int productId) {

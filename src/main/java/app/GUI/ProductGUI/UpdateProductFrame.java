@@ -9,7 +9,6 @@ import java.awt.Insets;
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -25,6 +24,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.NumberFormatter;
 
@@ -45,7 +46,6 @@ public class UpdateProductFrame extends JFrame {
     private JFormattedTextField salePriceField;
     private JTextArea descriptionArea;
     private JButton selectImageButton;
-    private Product newProduct;
     private JLabel imagePreviewLabel;
     private File selectedImageFile;
 
@@ -223,11 +223,21 @@ public class UpdateProductFrame extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Chi tiết sản phẩm (Màu, Dung lượng)"));
 
-        String[] columnNames = { "Màu", "Dung lượng", "Điều chỉnh Giá", "Số lượng" };
+        String[] columnNames = { "Id", "Màu", "Dung lượng", "Điều chỉnh Giá", "Số lượng" };
         detailTableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return true;
+                return column != 0 && column != 4;
+            }
+
+            @Override
+            public void setValueAt(Object aValue, int row, int column) {
+                // Object productId = getValueAt(row, 0);
+                // String columnName = getColumnName(column);
+
+                // System.out.println("Cập nhật: ID " + productId + ", Cột " + columnName + ",
+                // Giá trị: " + aValue);
+                super.setValueAt(aValue, row, column);
             }
         };
         detailTable = new JTable(detailTableModel);
@@ -300,6 +310,7 @@ public class UpdateProductFrame extends JFrame {
         }
         for (ProductDetail productDetail : details) {
             model.addRow(new Object[] {
+                    productDetail.getProductDetailId(),
                     productDetail.getColor(),
                     productDetail.getCapacity(),
                     productDetail.getPriceAdjustment(),
@@ -309,7 +320,7 @@ public class UpdateProductFrame extends JFrame {
     }
 
     private void addDetailRow() {
-        detailTableModel.addRow(new Object[] { "Xanh", "128GB", new BigDecimal("0.00"), 0 });
+        detailTableModel.addRow(new Object[] { 0, "Xanh", "128GB", new BigDecimal("0.00"), "Hết hàng" });
     }
 
     private void removeSelectedDetailRow() {
@@ -332,39 +343,46 @@ public class UpdateProductFrame extends JFrame {
         BigDecimal saleP = (BigDecimal) salePriceField.getValue();
         String description = descriptionArea.getText();
         String imageUrl = selectedImageFile != null ? selectedImageFile.getName() : "";
+        int status = 1;
 
         if (name.trim().isEmpty() || importP == null || saleP == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng điền đủ thông tin cơ bản.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        newProduct = new Product(name, brandId, importP, categoryId, imageUrl, description, saleP);
-        int newProductId = productBUS.AddProduct(newProduct);
-        if (newProductId > 0) {
-            newProduct.setProductId(newProductId);
-        } else {
-            return;
+        Product newProduct = new Product(instanceProduct.getProductId(), name, brandId, importP, categoryId, imageUrl,
+                description, saleP, status);
+        int isUpdated = productBUS.UpdateProduct(newProduct);
+        if (isUpdated > 0) {
+            saveProductDetails();
+
+            JOptionPane.showMessageDialog(this, "Sản phẩm đã được lưu thành công!", "Thành công",
+                    JOptionPane.INFORMATION_MESSAGE);
+            dispose();
         }
-
-        saveProductDetails();
-
-        JOptionPane.showMessageDialog(this, "Sản phẩm đã được lưu thành công!", "Thành công",
-                JOptionPane.INFORMATION_MESSAGE);
-        dispose();
     }
 
     public void saveProductDetails() {
         productDetailsList.clear();
+        DefaultTableModel detailTableModelNew = (DefaultTableModel) detailTable.getModel();
         for (int i = 0; i < detailTableModel.getRowCount(); i++) {
             try {
-                String color = detailTableModel.getValueAt(i, 0).toString();
-                String capacity = detailTableModel.getValueAt(i, 1).toString();
-                BigDecimal priceAdj = new BigDecimal(detailTableModel.getValueAt(i, 2).toString());
-
+                int detailId = (int) detailTableModelNew.getValueAt(i, 0);
+                String color = detailTableModelNew.getValueAt(i, 1).toString();
+                String capacity = detailTableModelNew.getValueAt(i, 2).toString();
+                BigDecimal priceAdj = new BigDecimal(detailTableModelNew.getValueAt(i, 3).toString());
+                int stock = detailTableModelNew.getValueAt(i, 4).equals("Hết hàng") ? 0
+                        : (int) detailTableModelNew.getValueAt(i, 4);
                 ProductDetail detail = new ProductDetail();
+                detail.setProductDetailId(detailId);
+                detail.setProductId(instanceProduct.getProductId());
                 detail.setColor(color);
                 detail.setCapacity(capacity);
                 detail.setPriceAdjustment(priceAdj);
+                detail.setStock(stock);
+
+                // System.out.println("Check detail: " + detail.getProductDetailId() +
+                // detail.getColor());
 
                 productDetailsList.add(detail);
             } catch (Exception ex) {
@@ -380,7 +398,7 @@ public class UpdateProductFrame extends JFrame {
             return;
         }
 
-        newProduct.setProductDetails(productDetailsList);
-        productBUS.saveProductDetails(newProduct);
+        instanceProduct.setProductDetails(productDetailsList);
+        productBUS.saveProductDetails(instanceProduct);
     }
 }

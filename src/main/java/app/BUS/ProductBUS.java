@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -27,12 +28,24 @@ public class ProductBUS {
 		return dao.getProductById(productId);
 	}
 
+	public int getQuantityById(int productId, String status) {
+		return dao.getQuantityById(productId, status);
+	}
+
+	public int getQuantityByName(String productName, String status) {
+		return dao.getQuantityByName(productName, status);
+	}
+
 	public List<Product> getAll() {
 		return dao.getAll();
 	}
 
 	public List<Product> getAllDesc() {
 		return dao.getAllDesc();
+	}
+
+	public Map<String, Integer> getBestSellingProducts(String status) {
+		return dao.getBestSellingProducts(status);
 	}
 
 	public int AddProduct(Product product) {
@@ -106,11 +119,12 @@ public class ProductBUS {
 	public int saveProductDetails(Product product) {
 		int row = 0;
 		for (ProductDetail detail : product.getProductDetails()) {
-			int response = detailBUS.addProductDetail(
+			int response = detail.getProductDetailId() == 0 ? detailBUS.addProductDetail(
 					product.getProductId(),
 					detail.getColor(),
 					detail.getCapacity(),
-					detail.getPriceAdjustment());
+					detail.getPriceAdjustment())
+					: detailBUS.updateProductDetail(detail);
 			row += response > 0 ? 1 : 0;
 		}
 		return row;
