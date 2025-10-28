@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -116,8 +117,16 @@ public class ImportSlipBUS {
 
         return results;
     }
+    public List<ImportSlip> filterImportSlipstotal(BigDecimal minTotal, BigDecimal maxTotal) {
+        List<ImportSlip> all = getAllActiveImportSlips();
+        return all.stream().filter(slip -> {
+            boolean match = true;
 
-    public static void main(String[] args) {
+            // Lọc theo "Thành tiền"
+            if (minTotal != null && slip.getTotalAmount().compareTo(minTotal) < 0) match = false;
+            if (maxTotal != null && slip.getTotalAmount().compareTo(maxTotal) > 0) match = false;
 
+            return match;
+        }).collect(Collectors.toList());
     }
 }
