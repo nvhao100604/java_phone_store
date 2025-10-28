@@ -7,6 +7,7 @@ public class Promotion {
 
 	private int promotionId;
 	private String code;
+	private String description;
 	private boolean isPercent;
 	private BigDecimal value;
 	private int percent;
@@ -20,6 +21,7 @@ public class Promotion {
 	public Promotion() {
 		this.promotionId = 0;
 		this.code = "";
+		this.description = "";
 		this.isPercent = false;
 		this.value = new BigDecimal(0);
 		this.percent = 0;
@@ -31,11 +33,28 @@ public class Promotion {
 		this.status = 0;
 	}
 
-	public Promotion(int promotionId, String code, boolean isPercent, int percent, BigDecimal value, int quantity,
+	public Promotion(int promotionId, String code, String description, boolean isPercent, int percent, BigDecimal value, int quantity,
 			Date startDate, Date expirationDate,
 			int brandId, int categoryId, int status) {
 		this.promotionId = promotionId;
 		this.code = code;
+		this.description = description;
+		this.isPercent = isPercent;
+		this.value = value;
+		this.percent = percent;
+		this.quantity = quantity;
+		this.startDate = startDate;
+		this.expirationDate = expirationDate;
+		this.brandId = brandId;
+		this.categoryId = categoryId;
+		this.status = status;
+	}
+
+	public Promotion(String code, String description, boolean isPercent, int percent, BigDecimal value, int quantity,
+			Date startDate, Date expirationDate,
+			int brandId, int categoryId, int status) {
+		this.code = code;
+		this.description = description;
 		this.isPercent = isPercent;
 		this.value = value;
 		this.percent = percent;
@@ -61,6 +80,14 @@ public class Promotion {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public boolean isPercent() {

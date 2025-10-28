@@ -23,7 +23,7 @@ public class ImportSlip {
 	public ImportSlip(int importSlipId, int supplierId, Date importDate, BigDecimal totalAmount, int profit,
 			int status) {
 		this.importSlipId = importSlipId;
-		this.supplierId = supplierId;
+		this.supplierId = supplierId; // mã nhà cung cấp ( join )
 		this.importDate = importDate;
 		this.totalAmount = totalAmount;
 		this.profit = profit;
@@ -50,7 +50,7 @@ public class ImportSlip {
 	public int getSupplierId() {
 		return supplierId;
 	}
-
+	
 	public void setSupplierId(int supplierId) {
 		this.supplierId = supplierId;
 	}
