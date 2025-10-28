@@ -308,13 +308,13 @@ public class AddProductFrame extends JFrame {
         newProduct = new Product(name, brandId, new BigDecimal(0), categoryId, imageUrl, description,
                 new BigDecimal(0));
         int newProductId = productBUS.AddProduct(newProduct);
-        if (newProductId > 0) {
+        if (newProductId > 0)
             newProduct.setProductId(newProductId);
-        } else {
+        else
             return;
-        }
 
-        saveProductDetails();
+        if (!saveProductDetails())
+            return;
 
         JOptionPane.showMessageDialog(this, "Sản phẩm đã được lưu thành công!", "Thành công",
                 JOptionPane.INFORMATION_MESSAGE);
@@ -322,7 +322,7 @@ public class AddProductFrame extends JFrame {
         dispose();
     }
 
-    public void saveProductDetails() {
+    public boolean saveProductDetails() {
         productDetailsList.clear();
         for (int i = 0; i < detailTableModel.getRowCount(); i++) {
             try {
@@ -339,17 +339,18 @@ public class AddProductFrame extends JFrame {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Lỗi định dạng chi tiết sản phẩm ở hàng " + (i + 1), "Lỗi",
                         JOptionPane.ERROR_MESSAGE);
-                return;
+                return false;
             }
         }
 
         if (productDetailsList.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng thêm ít nhất một chi tiết sản phẩm.", "Lỗi",
                     JOptionPane.ERROR_MESSAGE);
-            return;
+            return false;
         }
 
         newProduct.setProductDetails(productDetailsList);
         productBUS.saveProductDetails(newProduct);
+        return true;
     }
 }

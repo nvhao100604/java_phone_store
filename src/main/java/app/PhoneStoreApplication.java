@@ -11,7 +11,6 @@ import javax.swing.UIManager;
 import app.DTO.Account;
 import app.GUI.LoginGUI;
 import app.GUI.MainGUI;
-import app.utils.DataTable;
 import app.utils.FadeTransition;
 
 public class PhoneStoreApplication extends JFrame {

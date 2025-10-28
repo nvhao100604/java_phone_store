@@ -71,4 +71,36 @@ public class ProductDetailDAO {
         return 0;
     }
 
+    public int updateProductDetail(ProductDetail detail) {
+        String sql = "UPDATE chitietsanpham SET " +
+                "idSP = ?, " +
+                "MAUSAC = ?, " +
+                "DUNGLUONG = ?, " +
+                "DIEUCHINHGIA = ? " +
+                "WHERE idCTSP = ?";
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement st = con.prepareStatement(sql)) {
+            st.setInt(1, detail.getProductId());
+            st.setString(2, detail.getColor());
+            st.setString(3, detail.getCapacity());
+            st.setBigDecimal(4, detail.getPriceAdjustment());
+            st.setInt(5, detail.getProductDetailId());
+            return st.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // public boolean checkProductDetailId(ProductDetail detail) {
+    // String sql = "SELECT * FROM `chitietsanpham` WHERE CTSP= ?";
+    // try (Connection connection = DBConnect.getConnection();
+    // PreparedStatement st = connection.prepareStatement(sql)) {
+    // st.setInt(1, detail.getProductDetailId());
+
+    // } catch (Exception e) {
+    // // TODO: handle exception
+    // }
+    // }
 }

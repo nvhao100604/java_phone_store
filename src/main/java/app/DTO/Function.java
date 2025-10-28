@@ -1,12 +1,14 @@
 package app.DTO;
 
+import app.GUI.StatisticGUI;
 import app.GUI.ProductGUI.ProductGUI;
 import app.GUI.ProductTypeGUI.ProductTypeGUI;
 import app.GUI.PromotionGUI.qlkhuyenmai;
 import app.GUI.SupplierGUI.SupplierGUI;
-import app.GUI.qlkho_phieunhap;
 import app.GUI.EmployeeGUI.quanlynhanvien;
 import app.GUI.ImportSlipGUI.ImportSlipGUI;
+import app.GUI.ImportSlipGUI.qlkho_phieunhap;
+import app.GUI.OrderGUI.donhang;
 import app.GUI.PermissionGUI.PermissionGUI;
 import app.GUI.CompanyGUI.CompanyGUI;
 
@@ -83,9 +85,11 @@ public class Function {
 			case 7:
 				return ImportSlipGUI.class;
 			case 8:
+				return donhang.class;
 			case 9:
 				return qlkhuyenmai.class;
 			case 10:
+				return StatisticGUI.class;
 			default:
 				return ProductGUI.class;
 		}
