@@ -313,7 +313,7 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
             dateFrom.setDate(null);
             dateTo.setDate(null);
             noResultLabel.setText("");
-            updateTable(importSlipBUS.getAllImportSlips());
+            updateTable(importSlipBUS.getAllImportSlips()); // sửa lại
         });
 
         gbc.gridx = 0;
