@@ -235,35 +235,35 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
         priceFromField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) { 
-            	handleFilterChange(); 
+            	handleFilterChangeThanhTien(); 
             }
             @Override
             public void removeUpdate(DocumentEvent e) { 
-            	handleFilterChange(); 
+            	handleFilterChangeThanhTien(); 
             }
             @Override
             public void changedUpdate(DocumentEvent e) { 
-            	handleFilterChange(); 
+            	handleFilterChangeThanhTien(); 
             }
         });
         priceToField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) { 
-            	handleFilterChange(); 
+            	handleFilterChangeThanhTien(); 
             }
             @Override
             public void removeUpdate(DocumentEvent e) { 
-            	handleFilterChange(); 
+            	handleFilterChangeThanhTien(); 
             }
             @Override
             public void changedUpdate(DocumentEvent e) { 
-            	handleFilterChange(); 
+            	handleFilterChangeThanhTien(); 
             }
         });
 
         // Khi người dùng chọn "Ngày nhập"
-        dateFrom.addPropertyChangeListener("date", evt -> handleFilterChange());
-        dateTo.addPropertyChangeListener("date", evt -> handleFilterChange());
+        dateFrom.addPropertyChangeListener("date", evt -> handleFilterChangeNgaynhap());
+        dateTo.addPropertyChangeListener("date", evt -> handleFilterChangeNgaynhap());
         
         // ===== ACTION: nút Tìm kiếm =====
         filterButton.addActionListener(e -> {
@@ -738,9 +738,10 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
         header.setFont(new Font("Arial", Font.BOLD, 16));
         ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
     }
- // ======================= HÀM LỌC DỮ LIỆU =======================
+    
+ // ======================= LỌC DỮ LIỆU THÀNH TIỀN =======================
 
-    private void handleFilterChange() {
+    private void handleFilterChangeThanhTien() {
         try {
             String fromText = priceFromField.getText().trim();
             String toText = priceToField.getText().trim();
@@ -754,6 +755,25 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
                 loadTableData(filteredList);
             }
             
+            java.util.Date utilFromDate = dateFrom.getDate();
+            java.util.Date utilToDate = dateTo.getDate();
+
+            if (utilFromDate != null && utilToDate != null) {
+                java.sql.Date sqlFromDate = new java.sql.Date(utilFromDate.getTime());
+                java.sql.Date sqlToDate = new java.sql.Date(utilToDate.getTime());
+                
+                List<ImportSlip> filteredList = importSlipBUS.filterImportSlips(sqlFromDate, sqlToDate);
+                loadTableData(filteredList);
+            }
+        } catch (Exception ex) {
+            System.err.println("Lỗi lọc phiếu nhập: " + ex.getMessage());
+        }
+    }
+    
+ // ======================= LỌC DỮ LIỆU NGÀY NHẬP =======================
+
+    private void handleFilterChangeNgaynhap() {
+        try {
             java.util.Date utilFromDate = dateFrom.getDate();
             java.util.Date utilToDate = dateTo.getDate();
 
