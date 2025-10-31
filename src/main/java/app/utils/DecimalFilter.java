@@ -1,5 +1,11 @@
 package app.utils;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
+
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
@@ -34,6 +40,23 @@ public class DecimalFilter extends DocumentFilter {
 
         if (text.chars().allMatch(c -> VALID_CHARS.indexOf(c) != -1)) {
             super.replace(fb, offset, length, text, attrs);
+        }
+    }
+
+    public static DecimalFormat PriceFormatter() {
+        DecimalFormat currencyFormatter = new DecimalFormat("#,###");
+        return currencyFormatter;
+    }
+
+    public static Number PriceParser(String numberString) {
+        try {
+            NumberFormat format = NumberFormat.getNumberInstance(Locale.US);
+            Number parsedNumber = format.parse(numberString);
+            return parsedNumber;
+
+        } catch (ParseException e) {
+            System.err.println("Lỗi định dạng số: Chuỗi không hợp lệ - " + e.getMessage());
+            return null;
         }
     }
 }

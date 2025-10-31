@@ -13,4 +13,8 @@ public class CategoryBUS {
     public java.util.List<app.DTO.Category> getAllCategories() {
         return dao.getAllCategories();
     }
+
+    public String[] getToStringCategories() {
+        return dao.getToStringCategories();
+    }
 }

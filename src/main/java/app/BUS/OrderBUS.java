@@ -1,10 +1,13 @@
 package app.BUS;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import app.DAO.OrderDAO;
 import app.DTO.Order;
+import app.DTO.PaymentMethod;
 
 public class OrderBUS {
 
@@ -22,11 +25,34 @@ public class OrderBUS {
         return dao.getAllActiveOrders();
     }
 
+    public BigDecimal getTotalRevenue() {
+        return dao.getTotalRevenue();
+    }
+
+    public BigDecimal getAverageOrderValue() {
+        return dao.getAverageOrderValue();
+    }
+
+    public List<BigDecimal> getTotalRevenueByMonth(int year) {
+        return dao.getTotalRevenueByMonth(year);
+    }
+
+    public Map<String, BigDecimal> getRevenueByCategory(int categoryId) {
+        return dao.getRevenueByCategory(categoryId);
+    }
+
+    public List<Integer> getAllYear() {
+        return dao.getAllYear();
+    }
+
     public int addOrder(Order order) {
         return dao.addOrder(order);
     }
 
     public int updateOrder(Order order) {
+        if (order.getOrderId() == 0) {
+            return -1;
+        }
         return dao.updateOrder(order);
     }
 
@@ -68,5 +94,23 @@ public class OrderBUS {
 
     public List<Order> sortOrdersByTotal(boolean ascending) {
         return dao.sortOrdersByTotal(ascending);
+    }
+
+    public List<Order> filterOrder(String keyword,
+            String emString,
+            Date fromDate,
+            Date toDate,
+            BigDecimal fromPrice,
+            BigDecimal toPrice,
+            PaymentMethod payment,
+            boolean sortByPriceAscending) {
+        return dao.filterOrder(keyword,
+                emString,
+                fromDate,
+                toDate,
+                fromPrice,
+                toPrice,
+                payment,
+                sortByPriceAscending);
     }
 }

@@ -3,15 +3,17 @@ package app;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import org.apache.poi.ss.usermodel.Color;
+
 import app.DTO.Account;
 import app.GUI.LoginGUI;
 import app.GUI.MainGUI;
-import app.utils.DataTable;
 import app.utils.FadeTransition;
 
 public class PhoneStoreApplication extends JFrame {
@@ -32,6 +34,16 @@ public class PhoneStoreApplication extends JFrame {
 			System.err.println("Failed to initialize FlatLaf");
 		}
 		// DataTable.createExcelFolder();
+
+		try {
+			UIManager.put("Label.font", new Font("Arial", Font.PLAIN, 14));
+			UIManager.put("Button.background", java.awt.Color.LIGHT_GRAY);
+			UIManager.put("Table.showGrid", Boolean.TRUE);
+			UIManager.put("Table.gridColor", java.awt.Color.GRAY);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("Failed to initialize FlatLaf");
+		}
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

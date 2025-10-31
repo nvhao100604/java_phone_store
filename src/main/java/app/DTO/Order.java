@@ -10,6 +10,8 @@ public class Order {
 	private int orderId;
 	private int accountId;
 	private int customerId;
+	private String customerName;
+	private String accountName;
 	private BigDecimal totalAmount;
 	private Date purchaseDate;
 	private String address;
@@ -64,12 +66,28 @@ public class Order {
 		this.accountId = accountId;
 	}
 
+	public void setAccountName(String name) {
+		this.accountName = name;
+	}
+
+	public String getAccountName() {
+		return this.accountName;
+	}
+
 	public int getCustomerId() {
 		return customerId;
 	}
 
 	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
+	}
+
+	public void setCustomerName(String name) {
+		this.customerName = name;
+	}
+
+	public String getCustomerName() {
+		return this.customerName;
 	}
 
 	public BigDecimal getTotalAmount() {

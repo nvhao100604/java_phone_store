@@ -7,7 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import app.DTO.Product;
 import app.database.DBConnect;
@@ -68,6 +71,54 @@ public class ProductDAO {
 		return list;
 	}
 
+	public Map<String, Integer> getBestSellingProducts(String status) {
+		Map<String, Integer> list = new LinkedHashMap<>();
+		String sql = "SELECT s.TENSP, COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE i.STATUS= ? GROUP BY s.idSP ORDER BY COUNT(i.imei) DESC";
+		try (Connection con = DBConnect.getConnection();
+				PreparedStatement st = con.prepareStatement(sql)) {
+			st.setString(1, status);
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				list.put(rs.getString(1), rs.getInt(2));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public int getQuantityById(int productId, String status) {
+		String sql = "SELECT COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE s.idSP= ? AND i.STATUS= ? GROUP BY s.idSP";
+		try (Connection con = DBConnect.getConnection();
+				PreparedStatement st = con.prepareStatement(sql)) {
+			st.setInt(1, productId);
+			st.setString(2, status);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	public int getQuantityByName(String productName, String status) {
+		String sql = "SELECT COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE s.TENSP= ? AND i.STATUS= ? GROUP BY s.idSP";
+		try (Connection con = DBConnect.getConnection();
+				PreparedStatement st = con.prepareStatement(sql)) {
+			st.setString(1, productName);
+			st.setString(2, status);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
 	public Product getProductById(int productId) {
 		String sql = "SELECT sp.idSP, sp.TENSP, sp.HANG, h.TENHANG, sp.GIANHAP,sp.idDM, d.LOAISP, sp.IMG, sp.MOTA, sp.GIABAN, sp.TRANGTHAI from sanpham sp join hang h ON sp.HANG=h.idHANG join danhmuc d on sp.idDM=d.idDM WHERE sp.idSP= ? AND sp.TRANGTHAI=1";
 		try (Connection con = DBConnect.getConnection();
@@ -89,7 +140,6 @@ public class ProductDAO {
 						rs.getInt(11));
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return null;
@@ -115,7 +165,6 @@ public class ProductDAO {
 				}
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return 0;
@@ -140,7 +189,6 @@ public class ProductDAO {
 			stmt.setInt(9, product.getProductId());
 			return stmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return 0;
@@ -155,7 +203,6 @@ public class ProductDAO {
 			System.out.println("Rows: " + rowsAffect);
 			return rowsAffect;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return 0;
@@ -167,10 +214,8 @@ public class ProductDAO {
 				PreparedStatement st = con.prepareStatement(sql)) {
 			st.setInt(1, productId);
 			int rowsAffect = st.executeUpdate();
-			// System.out.println("Rows: " + rowsAffect);
 			return rowsAffect;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return 0;
@@ -182,7 +227,6 @@ public class ProductDAO {
 				PreparedStatement st = con.prepareStatement(sql)) {
 			st.setInt(1, productId);
 			int rowsAffect = st.executeUpdate();
-			// System.out.println("Rows: " + rowsAffect);
 			return rowsAffect;
 		} catch (Exception e) {
 			e.printStackTrace();

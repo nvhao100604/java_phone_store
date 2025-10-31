@@ -90,4 +90,9 @@ public class ProductDetail {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
+
+	@Override
+	public String toString() {
+		return this.color + ", " + this.capacity;
+	}
 }
