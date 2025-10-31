@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,7 +31,6 @@ public class OrderDAO {
                 order.setTotalAmount(rs.getBigDecimal("THANHTIEN"));
                 order.setPurchaseDate(rs.getDate("NGAYMUA"));
                 order.setAddress(rs.getString("DIACHI"));
-                order.setPromotionCode(rs.getObject("MAKHUYENMAI") == null ? null : rs.getInt("MAKHUYENMAI"));
                 order.setStatus(rs.getInt("TRANGTHAI"));
                 order.setPaymentId(PaymentMethod.valueOf(rs.getString("PTTHANHTOAN")));
                 orders.add(order);
@@ -56,7 +56,6 @@ public class OrderDAO {
                 order.setTotalAmount(rs.getBigDecimal("THANHTIEN"));
                 order.setPurchaseDate(rs.getDate("NGAYMUA"));
                 order.setAddress(rs.getString("DIACHI"));
-                order.setPromotionCode(rs.getObject("MAKHUYENMAI") == null ? null : rs.getInt("MAKHUYENMAI"));
                 order.setStatus(rs.getInt("TRANGTHAI"));
                 order.setPaymentId(PaymentMethod.valueOf(rs.getString("PTTHANHTOAN")));
                 orders.add(order);
@@ -453,6 +452,79 @@ public class OrderDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return orders;
+    }
+
+    public List<Order> filterOrder(
+            String keyword,
+            String employee,
+            Date fromDate,
+            Date toDate,
+            BigDecimal fromPrice,
+            BigDecimal toPrice,
+            PaymentMethod payment,
+            boolean sortByPriceAscending) {
+        List<Order> orders = new ArrayList<>();
+
+        String sql = "SELECT d.* from donhang d " +
+                "\nJOIN khachhang k ON d.idkh=k.idkh JOIN taikhoan t ON d.idTK=t.idTK  ";
+        int index = 0;
+        String conditionSql = " WHERE ";
+        String orderSql = " ORDER BY d.THANHTIEN " + (sortByPriceAscending ? "ASC" : "DESC");
+
+        if (keyword != null && !keyword.equals("")) {
+            conditionSql += " (k.hoten LIKE '%" + keyword + "%' OR k.sdt LIKE '%" + keyword + "%') ";
+            index++;
+        }
+
+        if (fromPrice != null && toPrice != null
+                && fromPrice.compareTo(toPrice) <= 0
+                && toPrice.compareTo(BigDecimal.ZERO) > 0) {
+            conditionSql += (index > 0 ? " AND " : "") + " d.THANHTIEN BETWEEN " + fromPrice + " AND " + toPrice;
+            index++;
+        }
+
+        if (fromDate != null && toDate != null) {
+            conditionSql += (index > 0 ? " AND " : "") + " d.NGAYMUA BETWEEN " + fromDate + " AND " + toDate;
+            index++;
+        }
+
+        if (!employee.equals("") && employee != null) {
+            conditionSql += (index > 0 ? " AND " : "") + " t.HOTEN LIKE '%" + employee + "%' OR t.SDT LIKE '%"
+                    + employee + "%'";
+            index++;
+        }
+
+        if (payment != null && !payment.equals("")) {
+            conditionSql += (index > 0 ? " AND " : "") + " d.PTTHANHTOAN= ?";
+            index++;
+        }
+
+        // orderSql = index > 0 ? " AND " + orderSql : orderSql;
+        String combineSql = sql + (index > 0 ? conditionSql : "") + orderSql;
+        System.out.println("SQL check: " + combineSql);
+
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement ps = con.prepareStatement(combineSql)) {
+            if (payment != null) {
+                ps.setString(1, payment.name());
+            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setOrderId(rs.getInt("idHD"));
+                order.setAccountId(rs.getInt("idTK"));
+                order.setCustomerId(rs.getInt("idkh"));
+                order.setTotalAmount(rs.getBigDecimal("THANHTIEN"));
+                order.setPurchaseDate(rs.getDate("NGAYMUA"));
+                order.setStatus(rs.getInt("TRANGTHAI"));
+                order.setPaymentId(PaymentMethod.valueOf(rs.getString("PTTHANHTOAN")));
+                orders.add(order);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(orders.size());
         return orders;
     }
 }

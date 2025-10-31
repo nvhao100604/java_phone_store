@@ -173,4 +173,9 @@ public class Product {
 	public void setProductDetails(List<ProductDetail> productDetails) {
 		this.productDetails = productDetails;
 	}
+
+	@Override
+	public String toString() {
+		return this.productName;
+	}
 }
