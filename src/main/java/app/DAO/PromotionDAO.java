@@ -419,4 +419,17 @@ public class PromotionDAO {
         }
     	return -1;
     }
+    public int setPromotionstatus(Date ngaylapphieu)
+    {
+    	if(getromotionByDate(ngaylapphieu) != null)
+    	{
+    		setPromotionByStatus1(ngaylapphieu);
+    		return 1;
+    	}
+    	else
+    	{
+    		setPromotionByStatus0(ngaylapphieu);
+    		return 0;
+    	}
+    }
 }

@@ -144,6 +144,32 @@ public class ProductDAO {
 		}
 		return null;
 	}
+	
+	public Product getProductById(String productName) { // theo tên sản phẩm
+		String sql = "SELECT sp.idSP, sp.TENSP, sp.HANG, h.TENHANG, sp.GIANHAP,sp.idDM, d.LOAISP, sp.IMG, sp.MOTA, sp.GIABAN, sp.TRANGTHAI from sanpham sp join hang h ON sp.HANG=h.idHANG join danhmuc d on sp.idDM=d.idDM WHERE sp.TENSP= ? AND sp.TRANGTHAI=1";
+		try (Connection con = DBConnect.getConnection();
+				PreparedStatement st = con.prepareStatement(sql)) {
+			st.setString(1, productName);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				return new Product(
+						rs.getInt(1),
+						rs.getString(2),
+						rs.getInt(3),
+						rs.getString(4),
+						rs.getBigDecimal(5),
+						rs.getInt(6),
+						rs.getString(7),
+						rs.getString(8),
+						rs.getString(9),
+						rs.getBigDecimal(10),
+						rs.getInt(11));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public int addProduct(Product product) {
 		String sql = "INSERT INTO sanpham (TENSP, HANG, GIANHAP, idDM, IMG, MOTA, GIABAN) VALUES(?, ?, ?, ?, ?, ?, ?)";
