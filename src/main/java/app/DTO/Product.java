@@ -7,11 +7,11 @@ import java.util.List;
 public class Product {
 
 	private int productId;
-	private String productName;
-	private int brandId;
+	private String productName; // có hiện ra được cái này đầu rồi ( Promotion GUI ) - 1
+	private int brandId; // ra 1 - 2.1
 	private String brand;
 	private BigDecimal importPrice;
-	private int categoryId;
+	private int categoryId; // ra 2 - 2.2
 	private String categoryName;
 	private String imageUrl;
 	private String description;

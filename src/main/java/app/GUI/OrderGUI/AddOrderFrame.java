@@ -89,6 +89,8 @@ public class AddOrderFrame extends JFrame {
     private NumberFormat currencyFormatter;
     private JComboBox<ProductDetail> variantComboBox;
 
+    private String tensanpham;
+    
     public AddOrderFrame() {
         this.productBUS = new ProductBUS();
         this.detailList = new ArrayList<>();
@@ -230,11 +232,20 @@ public class AddOrderFrame extends JFrame {
         productComboBox = new JComboBox<>(products.toArray(new Product[0]));
         if (!products.isEmpty()) {
             productComboBox.setSelectedIndex(0);
+            tensanpham = products.get(0).getProductName(); // gán giá trị mặc định
         }
         productComboBox.setFont(FONT_INPUT);
         productComboBox.setBackground(new Color(250, 250, 250));
         panel.add(productComboBox, gbc);
-
+        
+        productComboBox.addActionListener(e -> {
+            Product selectedProduct = (Product) productComboBox.getSelectedItem();
+            if (selectedProduct != null) 
+            {
+            	tensanpham = selectedProduct.getProductName(); // cập nhật giá trị
+            }
+        });
+        
         gbc.gridy = 1;
         gbc.gridx = 0;
         gbc.gridwidth = 1;
@@ -299,7 +310,7 @@ public class AddOrderFrame extends JFrame {
         panel.add(addButton, gbc);
         addHoverEffect(addButton, PRIMARY_BLUE, PRIMARY_BLUE_DARK);
 
-        HandleChangeProduct();
+        // HandleChangeProduct();
 
         return panel;
     }
@@ -326,6 +337,8 @@ public class AddOrderFrame extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.weightx = 1.0;
+        
+        
         
         // ===== Panel 1 =====
         JPanel panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
@@ -357,6 +370,7 @@ public class AddOrderFrame extends JFrame {
 
         gbc.gridx = 2;
         panel.add(panel3, gbc);
+        
         
         return panel;
     }
