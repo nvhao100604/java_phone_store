@@ -145,7 +145,7 @@ public class ProductDAO {
 		return null;
 	}
 	
-	public Product getProductById(String productName) { // theo tên sản phẩm
+	public Product getProductByName(String productName) { // theo tên sản phẩm
 		String sql = "SELECT sp.idSP, sp.TENSP, sp.HANG, h.TENHANG, sp.GIANHAP,sp.idDM, d.LOAISP, sp.IMG, sp.MOTA, sp.GIABAN, sp.TRANGTHAI from sanpham sp join hang h ON sp.HANG=h.idHANG join danhmuc d on sp.idDM=d.idDM WHERE sp.TENSP= ? AND sp.TRANGTHAI=1";
 		try (Connection con = DBConnect.getConnection();
 				PreparedStatement st = con.prepareStatement(sql)) {

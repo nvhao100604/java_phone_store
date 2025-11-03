@@ -28,9 +28,9 @@ public class ProductBUS {
 		return dao.getProductById(productId);
 	}
 
-	public Product getProductById(String productName) // thêm
+	public Product getProductByName(String productName) // thêm
 	{
-		return dao.getProductById(productName);
+		return dao.getProductByName(productName);
 	}
 	
 	public int getQuantityById(int productId, String status) {
