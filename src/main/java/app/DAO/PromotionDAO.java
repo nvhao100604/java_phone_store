@@ -385,14 +385,18 @@ public class PromotionDAO {
         }
         return null;
     }
-    public int setPromotionByStatus1(Date ngaylapphieu)
+    public int setPromotionByStatus1(int brandId, int categoryId, Date currentDate)
     {
-    	String sql = "UPDATE khuyenmai SET TRANGTHAI = 1 WHERE NGAYAPDUNG <= ? AND HANSUDUNG >= ?";
+    	String sql = "UPDATE khuyenmai SET TRANGTHAI = 1 WHERE TRANGTHAI = 1 AND SOLUONG > 0 AND NGAYAPDUNG <= ? "
+    			+"AND HANSUDUNG >= ?"
+    			+"AND (HANG = ? OR DANHMUC = ? OR (HANG IS NULL AND DANHMUC IS NULL))";
     	try (Connection con = DBConnect.getConnection()) 
         {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setDate(1, ngaylapphieu);
-            ps.setDate(2, ngaylapphieu);
+            ps.setDate(1, new Date(currentDate.getTime()));
+            ps.setDate(2, new Date(currentDate.getTime()));
+            ps.setInt(3, brandId);
+            ps.setInt(4, categoryId);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected;
         } 
@@ -402,14 +406,18 @@ public class PromotionDAO {
         }
     	return -1;
     }
-    public int setPromotionByStatus0(Date ngaylapphieu)
+    public int setPromotionByStatus0(int brandId, int categoryId, Date currentDate)
     {
-    	String sql = "UPDATE khuyenmai SET TRANGTHAI = 0 WHERE NGAYAPDUNG <= ? AND HANSUDUNG >= ?";
+    	String sql = "UPDATE khuyenmai SET TRANGTHAI = 0 WHERE TRANGTHAI = 1 AND SOLUONG > 0 AND NGAYAPDUNG <= ? "
+    			+"AND HANSUDUNG >= ?"
+    			+"AND (HANG = ? OR DANHMUC = ? OR (HANG IS NULL AND DANHMUC IS NULL))";
     	try (Connection con = DBConnect.getConnection()) 
         {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setDate(1, ngaylapphieu);
-            ps.setDate(2, ngaylapphieu);
+            ps.setDate(1, new Date(currentDate.getTime()));
+            ps.setDate(2, new Date(currentDate.getTime()));
+            ps.setInt(3, brandId);
+            ps.setInt(4, categoryId);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected;
         } 
@@ -419,16 +427,16 @@ public class PromotionDAO {
         }
     	return -1;
     }
-    public int setPromotionstatus(Date ngaylapphieu)
+    public int setPromotionstatus(int brandId, int categoryId, Date currentDate)
     {
-    	if(getromotionByDate(ngaylapphieu) != null)
+    	if(getValidPromotions(brandId,categoryId,currentDate) != null)
     	{
-    		setPromotionByStatus1(ngaylapphieu);
+    		setPromotionByStatus1(brandId,categoryId,currentDate);
     		return 1;
     	}
     	else
     	{
-    		setPromotionByStatus0(ngaylapphieu);
+    		setPromotionByStatus0(brandId,categoryId,currentDate);
     		return 0;
     	}
     }

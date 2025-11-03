@@ -21,9 +21,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import app.BUS.ProductBUS;
+import app.BUS.PromotionBUS;
 import app.DTO.OrderDetail;
 import app.DTO.Product;
 import app.DTO.ProductDetail;
+import app.DTO.Promotion;
 import app.utils.DecimalFilter;
 
 import java.awt.BorderLayout;
@@ -39,7 +41,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +75,9 @@ public class AddOrderFrame extends JFrame {
 
     // private Map<String, BigDecimal> productPrices;
     private ProductBUS productBUS;
+    private PromotionBUS promotionBUS;
     private List<OrderDetail> detailList;
+    private List<Promotion> promotionlist;
 
     private JTextField customerNameField;
     private JTextField customerAddressField;
@@ -90,10 +96,13 @@ public class AddOrderFrame extends JFrame {
     private JComboBox<ProductDetail> variantComboBox;
 
     private String tensanpham;
+    private JComboBox<String> comboPromoType;
     
     public AddOrderFrame() {
         this.productBUS = new ProductBUS();
         this.detailList = new ArrayList<>();
+        this.promotionBUS = new PromotionBUS();
+        this.promotionlist = new ArrayList<>();
         initialize();
     }
 
@@ -238,14 +247,6 @@ public class AddOrderFrame extends JFrame {
         productComboBox.setBackground(new Color(250, 250, 250));
         panel.add(productComboBox, gbc);
         
-        productComboBox.addActionListener(e -> {
-            Product selectedProduct = (Product) productComboBox.getSelectedItem();
-            if (selectedProduct != null) 
-            {
-            	tensanpham = selectedProduct.getProductName(); // cập nhật giá trị
-            }
-        });
-        
         gbc.gridy = 1;
         gbc.gridx = 0;
         gbc.gridwidth = 1;
@@ -315,7 +316,7 @@ public class AddOrderFrame extends JFrame {
         return panel;
     }
     
-    private JPanel createPromotionPanel() {
+    private JPanel createPromotionPanel() { // nơi chính của hiện khuyến mãi
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(BG_WHITE);
 
@@ -338,8 +339,6 @@ public class AddOrderFrame extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.weightx = 1.0;
         
-        
-        
         // ===== Panel 1 =====
         JPanel panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panel1.setOpaque(false);
@@ -355,8 +354,8 @@ public class AddOrderFrame extends JFrame {
         // ===== Panel 3 =====
         JPanel panel3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panel3.setOpaque(false);
-        JComboBox<String> comboPromoType = new JComboBox<>(
-                new String[]{"-- Chọn khuyến mãi --",label1.getText(),label2.getText()});
+        comboPromoType = new JComboBox<>( new String[]{"-- Chọn khuyến mãi --"} );
+        comboPromoType.addActionListener(e -> runPromotion());
         comboPromoType.setPreferredSize(new Dimension(160, 20));
         panel3.add(comboPromoType);
 
@@ -511,11 +510,46 @@ public class AddOrderFrame extends JFrame {
         addButton.addActionListener(e -> addProductToCart());
         clearButton.addActionListener(e -> clearCart());
         submitButton.addActionListener(e -> submitOrder());
-        productComboBox.addActionListener(e -> HandleChangeProduct());
+        productComboBox.addActionListener(e -> 
+        {
+        	// HandleChangeProduct();
+        	runPromotion();
+        });
         variantComboBox.addActionListener(e -> CalculatePrice());
         removeButton.addActionListener(e -> RemoveFromList());
     }
 
+    private void runPromotion() // chạy khuyến mãi
+    {
+    	Product selectedProduct = (Product) productComboBox.getSelectedItem();
+        if (selectedProduct != null) 
+        {
+        	tensanpham = selectedProduct.getProductName(); // cập nhật giá trị
+        }
+        Product p1 = productBUS.getProductByName(tensanpham);
+        
+        // lấy thời gian thực tại
+        LocalDate today = LocalDate.now();
+        Date sqlDate = Date.valueOf(today); // chuyển đổi sang java.sql.Date
+        
+        promotionBUS.setPromotionstatus(p1.getBrandId(), p1.getCategoryId(), sqlDate);
+        
+        promotionlist = promotionBUS.getValidPromotions(p1.getBrandId(), p1.getCategoryId(), sqlDate);
+        
+        int itemCount = comboPromoType.getItemCount();
+        while (itemCount > 1) // nếu có nhiều hơn 1 item thì xóa từ vị trí 1 trở đi
+        { 
+            comboPromoType.removeItemAt(1);
+            itemCount--;
+        }
+        
+        for (Promotion promo : promotionlist) {
+            comboPromoType.addItem(promo.getCode()); // thêm nguyên 1 danh sách mã CODE khuyến mãi còn hiệu lực
+        }
+        
+        System.out.println("Selected: " + comboPromoType.getSelectedItem());
+    }
+    
     private void addProductToCart() {
         // <<< SỬA ĐỔI >>> Kiểm tra xem có sản phẩm nào không
         Product selectedProduct = (Product) productComboBox.getSelectedItem();
