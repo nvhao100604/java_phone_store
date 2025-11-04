@@ -97,6 +97,7 @@ public class AddOrderFrame extends JFrame {
 
     private String tensanpham;
     private JComboBox<String> comboPromoType;
+    private JLabel label1, label2;
     
     public AddOrderFrame() {
         this.productBUS = new ProductBUS();
@@ -343,13 +344,14 @@ public class AddOrderFrame extends JFrame {
         // ===== Panel 1 =====
         JPanel panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panel1.setOpaque(false);
-        JLabel label1 = new JLabel("Khuyến mãi 1");
+        label1 = new JLabel(""); // để đó
         panel1.add(label1);
 
         // ===== Panel 2 =====
         JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panel2.setOpaque(false);
-        JLabel label2 = new JLabel("Khuyến mãi 2");
+        label2 = new JLabel(""); // để đó
+        
         panel2.add(label2);
 
         // ===== Panel 3 =====
@@ -522,6 +524,10 @@ public class AddOrderFrame extends JFrame {
 
     private void runPromotion() // chạy khuyến mãi
     {
+    	// thay đổi hiển thị label CODE mỗi lần đổi tên sản phẩm
+    	label1.setText("");
+    	label2.setText("");
+    	
     	Product selectedProduct = (Product) productComboBox.getSelectedItem();
         if (selectedProduct != null) 
         {
@@ -548,6 +554,15 @@ public class AddOrderFrame extends JFrame {
             comboPromoType.addItem(promo.getCode()); // thêm nguyên 1 danh sách mã CODE khuyến mãi còn hiệu lực
         }
         
+        if(promotionlist.size()==2)
+        {
+        	label1.setText(promotionlist.get(0).getCode());
+        	label2.setText(promotionlist.get(1).getCode());
+        }
+        if(promotionlist.size()==1)
+        {
+        	label1.setText(promotionlist.get(0).getCode());
+        }
     }
     
     private void addProductToCart() {
