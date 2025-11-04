@@ -358,7 +358,6 @@ public class AddOrderFrame extends JFrame {
         JPanel panel3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panel3.setOpaque(false);
         comboPromoType = new JComboBox<>( new String[]{"-- Chọn khuyến mãi --"} );
-        // comboPromoType.addActionListener(e -> runPromotion());
         comboPromoType.setPreferredSize(new Dimension(160, 20));
         panel3.add(comboPromoType);
 
@@ -563,6 +562,18 @@ public class AddOrderFrame extends JFrame {
         {
         	label1.setText(promotionlist.get(0).getCode());
         }
+        comboPromoType.addActionListener(e -> 
+        {
+        	if(comboPromoType.getSelectedIndex()==1)
+        	{
+        		 label1.setForeground(Color.BLUE);
+        	}
+        	if(comboPromoType.getSelectedIndex()==2)
+        	{
+        		 label2.setForeground(Color.BLUE);
+        	}
+        });
+        
     }
     
     private void addProductToCart() {
