@@ -6,16 +6,16 @@ import java.util.Date;
 public class Promotion {
 
 	private int promotionId;
-	private String code;
+	private String code; // ra kết quả - 4.1
 	private String description;
 	private boolean isPercent;
 	private BigDecimal value;
 	private int percent;
 	private int quantity;
-	private Date startDate;
+	private Date startDate; 
 	private Date expirationDate;
-	private int brandId;
-	private int categoryId;
+	private int brandId; // ứng 1 - 3.1
+	private int categoryId; // ứng 2 - 3.2
 	private int status;
 
 	public Promotion() {

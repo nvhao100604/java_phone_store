@@ -20,6 +20,12 @@ public class OrderDetail {
 		this.price = price;
 	}
 
+	public OrderDetail(int productId, int quantity, BigDecimal price) {
+		this.productId = productId;
+		this.quantity = quantity;
+		this.price = price;
+	}
+
 	// Getters and Setters
 	public int getOrderId() {
 		return orderId;

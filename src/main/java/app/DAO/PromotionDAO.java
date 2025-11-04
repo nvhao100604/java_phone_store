@@ -353,4 +353,91 @@ public class PromotionDAO {
         }
         return promotions;
     }
+    public Promotion getromotionByDate(Date ngaylapphieu)
+    {
+        String sql = "SELECT * FROM khuyenmai WHERE NGAYAPDUNG <= ? AND HANSUDUNG >= ?";
+        try (Connection con = DBConnect.getConnection()) 
+        {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setDate(1, ngaylapphieu);
+            ps.setDate(2, ngaylapphieu);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+            {
+                Promotion promotion = new Promotion();
+                promotion.setPromotionId(rs.getInt("MAKHUYENMAI"));
+                promotion.setCode(rs.getString("CODE"));
+                promotion.setIsPercent(rs.getBoolean("IS_PERCENT"));
+                promotion.setValue(rs.getBigDecimal("GIATRI"));
+                promotion.setPercent(rs.getInt("PHANTRAM"));
+                promotion.setQuantity(rs.getInt("SOLUONG"));
+                promotion.setStartDate(rs.getDate("NGAYAPDUNG"));
+                promotion.setExpirationDate(rs.getDate("HANSUDUNG"));
+                promotion.setBrandId(rs.getInt("HANG"));
+                promotion.setCategoryId(rs.getInt("DANHMUC"));
+                promotion.setStatus(rs.getInt("TRANGTHAI"));
+                return promotion;
+            }
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public int setPromotionByStatus1(int brandId, int categoryId, Date currentDate)
+    {
+    	String sql = "UPDATE khuyenmai SET TRANGTHAI = 1 WHERE TRANGTHAI = 1 AND SOLUONG > 0 AND NGAYAPDUNG <= ? "
+    			+"AND HANSUDUNG >= ?"
+    			+"AND (HANG = ? OR DANHMUC = ? OR (HANG IS NULL AND DANHMUC IS NULL))";
+    	try (Connection con = DBConnect.getConnection()) 
+        {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setDate(1, new Date(currentDate.getTime()));
+            ps.setDate(2, new Date(currentDate.getTime()));
+            ps.setInt(3, brandId);
+            ps.setInt(4, categoryId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected;
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
+    	return -1;
+    }
+    public int setPromotionByStatus0(int brandId, int categoryId, Date currentDate)
+    {
+    	String sql = "UPDATE khuyenmai SET TRANGTHAI = 0 WHERE TRANGTHAI = 1 AND SOLUONG > 0 AND NGAYAPDUNG <= ? "
+    			+"AND HANSUDUNG >= ?"
+    			+"AND (HANG = ? OR DANHMUC = ? OR (HANG IS NULL AND DANHMUC IS NULL))";
+    	try (Connection con = DBConnect.getConnection()) 
+        {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setDate(1, new Date(currentDate.getTime()));
+            ps.setDate(2, new Date(currentDate.getTime()));
+            ps.setInt(3, brandId);
+            ps.setInt(4, categoryId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected;
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
+    	return -1;
+    }
+    public int setPromotionstatus(int brandId, int categoryId, Date currentDate)
+    {
+    	if(getValidPromotions(brandId,categoryId,currentDate) != null)
+    	{
+    		setPromotionByStatus1(brandId,categoryId,currentDate);
+    		return 1;
+    	}
+    	else
+    	{
+    		setPromotionByStatus0(brandId,categoryId,currentDate);
+    		return 0;
+    	}
+    }
 }

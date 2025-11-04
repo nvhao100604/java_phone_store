@@ -125,4 +125,8 @@ public class PromotionBUS {
             return false;
         }
     }
+    public int setPromotionstatus(int brandId, int categoryId, Date currentDate)
+    {
+    	return dao.setPromotionstatus(brandId, categoryId, currentDate);
+    }
 }

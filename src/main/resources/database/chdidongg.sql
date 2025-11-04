@@ -581,6 +581,7 @@ INSERT INTO `phanquyen` (`idQUYEN`, `idCN`) VALUES
 CREATE TABLE `phieunhap` (
   `idPN` int(11) NOT NULL,
   `idNCC` int(11) NOT NULL,
+  `idTK` int(11) NOT NULL,
   `NGAYNHAP` date NOT NULL,
   `THANHTIEN` decimal(10,2) DEFAULT NULL,
   `LOINHUAN` int(2) NOT NULL,
@@ -591,8 +592,11 @@ CREATE TABLE `phieunhap` (
 -- Đang đổ dữ liệu cho bảng `phieunhap`
 --
 
-INSERT INTO `phieunhap` (`idPN`, `idNCC`, `NGAYNHAP`, `THANHTIEN`, `LOINHUAN`, `TRANGTHAI`) VALUES
-(1, 1, '2025-09-17', 500000.00, 100000, 1);
+INSERT INTO `phieunhap` (`idPN`, `idNCC`, `idTK`, `NGAYNHAP`, `THANHTIEN`, `LOINHUAN`, `TRANGTHAI`) VALUES
+(1, 1, 1, '2025-09-17', 500000.00, 100000, 1),
+(2, 1, 2, '2025-09-17', 200000.00, 100000, 1),
+(3, 1, 1, '2025-09-17', 30000.00, 100000, 1),
+(4, 1, 3, '2025-09-17', 10000.00, 100000, 1);
 
 -- --------------------------------------------------------
 
@@ -845,7 +849,8 @@ ALTER TABLE `phanquyen`
 --
 ALTER TABLE `phieunhap`
   ADD PRIMARY KEY (`idPN`),
-  ADD KEY `ncc-pn` (`idNCC`);
+  ADD KEY `ncc-pn` (`idNCC`),
+  ADD KEY `id-tk` (`idTK`);
 
 --
 -- Chỉ mục cho bảng `quyen`
@@ -1025,7 +1030,8 @@ ALTER TABLE `phanquyen`
 -- Các ràng buộc cho bảng `phieunhap`
 --
 ALTER TABLE `phieunhap`
-  ADD CONSTRAINT `ncc-pn` FOREIGN KEY (`idNCC`) REFERENCES `nhacungcap` (`idNCC`);
+  ADD CONSTRAINT `ncc-pn` FOREIGN KEY (`idNCC`) REFERENCES `nhacungcap` (`idNCC`),
+  ADD CONSTRAINT `tk-id` FOREIGN KEY (`idTK`) REFERENCES `taikhoan` (`idTK`);
 
 --
 -- Các ràng buộc cho bảng `sanpham`
