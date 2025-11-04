@@ -243,6 +243,7 @@ public class AddOrderFrame extends JFrame {
             productComboBox.setSelectedIndex(0);
             tensanpham = products.get(0).getProductName(); // gán giá trị mặc định
         }
+        
         productComboBox.setFont(FONT_INPUT);
         productComboBox.setBackground(new Color(250, 250, 250));
         panel.add(productComboBox, gbc);
@@ -355,7 +356,7 @@ public class AddOrderFrame extends JFrame {
         JPanel panel3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panel3.setOpaque(false);
         comboPromoType = new JComboBox<>( new String[]{"-- Chọn khuyến mãi --"} );
-        comboPromoType.addActionListener(e -> runPromotion());
+        // comboPromoType.addActionListener(e -> runPromotion());
         comboPromoType.setPreferredSize(new Dimension(160, 20));
         panel3.add(comboPromoType);
 
@@ -547,7 +548,6 @@ public class AddOrderFrame extends JFrame {
             comboPromoType.addItem(promo.getCode()); // thêm nguyên 1 danh sách mã CODE khuyến mãi còn hiệu lực
         }
         
-        System.out.println("Selected: " + comboPromoType.getSelectedItem());
     }
     
     private void addProductToCart() {
