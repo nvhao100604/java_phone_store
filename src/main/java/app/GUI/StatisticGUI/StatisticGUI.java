@@ -1,4 +1,4 @@
-package app.GUI;
+package app.GUI.StatisticGUI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
