@@ -447,7 +447,9 @@ public class AddOrderFrame extends JFrame {
 
         if (getRow(targetDetailId) > -1) {
             System.out.println("Check row: " + getRow(targetDetailId));
-            cartTable.setValueAt(addQuantity, getRow(targetDetailId), 3);
+            String quantity = cartTable.getValueAt(getRow(targetDetailId), 3).toString();
+            int currentQuantity = DecimalFilter.PriceParser(quantity).intValue();
+            cartTable.setValueAt(currentQuantity + addQuantity, getRow(targetDetailId), 3);
             return;
         }
         Integer quantity = (Integer) quantitySpinner.getValue();
@@ -468,6 +470,12 @@ public class AddOrderFrame extends JFrame {
                 quantity,
                 total));
         ResetState();
+    }
+
+    private void AddToList(OrderDetail detail) {
+        if (detail == null)
+            return;
+        detailList.add(detail);
     }
 
     private void HandleUpdateQuantity(int row, int quantity) {
@@ -520,8 +528,23 @@ public class AddOrderFrame extends JFrame {
                 return row;
             }
         }
-
         return -1;
+    }
+
+    private void updateTotal() {
+        System.out.println("Check");
+        DefaultTableModel tableModel = (DefaultTableModel) cartTable.getModel();
+        BigDecimal total = BigDecimal.ZERO;
+        int totalColumnIndex = 5;
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            Object cellValue = tableModel.getValueAt(i, totalColumnIndex);
+            Number parsedValue = DecimalFilter.PriceParser(cellValue.toString());
+            BigDecimal trueValue = new BigDecimal(parsedValue.toString());
+
+            total = total.add(trueValue);
+        }
+        totalLabel.setText("Tổng cộng: " + DecimalFilter.PriceFormatter().format(total));
     }
 
     private void ResetState() {
@@ -529,14 +552,14 @@ public class AddOrderFrame extends JFrame {
         quantitySpinner.setValue(1);
     }
 
-    private void AddToList(OrderDetail detail) {
-        if (detail == null)
-            return;
-        detailList.add(detail);
-    }
-
     private void RemoveFromList() {
         int selectedRow = cartTable.getSelectedRow();
+        if (selectedRow >= -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Vui lòng chọn sản phẩm để xóa",
+                    "Cảnh báo",
+                    JOptionPane.WARNING_MESSAGE);
+        }
         int targetDetailId = (int) cartTable.getValueAt(selectedRow, 0);
         if (selectedRow != -1) {
             Optional<OrderDetail> alreadyExists = detailList.stream()
@@ -556,30 +579,6 @@ public class AddOrderFrame extends JFrame {
                     "Chưa chọn hàng",
                     JOptionPane.WARNING_MESSAGE);
         }
-    }
-
-    private void updateTotal() {
-        System.out.println("Check");
-        DefaultTableModel tableModel = (DefaultTableModel) cartTable.getModel();
-        BigDecimal total = BigDecimal.ZERO;
-        int totalColumnIndex = 5;
-
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            Object cellValue = tableModel.getValueAt(i, totalColumnIndex);
-            Number parsedValue = DecimalFilter.PriceParser(cellValue.toString());
-            BigDecimal trueValue = new BigDecimal(parsedValue.toString());
-
-            total = total.add(trueValue);
-        }
-
-        // for (int i = 0; i < tableModel.getRowCount(); i++) {
-        // Object cellValue = tableModel.getValueAt(i, totalColumnIndex);
-        // if (cellValue instanceof BigDecimal) {
-        // tableModel.setValueAt(currencyFormatter.format((Double) ), i,
-        // totalColumnIndex);
-        // }
-        // }
-        totalLabel.setText("Tổng cộng: " + DecimalFilter.PriceFormatter().format(total));
     }
 
     private void clearCart() {
@@ -608,7 +607,7 @@ public class AddOrderFrame extends JFrame {
             return;
         }
 
-        if (HandleSaveOrder()) {
+        if (HandleSaveOrderDetail()) {
             String totalText = totalLabel.getText();
             String message = String.format(
                     "Đơn hàng đã được đặt thành công!\n\nKhách hàng: %s\nĐịa chỉ: %s\n%s",
@@ -625,12 +624,12 @@ public class AddOrderFrame extends JFrame {
         }
     }
 
-    private boolean HandleSaveOrder() {
-        return false;
+    private int HandleSaveOrder() {
+        return -1;
     }
 
-    private void HandleSaveOrderDetail() {
-
+    private boolean HandleSaveOrderDetail() {
+        return false;
     }
 
     private void HandleChangeProduct() {
