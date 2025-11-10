@@ -509,9 +509,10 @@ public class AddImportSlipFrame extends JFrame {
                 UpdateProductPrice(productDetailId, salePrice);
                 int response = importSlipBUS.AddImportSlipDetail(detail);
                 System.out.println("check response detail: " + response);
-                if (response > 0) {
+                if (response > 0)
                     SaveImeiNumbers(quantity, productDetailId, importSlipId);
-                }
+                else
+                    return -1;
                 rowAffected += response;
             } catch (ParseException | NumberFormatException | ClassCastException e) {
                 JOptionPane.showMessageDialog(this,
@@ -540,8 +541,9 @@ public class AddImportSlipFrame extends JFrame {
                     "Nhập số IMEI thứ " + (i + 1) + " cho sản phẩm (ID CTSP: " + imei.getIdProductDetail() + "):",
                     "Nhập Số IMEI",
                     JOptionPane.PLAIN_MESSAGE);
-            String imeiCode = defaultImeiCode.concat(imeiNumber);
-            if (imeiCode != null && !imeiCode.trim().isEmpty() && imeiCode.length() != 15) {
+            String imeiCode = defaultImeiCode + imeiNumber;
+            System.out.println("check imei: " + imeiCode.length());
+            if (imeiNumber != null && !imeiNumber.trim().isEmpty() || imeiCode.length() != 15) {
                 imei.setImei(imeiCode.trim());
                 int response = importSlipBUS.AddImei(imei);
                 System.out.println("Add IMEI response: " + response);
