@@ -18,6 +18,10 @@ public class ImportSlipDetailBUS {
 		return dao.getProductsByImportSlipId(importSlipId);
 	}
 
+	public int AddImportSlipDetail(app.DTO.ImportSlipDetail importSlipDetail) {
+		return dao.AddImportSlipDetail(importSlipDetail);
+	}
+
 	public static void main(String[] args) {
 		ImportSlipDetailBUS bus = new ImportSlipDetailBUS();
 		List<Product> products = bus.getProductsByImportSlipId(1);

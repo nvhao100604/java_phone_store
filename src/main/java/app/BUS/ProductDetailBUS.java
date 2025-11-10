@@ -29,6 +29,10 @@ public class ProductDetailBUS {
 		return dao.updateProductDetail(detail);
 	}
 
+	public int updateProductPriceByDetailId(int productDetailId, BigDecimal newSalePrice) {
+		return dao.updateProductPriceByDetailId(productDetailId, newSalePrice);
+	}
+
 	public static void main(String[] args) {
 		// ProductDetailBUS bus = new ProductDetailBUS();
 		// List<ProductDetail> list = bus.getProductDetailById(1);

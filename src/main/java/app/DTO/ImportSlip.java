@@ -9,6 +9,7 @@ public class ImportSlip {
 
 	private int importSlipId;
 	private int supplierId;
+	private int employeeId;
 	private Date importDate;
 	private BigDecimal totalAmount;
 	private int profit;
@@ -20,10 +21,12 @@ public class ImportSlip {
 		this.details = new ArrayList<>();
 	}
 
-	public ImportSlip(int importSlipId, int supplierId, Date importDate, BigDecimal totalAmount, int profit,
+	public ImportSlip(int importSlipId, int supplierId, int employeeId, Date importDate, BigDecimal totalAmount,
+			int profit,
 			int status) {
 		this.importSlipId = importSlipId;
-		this.supplierId = supplierId; // mã nhà cung cấp ( join )
+		this.supplierId = supplierId;
+		this.employeeId = employeeId;
 		this.importDate = importDate;
 		this.totalAmount = totalAmount;
 		this.profit = profit;
@@ -31,8 +34,9 @@ public class ImportSlip {
 		this.details = new ArrayList<>();
 	}
 
-	public ImportSlip(int supplierId, Date importDate, BigDecimal totalAmount, int profit) {
+	public ImportSlip(int supplierId, int employeeId, Date importDate, BigDecimal totalAmount, int profit) {
 		this.supplierId = supplierId;
+		this.employeeId = employeeId;
 		this.importDate = importDate;
 		this.totalAmount = totalAmount;
 		this.profit = profit;
@@ -50,7 +54,15 @@ public class ImportSlip {
 	public int getSupplierId() {
 		return supplierId;
 	}
-	
+
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public int getEmployeeId() {
+		return employeeId;
+	}
+
 	public void setSupplierId(int supplierId) {
 		this.supplierId = supplierId;
 	}
