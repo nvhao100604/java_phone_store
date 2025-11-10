@@ -88,11 +88,13 @@ public class ProductDAO {
 	}
 
 	public int getQuantityById(int productId, String status) {
-		String sql = "SELECT COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE s.idSP= ? AND i.STATUS= ? GROUP BY s.idSP";
+		String statusCheck = status.equals("CÒN HÀNG") ? "IS NOT NULL" : "IS NULL";
+		String sql = "SELECT COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE s.idSP= ? "
+				+
+				"\nAND i.idPN " + statusCheck + " GROUP BY s.idSP";
 		try (Connection con = DBConnect.getConnection();
 				PreparedStatement st = con.prepareStatement(sql)) {
 			st.setInt(1, productId);
-			st.setString(2, status);
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				return rs.getInt(1);
@@ -144,7 +146,7 @@ public class ProductDAO {
 		}
 		return null;
 	}
-	
+
 	public Product getProductByName(String productName) { // theo tên sản phẩm
 		String sql = "SELECT sp.idSP, sp.TENSP, sp.HANG, h.TENHANG, sp.GIANHAP,sp.idDM, d.LOAISP, sp.IMG, sp.MOTA, sp.GIABAN, sp.TRANGTHAI from sanpham sp join hang h ON sp.HANG=h.idHANG join danhmuc d on sp.idDM=d.idDM WHERE sp.TENSP= ? AND sp.TRANGTHAI=1";
 		try (Connection con = DBConnect.getConnection();

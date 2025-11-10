@@ -35,4 +35,20 @@ public class ImportSlipDetailDAO {
         }
         return products;
     }
+
+    public int AddImportSlipDetail(app.DTO.ImportSlipDetail importSlipDetail) {
+        String sql = "INSERT INTO chitietphieunhap (idPN, idCTSP, SOLUONG, GIANHAP, DIEUCHINHGIA) VALUES (?, ?, ?, ?, ?)";
+        try (Connection connection = DBConnect.getConnection();
+                PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, importSlipDetail.getImportSlipId());
+            st.setInt(2, importSlipDetail.getProductDetailId());
+            st.setInt(3, importSlipDetail.getQuantity());
+            st.setBigDecimal(4, importSlipDetail.getImportPrice());
+            st.setBigDecimal(5, importSlipDetail.getPriceAdjustment());
+            return st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
 }

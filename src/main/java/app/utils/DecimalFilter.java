@@ -59,4 +59,27 @@ public class DecimalFilter extends DocumentFilter {
             return null;
         }
     }
+
+    public static BigDecimal parseToBigDecimal(Object value) throws ParseException {
+        if (value == null) {
+            return BigDecimal.ZERO;
+        }
+
+        if (value instanceof BigDecimal) {
+            return (BigDecimal) value;
+        }
+        if (value instanceof Number) {
+            return new BigDecimal(value.toString());
+        }
+
+        String valueStr = value.toString().trim();
+        if (valueStr.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
+        NumberFormat format = NumberFormat.getNumberInstance(Locale.US);
+        Number parsedNumber = format.parse(valueStr);
+
+        return new BigDecimal(parsedNumber.toString());
+    }
 }

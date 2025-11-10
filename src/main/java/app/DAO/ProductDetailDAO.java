@@ -93,6 +93,22 @@ public class ProductDetailDAO {
         return 0;
     }
 
+    public int updateProductPriceByDetailId(int productDetailId, BigDecimal newSalePrice) {
+        String sql = "UPDATE sanpham s SET s.GIABAN = ?" +
+                "\nWHERE s.idSP = (" +
+                "\nSELECT s.idSP FROM sanpham s JOIN chitietsanpham ct ON s.idSP=ct.idSP " +
+                "\nWHERE ct.idCTSP = ? GROUP BY s.idSP)";
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement st = con.prepareStatement(sql)) {
+            st.setBigDecimal(1, newSalePrice);
+            st.setInt(2, productDetailId);
+            return st.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     // public boolean checkProductDetailId(ProductDetail detail) {
     // String sql = "SELECT * FROM `chitietsanpham` WHERE CTSP= ?";
     // try (Connection connection = DBConnect.getConnection();

@@ -29,6 +29,7 @@ import app.BUS.ProductBUS;
 import app.BUS.SupplierBUS;
 import app.DTO.ImportSlip;
 import app.DTO.Product;
+import app.GUI.MainGUI;
 import app.GUI.CustomPanels.FilterPanel;
 import app.GUI.CustomPanels.khungchucnang;
 import app.GUI.interfaces.FunctionPanel;
@@ -40,9 +41,12 @@ import com.toedter.calendar.JDateChooser;
 public class ImportSlipGUI extends JPanel implements FunctionPanel {
     private static final int mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
     private static final int mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+
+    private MainGUI mainGUI;
     private ImportSlipBUS importSlipBUS; // thêm biến này
     private SupplierBUS supplierBUS; // join để lấy tên nhà cung cấp thông qua mã nhà cung cấp
     private CategoryBUS categoryBus;
+
     private khungchucnang khung;
     private JTextField nameSearchField;
     private JTextField priceFromField;
@@ -55,8 +59,8 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
     private JTable table;
     private DefaultTableModel tableModel;
 
-    public ImportSlipGUI() {
-
+    public ImportSlipGUI(MainGUI mainGUI) {
+        this.mainGUI = mainGUI;
         initialize();
     }
 
@@ -211,7 +215,7 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.CENTER;
         filterPanel.add(datePanel, gbc);
-        
+
         // ========== HÀNG 3 ==========
         JPanel processPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
         processPanel.setOpaque(false);
@@ -231,41 +235,45 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
         noResultLabel.setFont(new Font("Arial", Font.ITALIC, 14));
         noResultLabel.setForeground(Color.RED);
         processPanel.add(noResultLabel);
-        
-     // Khi người dùng nhập vào ô tìm kiếm "Thành tiền"
+
+        // Khi người dùng nhập vào ô tìm kiếm "Thành tiền"
         priceFromField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void insertUpdate(DocumentEvent e) { 
-            	handleFilterChangeThanhTien(); 
+            public void insertUpdate(DocumentEvent e) {
+                handleFilterChangeThanhTien();
             }
+
             @Override
-            public void removeUpdate(DocumentEvent e) { 
-            	handleFilterChangeThanhTien(); 
+            public void removeUpdate(DocumentEvent e) {
+                handleFilterChangeThanhTien();
             }
+
             @Override
-            public void changedUpdate(DocumentEvent e) { 
-            	handleFilterChangeThanhTien(); 
+            public void changedUpdate(DocumentEvent e) {
+                handleFilterChangeThanhTien();
             }
         });
         priceToField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void insertUpdate(DocumentEvent e) { 
-            	handleFilterChangeThanhTien(); 
+            public void insertUpdate(DocumentEvent e) {
+                handleFilterChangeThanhTien();
             }
+
             @Override
-            public void removeUpdate(DocumentEvent e) { 
-            	handleFilterChangeThanhTien(); 
+            public void removeUpdate(DocumentEvent e) {
+                handleFilterChangeThanhTien();
             }
+
             @Override
-            public void changedUpdate(DocumentEvent e) { 
-            	handleFilterChangeThanhTien(); 
+            public void changedUpdate(DocumentEvent e) {
+                handleFilterChangeThanhTien();
             }
         });
 
         // Khi người dùng chọn "Ngày nhập"
         dateFrom.addPropertyChangeListener("date", evt -> handleFilterChangeNgaynhap());
         dateTo.addPropertyChangeListener("date", evt -> handleFilterChangeNgaynhap());
-        
+
         // ===== ACTION: nút Tìm kiếm =====
         filterButton.addActionListener(e -> {
             try {
@@ -380,101 +388,8 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
 
     @Override
     public void Add() {
-        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Thêm phiếu nhập", true);
-        dialog.setSize(500, 400);
-        dialog.setLayout(new GridBagLayout());
-        dialog.setLocationRelativeTo(this);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        JLabel supplierLabel = new JLabel("Nhà cung cấp (ID):");
-        supplierLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        JTextField supplierField = new JTextField(20);
-        supplierField.setFont(new Font("Arial", Font.PLAIN, 20));
-
-        JLabel totalLabel = new JLabel("Thành tiền:");
-        totalLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        JTextField totalField = new JTextField(20);
-        totalField.setFont(new Font("Arial", Font.PLAIN, 20));
-        ((AbstractDocument) totalField.getDocument()).setDocumentFilter(new DecimalFilter());
-
-        JLabel profitLabel = new JLabel("Lợi nhuận:");
-        profitLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        JTextField profitField = new JTextField(20);
-        profitField.setFont(new Font("Arial", Font.PLAIN, 20));
-        ((AbstractDocument) profitField.getDocument()).setDocumentFilter(new DecimalFilter());
-
-        JLabel statusLabel = new JLabel("Trạng thái:");
-        statusLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        JComboBox<String> statusCombo = new JComboBox<>(new String[] { "0 - Không hoạt động", "1 - Hoạt động" });
-        statusCombo.setFont(new Font("Arial", Font.PLAIN, 20));
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        dialog.add(supplierLabel, gbc);
-        gbc.gridx = 1;
-        dialog.add(supplierField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        dialog.add(totalLabel, gbc);
-        gbc.gridx = 1;
-        dialog.add(totalField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        dialog.add(profitLabel, gbc);
-        gbc.gridx = 1;
-        dialog.add(profitField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        dialog.add(statusLabel, gbc);
-        gbc.gridx = 1;
-        dialog.add(statusCombo, gbc);
-
-        JButton saveButton = new JButton("Lưu");
-        saveButton.setFont(new Font("Arial", Font.PLAIN, 20));
-        saveButton.setBackground(Color.BLUE);
-        saveButton.setForeground(Color.WHITE);
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        dialog.add(saveButton, gbc);
-
-        saveButton.addActionListener(e -> {
-            try {
-                int supplierId = Integer.parseInt(supplierField.getText().trim());
-                BigDecimal totalAmount = new BigDecimal(totalField.getText().trim());
-                BigDecimal profit = new BigDecimal(profitField.getText().trim());
-                int status = statusCombo.getSelectedIndex();
-
-                ImportSlip slip = new ImportSlip(supplierId, new java.sql.Date(System.currentTimeMillis()), totalAmount,
-                        status);
-                int newId = importSlipBUS.addImportSlip(slip);
-                if (newId > 0) {
-                    slip.setImportSlipId(newId);
-                    updateTable(importSlipBUS.getAllImportSlips());
-                    JOptionPane.showMessageDialog(dialog, "Thêm phiếu nhập thành công!");
-                    dialog.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(dialog,
-                            "Thêm thất bại! Vui lòng kiểm tra dữ liệu (ID nhà cung cấp không tồn tại hoặc kết nối lỗi).",
-                            "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(dialog, "Vui lòng nhập số hợp lệ cho ID, thành tiền hoặc lợi nhuận!",
-                        "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(dialog, "Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        dialog.setVisible(true);
+        AddImportSlipFrame addImportSlipFrame = new AddImportSlipFrame(mainGUI.getAccount().getAccountId());
+        addImportSlipFrame.setVisible(true);
     }
 
     private void updateTable(List<ImportSlip> list) {
@@ -762,17 +677,21 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
             }
         }
     }
+
     public void SetTitleQuantity(int quantity) {
-		title.setText("Danh sách phiếu nhập (" + quantity + ")");
-	}
-    public void CreateTable()
-    {
-    	JPanel listPanel = new JPanel(new BorderLayout());
+        title.setText("Danh sách phiếu nhập (" + quantity + ")");
+    }
+
+    public void CreateTable() {
+        JPanel listPanel = new JPanel(new BorderLayout());
         scrollPane = new JScrollPane();
-        String[] columnNames = {"Mã phiếu nhập", "Người nhập", "Ngày nhập", "Nhà cung cấp", "Thành tiền", "Lợi nhuận", "Trạng thái"};
+        String[] columnNames = { "Mã phiếu nhập", "Người nhập", "Ngày nhập", "Nhà cung cấp", "Thành tiền", "Lợi nhuận",
+                "Trạng thái" };
         List<ImportSlip> importslipList = importSlipBUS.getAllActiveImportSlips();
         tableModel = new DefaultTableModel(importslipList.stream()
-                .map(p -> new Object[] { p.getImportSlipId(), null, p.getImportDate(), supplierBUS.getSupplierNameById(p.getSupplierId()), p.getTotalAmount(), p.getProfit(), p.getStatus() })
+                .map(p -> new Object[] { p.getImportSlipId(), p.getEmployeeId(), (java.util.Date) p.getImportDate(),
+                        supplierBUS.getSupplierNameById(p.getSupplierId()), p.getTotalAmount(), p.getProfit(),
+                        p.getStatus() })
                 .toArray(Object[][]::new), columnNames); // join để lấy tên nhà cung cấp
         table = new JTable(tableModel);
         table.setRowHeight(28);
@@ -787,30 +706,27 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
         header.setFont(new Font("Arial", Font.BOLD, 16));
         ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
     }
-    
- // ======================= LỌC DỮ LIỆU THÀNH TIỀN =======================
 
     private void handleFilterChangeThanhTien() {
         try {
             String fromText = priceFromField.getText().trim();
             String toText = priceToField.getText().trim();
-            
+
             BigDecimal fromValue = fromText.isEmpty() ? null : new BigDecimal(fromText);
             BigDecimal toValue = toText.isEmpty() ? null : new BigDecimal(toText);
 
-            if(fromValue!=null && toValue!=null)
-            {
-            	List<ImportSlip> filteredList = importSlipBUS.filterImportSlipstotal(fromValue, toValue);
+            if (fromValue != null && toValue != null) {
+                List<ImportSlip> filteredList = importSlipBUS.filterImportSlipstotal(fromValue, toValue);
                 loadTableData(filteredList);
             }
-            
+
             java.util.Date utilFromDate = dateFrom.getDate();
             java.util.Date utilToDate = dateTo.getDate();
 
             if (utilFromDate != null && utilToDate != null) {
                 java.sql.Date sqlFromDate = new java.sql.Date(utilFromDate.getTime());
                 java.sql.Date sqlToDate = new java.sql.Date(utilToDate.getTime());
-                
+
                 List<ImportSlip> filteredList = importSlipBUS.filterImportSlips(sqlFromDate, sqlToDate);
                 loadTableData(filteredList);
             }
@@ -818,8 +734,6 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
             System.err.println("Lỗi lọc phiếu nhập: " + ex.getMessage());
         }
     }
-    
- // ======================= LỌC DỮ LIỆU NGÀY NHẬP =======================
 
     private void handleFilterChangeNgaynhap() {
         try {
@@ -829,7 +743,7 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
             if (utilFromDate != null && utilToDate != null) {
                 java.sql.Date sqlFromDate = new java.sql.Date(utilFromDate.getTime());
                 java.sql.Date sqlToDate = new java.sql.Date(utilToDate.getTime());
-                
+
                 List<ImportSlip> filteredList = importSlipBUS.filterImportSlips(sqlFromDate, sqlToDate);
                 loadTableData(filteredList);
             }
@@ -837,17 +751,18 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
             System.err.println("Lỗi lọc phiếu nhập: " + ex.getMessage());
         }
     }
+
     private void loadTableData(List<ImportSlip> list) {
         tableModel.setRowCount(0);
         for (ImportSlip slip : list) {
             tableModel.addRow(new Object[] {
-                slip.getImportSlipId(),
-                null, // người nhập theo filter ( or )
-                slip.getImportDate(),
-                supplierBUS.getSupplierNameById(slip.getSupplierId()),
-                slip.getTotalAmount(),
-                slip.getProfit(),
-                slip.getStatus()
+                    slip.getImportSlipId(),
+                    null, // người nhập theo filter ( or )
+                    slip.getImportDate(),
+                    supplierBUS.getSupplierNameById(slip.getSupplierId()),
+                    slip.getTotalAmount(),
+                    slip.getProfit(),
+                    slip.getStatus()
             });
         }
         SetTitleQuantity(list.size());
