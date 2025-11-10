@@ -313,7 +313,7 @@ public class AddOrderFrame extends JFrame {
         panel.add(addButton, gbc);
         addHoverEffect(addButton, PRIMARY_BLUE, PRIMARY_BLUE_DARK);
 
-        // HandleChangeProduct();
+        HandleChangeProduct();
 
         return panel;
     }
@@ -523,9 +523,13 @@ public class AddOrderFrame extends JFrame {
 
     private void runPromotion() // chạy khuyến mãi
     {
-    	// thay đổi hiển thị label CODE mỗi lần đổi tên sản phẩm
+    	// thay đổi hiển thị label CODE mỗi lần đổi tên sản phẩm ( cho trống cái trước )
     	label1.setText("");
     	label2.setText("");
+    	
+    	// thay đổi hiển thị label CODE mỗi lần đổi tên sản phẩm ( cho đen lại )
+    	label1.setForeground(Color.BLACK);
+    	label2.setForeground(Color.BLACK);
     	
     	Product selectedProduct = (Product) productComboBox.getSelectedItem();
         if (selectedProduct != null) 
