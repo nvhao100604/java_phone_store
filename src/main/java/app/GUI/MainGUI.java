@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import app.PhoneStoreApplication;
 import app.DTO.Account;
 import app.GUI.CustomPanels.sidebar;
+import app.GUI.ImportSlipGUI.ImportSlipGUI;
 import app.GUI.ProductGUI.ProductGUI;
 
 public class MainGUI extends JPanel {
@@ -31,9 +32,16 @@ public class MainGUI extends JPanel {
 
 	public void InitialGUI(Class<?> guiClass) {
 		try {
-			Object guiInstance = guiClass.getDeclaredConstructor().newInstance();
-			if (guiInstance instanceof JPanel) {
-				setContent((JPanel) guiInstance);
+			JPanel guiInstance = null;
+			if (guiClass.equals(ImportSlipGUI.class)) {
+				guiInstance = (JPanel) guiClass.getDeclaredConstructor(MainGUI.class).newInstance(this);
+			} else {
+				guiInstance = (JPanel) guiClass.getDeclaredConstructor().newInstance();
+			}
+
+			// Giữ nguyên phần setContent
+			if (guiInstance != null) {
+				setContent(guiInstance);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

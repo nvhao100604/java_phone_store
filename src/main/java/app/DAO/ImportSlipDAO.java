@@ -24,10 +24,11 @@ public class ImportSlipDAO {
                 ImportSlip importSlip = new ImportSlip(
                         rs.getInt(1),
                         rs.getInt(2),
-                        rs.getDate(3),
-                        rs.getBigDecimal(4),
-                        rs.getInt(5),
-                        rs.getInt(6));
+                        rs.getInt(3),
+                        rs.getDate(4),
+                        rs.getBigDecimal(5),
+                        rs.getInt(6),
+                        rs.getInt(7));
                 list.add(importSlip);
             }
         } catch (SQLException e) {
@@ -46,10 +47,11 @@ public class ImportSlipDAO {
                 ImportSlip importSlip = new ImportSlip(
                         rs.getInt(1),
                         rs.getInt(2),
-                        rs.getDate(3),
-                        rs.getBigDecimal(4),
-                        rs.getInt(5),
-                        rs.getInt(6));
+                        rs.getInt(3),
+                        rs.getDate(4),
+                        rs.getBigDecimal(5),
+                        rs.getInt(6),
+                        rs.getInt(7));
                 list.add(importSlip);
             }
         } catch (SQLException e) {
@@ -59,12 +61,11 @@ public class ImportSlipDAO {
     }
 
     public int addImportSlip(ImportSlip importSlip) {
-        String sql = "INSERT INTO phieunhap (idNCC, NGAYNHAP, THANHTIEN, LOINHUAN, TRANGTHAI) VALUES (?, ?, ?, ?, ?)";
-
+        String sql = "INSERT INTO phieunhap (idNCC, idTK, THANHTIEN, LOINHUAN) VALUES (?, ?, ?, ?)";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
             stmt.setInt(1, importSlip.getSupplierId());
-            stmt.setDate(2, importSlip.getImportDate());
+            stmt.setInt(2, importSlip.getEmployeeId());
             stmt.setBigDecimal(3, importSlip.getTotalAmount());
             stmt.setInt(4, importSlip.getProfit());
             stmt.executeUpdate();
@@ -87,15 +88,16 @@ public class ImportSlipDAO {
             return -1;
         }
 
-        String sql = "UPDATE phieunhap SET idNCC=?, NGAYNHAP=?, THANHTIEN=?, LOINHUAN=?, TRANGTHAI=? WHERE idPN=?";
+        String sql = "UPDATE phieunhap SET idNCC=?, idTK = ?, NGAYNHAP=?, THANHTIEN=?, LOINHUAN=?, TRANGTHAI=? WHERE idPN=?";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setInt(1, importSlip.getSupplierId());
-            stmt.setDate(2, importSlip.getImportDate());
-            stmt.setBigDecimal(3, importSlip.getTotalAmount());
-            stmt.setInt(4, importSlip.getProfit());
-            stmt.setInt(5, importSlip.getStatus());
-            stmt.setInt(6, importSlip.getImportSlipId());
+            stmt.setInt(2, importSlip.getEmployeeId());
+            stmt.setDate(3, importSlip.getImportDate());
+            stmt.setBigDecimal(4, importSlip.getTotalAmount());
+            stmt.setInt(5, importSlip.getProfit());
+            stmt.setInt(6, importSlip.getStatus());
+            stmt.setInt(7, importSlip.getImportSlipId());
             return stmt.executeUpdate();
         } catch (Exception e) {
             // TODO: handle exception
@@ -154,10 +156,11 @@ public class ImportSlipDAO {
                     ImportSlip importSlip = new ImportSlip(
                             rs.getInt(1),
                             rs.getInt(2),
-                            rs.getDate(3),
-                            rs.getBigDecimal(4),
-                            rs.getInt(5),
-                            rs.getInt(6));
+                            rs.getInt(3),
+                            rs.getDate(4),
+                            rs.getBigDecimal(5),
+                            rs.getInt(6),
+                            rs.getInt(7));
                     list.add(importSlip);
                 }
             }
@@ -179,10 +182,11 @@ public class ImportSlipDAO {
                     ImportSlip importSlip = new ImportSlip(
                             rs.getInt(1),
                             rs.getInt(2),
-                            rs.getDate(3),
-                            rs.getBigDecimal(4),
-                            rs.getInt(5),
-                            rs.getInt(6));
+                            rs.getInt(3),
+                            rs.getDate(4),
+                            rs.getBigDecimal(5),
+                            rs.getInt(6),
+                            rs.getInt(7));
                     list.add(importSlip);
                 }
             }
@@ -203,10 +207,11 @@ public class ImportSlipDAO {
                 ImportSlip importSlip = new ImportSlip(
                         rs.getInt(1),
                         rs.getInt(2),
-                        rs.getDate(3),
-                        rs.getBigDecimal(4),
-                        rs.getInt(5),
-                        rs.getInt(6));
+                        rs.getInt(3),
+                        rs.getDate(4),
+                        rs.getBigDecimal(5),
+                        rs.getInt(6),
+                        rs.getInt(7));
                 list.add(importSlip);
             }
         } catch (SQLException e) {

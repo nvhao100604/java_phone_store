@@ -68,7 +68,6 @@ public class Supplier {
 
 	@Override
 	public String toString() {
-		return "Supplier{" + "idSupplier=" + idSupplier + ", nameSupplier='" + nameSupplier + '\'' + ", phoneNumber='"
-				+ phoneNumber + '\'' + ", address='" + address + '\'' + ", status=" + status + '}';
+		return this.nameSupplier + ": " + this.phoneNumber;
 	}
 }
