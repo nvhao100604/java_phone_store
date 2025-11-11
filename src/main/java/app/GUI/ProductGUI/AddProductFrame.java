@@ -37,6 +37,7 @@ import app.DTO.Brand;
 import app.DTO.Category;
 import app.DTO.Product;
 import app.DTO.ProductDetail;
+import app.GUI.interfaces.AddFrame;
 import app.utils.ImportImage;
 
 public class AddProductFrame extends JFrame {
@@ -62,9 +63,9 @@ public class AddProductFrame extends JFrame {
     private ProductBUS productBUS;
     private CategoryBUS categoryBUS;
     private BrandBUS brandBUS;
-    private final ProductGUI gui;
+    private final AddFrame gui;
 
-    public AddProductFrame(String title, ProductGUI gui) {
+    public AddProductFrame(String title, AddFrame gui) {
         super(title);
         this.gui = gui;
         this.categoryBUS = new CategoryBUS();

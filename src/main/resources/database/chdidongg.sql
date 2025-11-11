@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 10, 2025 at 01:44 PM
+-- Generation Time: Nov 11, 2025 at 10:30 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,7 +55,15 @@ INSERT INTO `chitiethoadon` (`idHD`, `idCTSP`, `SOLUONG`, `GIABAN`, `DIEUCHINHGI
 (16, 30, 2, 120000.50, 0.00),
 (17, 5, 4, 300000.00, 0.00),
 (18, 25, 1, 29900000.00, 0.00),
-(20, 15, 2, 1800000.00, 0.00);
+(20, 15, 2, 1800000.00, 0.00),
+(103, 1, 1, 19392000.00, 0.00),
+(104, 1, 1, 19392000.00, 0.00),
+(105, 1, 1, 19392000.00, 0.00),
+(106, 1, 1, 19392000.00, 0.00),
+(107, 1, 1, 19392000.00, 0.00),
+(108, 1, 1, 19392000.00, 0.00),
+(109, 18, 2, 19311200.00, 0.00),
+(110, 1, 4, 19392000.00, 0.00);
 
 -- --------------------------------------------------------
 
@@ -97,8 +105,7 @@ INSERT INTO `chitietphieunhap` (`idPN`, `idCTSP`, `SOLUONG`, `GIANHAP`, `DIEUCHI
 (1, 8, 6, 80000.00, 0.00),
 (1, 9, 9, 90000.00, 0.00),
 (1, 10, 4, 120000.00, 3000.00),
-(33, 1, 2, 19200000.00, 0.00),
-(34, 1, 2, 19200000.00, 0.00);
+(40, 18, 5, 19120000.00, 0.00);
 
 -- --------------------------------------------------------
 
@@ -310,7 +317,15 @@ INSERT INTO `donhang` (`idHD`, `idTK`, `idkh`, `THANHTIEN`, `NGAYMUA`, `DIACHI`,
 (17, 2, 2, 550000, '2023-11-15', '333 Võ Văn Tần, Q.3', NULL, 1, 'CASH'),
 (18, 1, 4, 2100000, '2023-08-20', '444 Hậu Giang, Q.6', NULL, 1, 'BANK_TRANSFER'),
 (19, 3, 3, 300000, '2023-05-10', '333 Võ Văn Tần, Q.3', NULL, 1, 'CASH'),
-(20, 1, 1, 1990000, '2023-01-05', '222 Lê Lai, Q.1', NULL, 1, 'BANK_TRANSFER');
+(20, 1, 1, 1990000, '2023-01-05', '222 Lê Lai, Q.1', NULL, 1, 'BANK_TRANSFER'),
+(103, 1, 3, 19382000, '2025-11-11', '1 An Định phường Xuân Thiều Quận 3 TPHCM', NULL, 1, 'CASH'),
+(104, 1, 3, 19382000, '2025-11-11', '1 An Định phường Xuân Thiều Quận 3 TPHCM', NULL, 1, 'CASH'),
+(105, 1, 3, 19382000, '2025-11-11', '1 An Định phường Xuân Thiều Quận 3 TPHCM', NULL, 1, 'CASH'),
+(106, 1, 3, 19382000, '2025-11-11', '1 An Định phường Xuân Thiều Quận 3 TPHCM', NULL, 1, 'CASH'),
+(107, 1, 3, 19382000, '2025-11-11', '1 An Định phường Xuân Thiều Quận 3 TPHCM', NULL, 1, 'CASH'),
+(108, 1, 3, 19382000, '2025-11-11', '1 An Định phường Xuân Thiều Quận 3 TPHCM', NULL, 1, 'CASH'),
+(109, 1, 3, 38622400, '2025-11-11', '1 An Định phường Xuân Thiều Quận 3 TPHCM', NULL, 1, 'CASH'),
+(110, 1, 3, 77558000, '2025-11-11', '1 An Định phường Xuân Thiều Quận 3 TPHCM', NULL, 1, 'CASH');
 
 -- --------------------------------------------------------
 
@@ -361,16 +376,16 @@ CREATE TABLE `imei` (
 --
 
 INSERT INTO `imei` (`idCTSP`, `imei`, `idPN`, `idHD`, `STATUS`) VALUES
-(1, '000000000000001', 1, NULL, 1),
-(1, '000000000000002', 1, NULL, 1),
-(1, '000000000000003', 1, NULL, 1),
-(1, '000000000000004', 1, NULL, 1),
-(1, '000000000000005', 1, NULL, 1),
-(1, '000000000000006', 1, NULL, 1),
-(1, '000000000000007', 1, NULL, 1),
-(1, '000000000000008', 1, NULL, 1),
-(1, '000000000000009', 1, NULL, 1),
-(1, '000000000000010', 1, NULL, 1),
+(1, '000000000000001', 1, 106, 1),
+(1, '000000000000002', 1, 108, 1),
+(1, '000000000000003', 1, 110, 1),
+(1, '000000000000004', 1, 110, 1),
+(1, '000000000000005', 1, 110, 1),
+(1, '000000000000006', 1, 103, 1),
+(1, '000000000000007', 1, 104, 1),
+(1, '000000000000008', 1, 105, 1),
+(1, '000000000000009', 1, 107, 1),
+(1, '000000000000010', 1, 110, 1),
 (2, '000000000000011', 1, NULL, 1),
 (2, '000000000000012', 1, NULL, 1),
 (2, '000000000000013', 1, NULL, 1),
@@ -434,8 +449,11 @@ INSERT INTO `imei` (`idCTSP`, `imei`, `idPN`, `idHD`, `STATUS`) VALUES
 (7, '000000000000071', 1, NULL, 1),
 (7, '000000000000072', 1, NULL, 1),
 (7, '000000000000073', 1, NULL, 1),
-(1, '3', 33, NULL, 1),
-(1, '5', 33, NULL, 1);
+(18, '123456789009874', 40, 109, 1),
+(18, '123456789009878', 40, NULL, 1),
+(18, '123456789012346', 40, NULL, 1),
+(18, '123456789054657', 40, NULL, 1),
+(18, '123456789056745', 40, 109, 1);
 
 -- --------------------------------------------------------
 
@@ -457,8 +475,9 @@ CREATE TABLE `khachhang` (
 INSERT INTO `khachhang` (`idkh`, `hoten`, `sdt`, `diachi`) VALUES
 (1, 'Nguyễn Thanh Bình', '0902487107', '65 Nguyễn Du phường An Phú Quận 12 TPHCM'),
 (2, 'Trương Xuân Cảnh', '0902483119', '102 Nguyễn Công Trứ phường An Phú Quận 12 TPHCM'),
-(3, 'Nguyễn Vũ Hào', '0977453631', '1 An Định phường Xuân Thiều Quận 3 TPHCM'),
-(4, 'Nguyễn Minh Thành', '0907885606', '70 Đinh Bộ Lĩnh phường An Thành Quận 2 Hà Nội');
+(3, 'Nguyễn Vũ Hào', '0799697981', '1 An Định phường Xuân Thiều Quận 3 TPHCM'),
+(4, 'Nguyễn Minh Thành', '0907885606', '70 Đinh Bộ Lĩnh phường An Thành Quận 2 Hà Nội'),
+(5, 'Bố Cảnh', '0988240232', 'ở chung thằng Cảnh');
 
 -- --------------------------------------------------------
 
@@ -486,8 +505,8 @@ CREATE TABLE `khuyenmai` (
 --
 
 INSERT INTO `khuyenmai` (`MAKHUYENMAI`, `CODE`, `MOTA`, `IS_PERCENT`, `GIATRI`, `PHANTRAM`, `SOLUONG`, `NGAYAPDUNG`, `HANSUDUNG`, `HANG`, `DANHMUC`, `TRANGTHAI`) VALUES
-(1, 'SALE10', '', 0, 10000.00, 0, 89, '2024-01-01', '2024-12-31', 1, 2, 1),
-(2, 'SALE20', '', 0, 20000.00, 0, 50, '2024-02-01', '2024-06-30', 2, 3, 1),
+(1, 'SALE10', '', 0, 10000.00, 0, 89, '2024-01-01', '2025-12-31', 1, 2, 1),
+(2, 'SALE20', '', 0, 20000.00, 0, 50, '2024-02-01', '2026-06-30', 2, 3, 1),
 (3, 'DISCOUNT15', '', 0, 15000.00, 0, 30, '2024-03-01', '2024-07-31', 3, 1, 1),
 (4, 'NEWYEAR25', '', 0, 25000.00, 0, 18, '2024-04-01', '2026-05-31', 4, 4, 1),
 (5, 'SUMMER30', '', 0, 30000.00, 0, 1, '2024-05-01', '2026-09-16', 5, 3, 1);
@@ -600,8 +619,7 @@ INSERT INTO `phieunhap` (`idPN`, `idNCC`, `idTK`, `NGAYNHAP`, `THANHTIEN`, `LOIN
 (2, 1, 2, '2025-09-16 17:00:00', 200000.00, 100000, 1),
 (3, 1, 1, '2025-09-16 17:00:00', 30000.00, 100000, 1),
 (4, 1, 3, '2025-09-16 17:00:00', 10000.00, 100000, 1),
-(33, 1, 1, '2025-11-10 04:24:01', 38400000.00, 1, 1),
-(34, 1, 1, '2025-11-10 12:43:22', 38400000.00, 1, 1);
+(40, 1, 1, '2025-11-10 19:25:08', 95600000.00, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -651,7 +669,7 @@ CREATE TABLE `sanpham` (
 INSERT INTO `sanpham` (`idSP`, `TENSP`, `HANG`, `GIANHAP`, `idDM`, `IMG`, `MOTA`, `TRANGTHAI`, `GIABAN`, `DISCOUNT`) VALUES
 (1, 'iPhone 16', 1, 19200000.00, 1, 'Iphone 16.jpeg', 'Hiệu năng vượt trội với chip A18rnVới lần nâng cấp này, Apple đã mạnh tay sử dụng chip A18 trên toàn bộ iPhone 16 Series, bao gồm iPhone 16 256GB. Đây là thế hệ chip 3nm thứ 2 của TSMC, công nghệ chip hiện đại nhất hiện nay, mang tới hiệu năng, tốc độ xử lý nhanh và tiết kiệm pin hơn so với chip A16 Bionic của iPhone 15 256GB.rnrnVề hệ điều hành, không còn là đồn đoán, gã khổng lồ công nghệ đã thực sự ứng dụng hệ điều hành iOS 18 tiên tiến trên điện thoại iPhone 16 phiên bản Tiêu Chuẩn. Hệ điều hành mới được cải tiến đặc biệt về AI, bổ sung tính năng tin nhắn mới, cập nhật Apple Maps, Siri, hỗ trợ RCS… mang đến nhiều tiện ích và nâng cấp trải nghiệm người dùng hơn iPhone 15 256GB', 1, 19392000.00, 0),
 (2, 'iPhone 16 plus', 1, 28000000.00, 1, 'Iphone 16 pờ lếch.jpeg', 'iPhone 16 Plus 512GB dự kiến sẽ là sản phẩm cháy hàng trong thời gian tới vì dung lượng lưu trữ lớn và có nhiều thay đổi về mặt thiết kế - công nghệ so với mức giá. Hãy cùng điểm mặt 10 lý do bạn nên mua iPhone 16 Plus 512GB ngay khi ra mắt qua bài viết sau nhé!', 1, 28280000.00, 0),
-(3, 'SamSung Galaxy Z Flip 6', 3, 19120000.00, 1, 'SamSung Galaxy Z Flip 6.jpeg', 'Galaxy Z Flip 6 ra mắt đã mở ra một kỷ nguyên AI di động với sức mạnh của Galaxy AI tiên tiến. Bên cạnh đó, thiết bị còn cuốn hút mọi người với vẻ ngoài siêu mỏng nhỏ gọn, hiệu năng mạnh mẽ, thời lượng sử dụng bền bỉ và camera nâng tầm nhiếp ảnh. Tất cả hứa hẹn sẽ mang đến cho bạn trải nghiệm sử dụng mới lạ, hấp dẫn, đáp ứng tốt mọi nhu cầu của bạn trong cuộc sống hiện đại ngày nay.', 1, 23900000.00, 0),
+(3, 'SamSung Galaxy Z Flip 6', 3, 19120000.00, 1, 'SamSung Galaxy Z Flip 6.jpeg', 'Galaxy Z Flip 6 ra mắt đã mở ra một kỷ nguyên AI di động với sức mạnh của Galaxy AI tiên tiến. Bên cạnh đó, thiết bị còn cuốn hút mọi người với vẻ ngoài siêu mỏng nhỏ gọn, hiệu năng mạnh mẽ, thời lượng sử dụng bền bỉ và camera nâng tầm nhiếp ảnh. Tất cả hứa hẹn sẽ mang đến cho bạn trải nghiệm sử dụng mới lạ, hấp dẫn, đáp ứng tốt mọi nhu cầu của bạn trong cuộc sống hiện đại ngày nay.', 1, 19311200.00, 0),
 (4, 'iPhone 16 Pro Max', 1, 26232000.00, 1, 'iphone 16 Pro Max.jpeg', 'iPhone 16 Plus 512GB dự kiến sẽ là sản phẩm cháy hàng trong thời gian tới vì dung lượng lưu trữ lớn và có nhiều thay đổi về mặt thiết kế - công nghệ so với mức giá. Hãy cùng điểm mặt 10 lý do bạn nên mua iPhone 16 Plus 512GB ngay khi ra mắt qua bài viết sau nhé!', 1, 32790000.00, 0),
 (5, 'Airpods pro 2', 1, 4952000.00, 4, 'Airpods pro 2.jpg', 'Trải nghiệm chất lượng âm thanh vô song với tính năng Chủ Động Khử Tiếng Ồn đẳng cấp Pro,Chú thích³ Âm Thanh Thích Ứng để kiểm soát tiếng ồn phù hợp trong mọi môi trường, cùng chế độ Xuyên Âm giúp bạn nghe thấy thế giới xung quanh mình,Chú thích² và tính năng Nhận Biết Cuộc Hội Thoại để giảm âm lượng của nội dung đang phát một cách liền mạch khi bạn đang nói chuyện với ai đó ở gần.Chú thích¹³ Giảm thiểu mức độ tiếp xúc của bạn với tiếng ồn lớn bằng tính năng Giảm Âm Thanh Lớn, sử dụng Tăng Cường Hội Thoại để tập trung vào giọng nói ngay trước mặt bạn, và phát Âm Thanh Trong Nền êm dịu như tiếng đại dương hoặc tiếng mưa rơi để chặn bớt tiếng ồn không mong muốn xung quanh. Cả AirPods Pro 2 và Hộp Sạc MagSafe không dây (USB-C) đều có khả năng chống bụi, chống mồ hôi và chống nước đạt chuẩn IP54,Chú thích¹² và bạn có thể sử dụng ứng dụng Tìm để theo dõi vị trí của các thiết bị này.Chú thích', 1, 6190000.00, 0),
 (6, 'Samsung Galaxy S21', 3, 6399200.00, 1, 'Samsung Galaxy S21.jpg', 'Smartphone Samsung S21', 1, 7999000.00, 0),
@@ -765,7 +783,7 @@ ALTER TABLE `chitiethoadon`
 -- Indexes for table `chitietkhuyenmai`
 --
 ALTER TABLE `chitietkhuyenmai`
-  ADD PRIMARY KEY (`idHD`,`MAKHUYENMAI`),
+  ADD UNIQUE KEY `idHD` (`idHD`,`MAKHUYENMAI`),
   ADD KEY `fk_ctkm_km` (`MAKHUYENMAI`);
 
 --
@@ -815,8 +833,8 @@ ALTER TABLE `hang`
 ALTER TABLE `imei`
   ADD PRIMARY KEY (`imei`),
   ADD KEY `idCTSP` (`idCTSP`),
-  ADD KEY `pn-imei` (`idPN`),
-  ADD KEY `hd-imei` (`idHD`);
+  ADD KEY `hd-imei` (`idHD`),
+  ADD KEY `pn-imei` (`idPN`);
 
 --
 -- Indexes for table `khachhang`
@@ -913,7 +931,7 @@ ALTER TABLE `danhmuc`
 -- AUTO_INCREMENT for table `donhang`
 --
 ALTER TABLE `donhang`
-  MODIFY `idHD` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `idHD` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `hang`
@@ -925,7 +943,7 @@ ALTER TABLE `hang`
 -- AUTO_INCREMENT for table `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `idkh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idkh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `khuyenmai`
@@ -943,7 +961,7 @@ ALTER TABLE `nhacungcap`
 -- AUTO_INCREMENT for table `phieunhap`
 --
 ALTER TABLE `phieunhap`
-  MODIFY `idPN` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `idPN` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `quyen`
@@ -1011,9 +1029,9 @@ ALTER TABLE `donhang`
 -- Constraints for table `imei`
 --
 ALTER TABLE `imei`
-  ADD CONSTRAINT `hd-imei` FOREIGN KEY (`idHD`) REFERENCES `donhang` (`idHD`),
+  ADD CONSTRAINT `hd-imei` FOREIGN KEY (`idHD`) REFERENCES `donhang` (`idHD`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `imei_ibfk_1` FOREIGN KEY (`idCTSP`) REFERENCES `chitietsanpham` (`idCTSP`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pn-imei` FOREIGN KEY (`idPN`) REFERENCES `phieunhap` (`idPN`);
+  ADD CONSTRAINT `pn-imei` FOREIGN KEY (`idPN`) REFERENCES `phieunhap` (`idPN`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `khuyenmai`
