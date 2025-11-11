@@ -169,7 +169,7 @@ public class OrderDAO {
     }
 
     public int addOrder(Order order) {
-        String sql = "INSERT INTO donhang (idTK, idkh, THANHTIEN, NGAYMUA, DIACHI, MAKHUYENMAI, PTTHANHTOAN) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO donhang (idTK, idkh, THANHTIEN, NGAYMUA, DIACHI, PTTHANHTOAN) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, order.getAccountId());
@@ -177,12 +177,7 @@ public class OrderDAO {
             ps.setBigDecimal(3, order.getTotalAmount());
             ps.setDate(4, new java.sql.Date(order.getPurchaseDate().getTime()));
             ps.setString(5, order.getAddress());
-            if (order.getPromotionCode() != null) {
-                ps.setInt(6, order.getPromotionCode());
-            } else {
-                ps.setNull(6, java.sql.Types.INTEGER);
-            }
-            ps.setString(8, order.getPaymentId().name());
+            ps.setString(6, order.getPaymentId().name());
 
             int rowsAffect = ps.executeUpdate();
             if (rowsAffect == 0) {

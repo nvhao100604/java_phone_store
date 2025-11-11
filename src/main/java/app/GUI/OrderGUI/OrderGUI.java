@@ -40,12 +40,14 @@ import app.BUS.OrderBUS;
 
 import app.DTO.Order;
 import app.DTO.PaymentMethod;
+import app.GUI.MainGUI;
 import app.GUI.CustomPanels.FilterPanel;
 import app.GUI.CustomPanels.khungchucnang;
 import app.GUI.interfaces.FunctionPanel;
 import app.utils.DecimalFilter;
 
 public class OrderGUI extends JPanel implements FunctionPanel {
+    private MainGUI mainGUI;
     private static final int mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
     private static final int mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 
@@ -68,7 +70,8 @@ public class OrderGUI extends JPanel implements FunctionPanel {
     private JTable table;
     private DefaultTableModel tableModel;
 
-    public OrderGUI() {
+    public OrderGUI(MainGUI mainGUI) {
+        this.mainGUI = mainGUI;
         initialize();
     }
 
@@ -336,7 +339,7 @@ public class OrderGUI extends JPanel implements FunctionPanel {
 
     @Override
     public void Add() {
-        AddOrderFrame addOrderFrame = new AddOrderFrame();
+        AddOrderFrame addOrderFrame = new AddOrderFrame(mainGUI.getAccount().getAccountId());
         addOrderFrame.setVisible(true);
     }
 

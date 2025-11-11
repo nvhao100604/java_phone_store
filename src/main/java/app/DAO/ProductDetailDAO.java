@@ -56,6 +56,24 @@ public class ProductDetailDAO {
         return null;
     }
 
+    public int getQuantityByDetailId(int productDetailId, String status) {
+        String statuCheck = status.equals("CÒN HÀNG") ? " IS NULL " : " IS NOT NULL ";
+        String sql = "SELECT COUNT(i.imei) AS SOLUONG from chitietsanpham ct JOIN imei i " +
+                "\nON ct.idCTSP=i.idCTSP LEFT JOIN sanpham s ON ct.idSP=s.idSP" +
+                "\n WHERE ct.idCTSP= ? AND i.idHD " + statuCheck + " GROUP BY ct.idCTSP";
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement st = con.prepareStatement(sql)) {
+            st.setInt(1, productDetailId);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("SOLUONG");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public int addProductDetail(int productId, String color, String capacity, BigDecimal priceAdjustment) {
         String sql = "INSERT INTO chitietsanpham (idSP, MAUSAC, DUNGLUONG, DIEUCHINHGIA) VALUES (?, ?, ?, ?)";
         try (Connection con = DBConnect.getConnection();

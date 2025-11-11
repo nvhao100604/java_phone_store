@@ -37,6 +37,10 @@ public class ProductBUS {
 		return dao.getQuantityById(productId, status);
 	}
 
+	public int getQuantityByDetailId(int productDetailId, String status) {
+		return detailBUS.getQuantityByDetailId(productDetailId, status);
+	}
+
 	public int getQuantityByName(String productName, String status) {
 		return dao.getQuantityByName(productName, status);
 	}

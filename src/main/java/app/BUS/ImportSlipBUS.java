@@ -32,6 +32,10 @@ public class ImportSlipBUS {
         return imeiBUS.AddImei(imei);
     }
 
+    public int UpdateImeiByOrderQuantity(int idOrder, int ProductDetailId, int Quantity) {
+        return imeiBUS.UpdateImeiByOrderQuantity(idOrder, ProductDetailId, Quantity);
+    }
+
     public List<ImportSlip> getAllImportSlips() {
         return dao.getAllImportSlips();
     }
