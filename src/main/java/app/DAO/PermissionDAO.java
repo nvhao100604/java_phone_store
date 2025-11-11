@@ -35,7 +35,7 @@ public class PermissionDAO {
 
     public List<Permission> getRole() {
         List<Permission> list = new ArrayList<>();
-        String sql = "SELECT idQUYEN, TENQUYEN FROM quyen WHERE TRANGTHAI = 1";
+        String sql = "SELECT idQUYEN, TENQUYEN FROM quyen WHERE TRANGTHAI = 1 AND idQUYEN <> 0";
         try (Connection con = DBConnect.getConnection();
             PreparedStatement st = con.prepareStatement(sql);
             ResultSet rs = st.executeQuery()) {
