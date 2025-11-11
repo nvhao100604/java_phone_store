@@ -1019,6 +1019,7 @@ public class AddOrderFrame extends JFrame {
 
         // int response = promotionBUS.addPromotionUsage(usage);
         // return response;
+        return 0;
     }
 
     private void ResetProductList() {
