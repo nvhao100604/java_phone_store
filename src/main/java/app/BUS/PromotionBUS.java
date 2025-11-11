@@ -15,12 +15,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import app.DAO.PromotionDAO;
 import app.DTO.Promotion;
+import app.DTO.PromotionUsage;
 
 public class PromotionBUS {
 
     private final PromotionDAO dao;
 
+    private final PromotionUsageBUS promotionUsageBUS;
+
     public PromotionBUS() {
+        this.promotionUsageBUS = new PromotionUsageBUS();
         this.dao = new PromotionDAO();
     }
 
@@ -132,5 +136,13 @@ public class PromotionBUS {
 
     public int setPromotionByStatus0(Date currentDate) {
         return dao.setPromotionByStatus0(currentDate);
+    }
+
+    public int reducePromotionQuantity(int promotionId) {
+        return dao.reducePromotionQuantity(promotionId);
+    }
+
+    public int AddPromotionUsage(PromotionUsage promotionUsage) {
+        return promotionUsageBUS.addPromotionUsage(promotionUsage);
     }
 }

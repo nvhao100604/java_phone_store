@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2025 at 10:30 AM
+-- Generation Time: Nov 11, 2025 at 10:35 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -73,7 +73,8 @@ INSERT INTO `chitiethoadon` (`idHD`, `idCTSP`, `SOLUONG`, `GIABAN`, `DIEUCHINHGI
 
 CREATE TABLE `chitietkhuyenmai` (
   `idHD` int(11) NOT NULL,
-  `MAKHUYENMAI` int(11) NOT NULL
+  `MAKHUYENMAI` int(11) NOT NULL,
+  `GIATRI` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

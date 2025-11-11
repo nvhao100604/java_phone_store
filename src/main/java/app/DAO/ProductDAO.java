@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import app.DTO.Product;
+import app.DTO.ProductDetail;
 import app.database.DBConnect;
 
 public class ProductDAO {

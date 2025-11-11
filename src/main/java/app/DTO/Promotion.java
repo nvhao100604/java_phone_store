@@ -165,7 +165,7 @@ public class Promotion {
 
 	@Override
 	public String toString() {
-		return this.code;
+		return this.code + " - " + this.quantity;
 	}
 
 }

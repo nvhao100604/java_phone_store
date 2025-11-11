@@ -177,6 +177,10 @@ public class ProductBUS {
 		}
 	}
 
+	public ProductDetail getProductDetailByDetailId(int detailId) {
+		return detailBUS.getProductDetailByDetailId(detailId);
+	}
+
 	// public static void main(String[] args) {
 	// ProductBUS bus = new ProductBUS();
 	// List<Product> products = bus.getAll();
