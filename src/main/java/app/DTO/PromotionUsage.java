@@ -7,6 +7,9 @@ public class PromotionUsage {
     private int promotionId;
     private BigDecimal value;
 
+    public PromotionUsage() {
+    }
+
     public PromotionUsage(int orderId, int promotionId, BigDecimal value) {
         this.orderId = orderId;
         this.promotionId = promotionId;
@@ -27,5 +30,13 @@ public class PromotionUsage {
 
     public int getPromotionId() {
         return promotionId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setPromotionId(int promotionId) {
+        this.promotionId = promotionId;
     }
 }

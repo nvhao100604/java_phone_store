@@ -493,6 +493,32 @@ public class ProductDAO {
 		return products;
 	}
 
+	public Product getProductByDetailId(int detailId) {
+		String sql = "SELECT sp.idSP, sp.TENSP, sp.HANG, h.TENHANG, sp.GIANHAP,sp.idDM, d.LOAISP, sp.IMG, sp.MOTA, sp.GIABAN, sp.TRANGTHAI from sanpham sp join hang h ON sp.HANG=h.idHANG join danhmuc d on sp.idDM=d.idDM join chitietsanpham ct ON sp.idSP=ct.idSP WHERE  ct.idCTSP= ? AND sp.TRANGTHAI=1";
+		try (Connection con = DBConnect.getConnection();
+				PreparedStatement st = con.prepareStatement(sql)) {
+			st.setInt(1, detailId);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				return new Product(
+						rs.getInt(1),
+						rs.getString(2),
+						rs.getInt(3),
+						rs.getString(4),
+						rs.getBigDecimal(5),
+						rs.getInt(6),
+						rs.getString(7),
+						rs.getString(8),
+						rs.getString(9),
+						rs.getBigDecimal(10),
+						rs.getInt(11));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	// public static void main(String[] args) {
 	// ProductDAO dao = new ProductDAO();
 	// List<Product> list = dao.getAll();

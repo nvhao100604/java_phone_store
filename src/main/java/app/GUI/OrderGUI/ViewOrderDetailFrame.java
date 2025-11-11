@@ -47,13 +47,8 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.List;
 
-/**
- * JDialog này dùng để hiển thị chi tiết một đơn hàng đã tồn tại (Read-Only).
- * Đã loại bỏ các chức năng thêm/sửa/xóa từ AddOrderFrame.
- */
 public class ViewOrderDetailFrame extends JDialog {
 
-    // --- Các hằng số STYLE (Giữ nguyên) ---
     private static final Color BG_LIGHT_GRAY = new Color(248, 248, 248);
     private static final Color BG_WHITE = Color.WHITE;
     private static final Color BORDER_GRAY = new Color(220, 220, 220);
@@ -68,70 +63,56 @@ public class ViewOrderDetailFrame extends JDialog {
     private static final Color PRIMARY_BLUE = new Color(52, 152, 219);
     private static final Color PRIMARY_BLUE_DARK = new Color(41, 128, 185);
 
-    // --- Các BUS cần thiết để TẢI dữ liệu ---
     private ProductBUS productBUS;
     private PromotionBUS promotionBUS;
     private CustomerBUS customerBUS;
     private OrderBUS orderBUS;
 
-    // --- Components (Chỉ giữ lại các thành phần hiển thị) ---
-    private JLabel customerPhoneDisplay; // Thay thế JTextField
+    private JLabel customerPhoneDisplay;
     private JLabel customerNameDisplay;
-    private JLabel paymentMethodDisplay; // Thay thế JComboBox
+    private JLabel paymentMethodDisplay;
     private JTable cartTable;
     private DefaultTableModel tableModel;
     private JLabel subtotalLabel;
     private JLabel promotionLabel;
     private JLabel totalLabel;
-    private JButton closeButton; // Thay thế các nút action
+    private JButton closeButton;
 
     private NumberFormat currencyFormatter;
-    private Order currentOrder; // Đơn hàng đang xem
+    private Order currentOrder;
 
-    /**
-     * Constructor
-     * 
-     * @param owner       Frame cha
-     * @param orderToView Đối tượng Order cần hiển thị
-     */
-    public ViewOrderDetailFrame(JFrame owner, Order orderToView) {
-        super(owner, "Chi tiết Đơn hàng #" + orderToView.getOrderId(), true); // Modal
-
-        this.currentOrder = orderToView;
-
-        // Khởi tạo BUS
+    public ViewOrderDetailFrame(JFrame owner, int orderToViewId) {
+        super(owner, "Chi tiết Đơn hàng #" + orderToViewId, true); // Modal
         this.productBUS = new ProductBUS();
         this.promotionBUS = new PromotionBUS();
         this.customerBUS = new CustomerBUS();
         this.orderBUS = new OrderBUS();
+        this.currentOrder = orderBUS.getOrderById(orderToViewId);
 
         this.currencyFormatter = DecimalFilter.PriceFormatter();
         initialize();
-        loadData(); // Tải dữ liệu vào form
+        loadData();
     }
 
     private void initialize() {
         setTitle("Chi tiết Đơn hàng #" + currentOrder.getOrderId());
-        setSize(780, 700); // Có thể nhỏ hơn form Add
+        setSize(780, 700);
         setLocationRelativeTo(getOwner());
         setLayout(new BorderLayout(15, 15));
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE); // Đóng JDialog
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         getContentPane().setBackground(BG_LIGHT_GRAY);
         ((JPanel) getContentPane()).setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // --- Tải các panel hiển thị ---
         JPanel customerPanel = createCustomerPanel();
         JPanel cartPanel = createCartPanel();
         JPanel bottomPanel = createBottomPanel();
         JPanel paymentPanel = createPaymentPanel();
 
-        // Khu vực trên cùng: Thông tin khách hàng
         JPanel topPanel = new JPanel(new BorderLayout(15, 15));
         topPanel.setOpaque(false);
         topPanel.add(customerPanel, BorderLayout.NORTH);
 
-        // Khu vực giữa: Giỏ hàng + Phương thức TT
         JPanel middlePanel = new JPanel();
         middlePanel.setOpaque(false);
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
@@ -143,7 +124,6 @@ public class ViewOrderDetailFrame extends JDialog {
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    // --- Panel Thanh toán (Chỉ hiển thị) ---
     private JPanel createPaymentPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
         panel.setOpaque(false);
@@ -152,7 +132,7 @@ public class ViewOrderDetailFrame extends JDialog {
         paymentLabel.setFont(FONT_LABEL);
         paymentLabel.setForeground(TEXT_DARK);
 
-        paymentMethodDisplay = new JLabel("Chưa xác định"); // Sẽ được load
+        paymentMethodDisplay = new JLabel("Chưa xác định");
         paymentMethodDisplay.setFont(FONT_INPUT.deriveFont(Font.BOLD));
         paymentMethodDisplay.setForeground(TEXT_DARK);
 
@@ -164,13 +144,12 @@ public class ViewOrderDetailFrame extends JDialog {
 
     // --- Panel Dưới cùng (Chỉ hiển thị Tổng tiền + Nút Đóng) ---
     private JPanel createBottomPanel() {
-        // Panel chứa nút Đóng
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         actionPanel.setOpaque(false);
         closeButton = createStyledButton("Đóng", TEXT_LIGHT, Color.GRAY);
-        closeButton.setBackground(COLOR_WHITE); // Nền trắng
-        closeButton.setForeground(COLOR_TEXT_DARK);
-        closeButton.addActionListener(e -> dispose()); // Sự kiện đóng cửa sổ
+        closeButton.setBackground(Color.WHITE);
+        closeButton.setForeground(Color.DARK_GRAY);
+        closeButton.addActionListener(e -> dispose());
         actionPanel.add(closeButton);
 
         // Panel chính
@@ -291,12 +270,11 @@ public class ViewOrderDetailFrame extends JDialog {
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // <-- KHÔNG CHO PHÉP CHỈNH SỬA
+                return false;
             }
         };
         cartTable = new JTable(tableModel);
 
-        // ... (Style JTable và JTableHeader giữ nguyên) ...
         cartTable.setFont(FONT_INPUT);
         cartTable.setRowHeight(30);
         cartTable.setGridColor(BORDER_GRAY);
@@ -315,11 +293,7 @@ public class ViewOrderDetailFrame extends JDialog {
         return panel;
     }
 
-    /**
-     * Tải tất cả dữ liệu của Order vào các component
-     */
     private void loadData() {
-        // 1. Tải thông tin Khách hàng
         try {
             Customer customer = customerBUS.getCustomerById(currentOrder.getCustomerId());
             if (customer != null) {
@@ -334,15 +308,13 @@ public class ViewOrderDetailFrame extends JDialog {
             customerNameDisplay.setText("(Lỗi tải dữ liệu)");
         }
 
-        // 2. Tải Chi tiết Đơn hàng (JTable)
         try {
             List<OrderDetail> details = orderBUS.getDetailsByOrderId(currentOrder.getOrderId());
-            tableModel.setRowCount(0); // Xóa dữ liệu cũ
+            tableModel.setRowCount(0);
 
-            BigDecimal subtotal = BigDecimal.ZERO; // Tính tổng cộng
+            BigDecimal subtotal = BigDecimal.ZERO;
 
             for (OrderDetail od : details) {
-                // Lấy thông tin sản phẩm và biến thể
                 ProductDetail pd = productBUS.getProductDetailByDetailId(od.getProductId());
                 Product p = productBUS.getProductById(pd.getProductId());
 
@@ -351,11 +323,11 @@ public class ViewOrderDetailFrame extends JDialog {
 
                 tableModel.addRow(new Object[] {
                         od.getProductId(),
-                        p.getProductName(), // Tên sản phẩm
-                        pd.toString(), // Tùy chọn (ví dụ: "Đen - 128GB")
-                        od.getQuantity(), // Số lượng
-                        currencyFormatter.format(od.getPrice()), // Đơn giá
-                        currencyFormatter.format(totalRow) // Thành tiền
+                        p.getProductName(),
+                        pd.toString(),
+                        od.getQuantity(),
+                        currencyFormatter.format(od.getPrice()),
+                        currencyFormatter.format(totalRow)
                 });
             }
 
@@ -367,13 +339,11 @@ public class ViewOrderDetailFrame extends JDialog {
                 }
             }
 
-            // Cập nhật các Label
             subtotalLabel.setText("Tổng cộng: " + currencyFormatter.format(subtotal));
             promotionLabel.setText("Khuyến mãi: - " + currencyFormatter.format(promotionValue));
             totalLabel.setText("Thành tiền: " + currencyFormatter.format(currentOrder.getTotalAmount()));
 
-            // 4. Tải Phương thức Thanh toán
-            paymentMethodDisplay.setText(currentOrder.getPaymentId().toString()); // Dùng toString() của Enum
+            paymentMethodDisplay.setText(currentOrder.getPaymentId().toString());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -382,7 +352,6 @@ public class ViewOrderDetailFrame extends JDialog {
         }
     }
 
-    // --- Các hàm tiện ích (Giữ nguyên) ---
     private void addHoverEffect(JButton button, Color defaultColor, Color hoverColor) {
         button.addMouseListener(new MouseAdapter() {
             @Override

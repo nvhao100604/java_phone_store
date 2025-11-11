@@ -519,14 +519,17 @@ public class AddImportSlipFrame extends JFrame implements AddFrame {
 
     private void SaveImeiNumbers(int importQuantity, int productDetailId, int importSlipId) {
         String defaultImeiCode = "1234567890";
+        int productTypeId = productBUS.getProductTypeByDetailId(productDetailId);
+
         Imei imei = new Imei();
         imei.setIdProductDetail(productDetailId);
         imei.setIdImport(importSlipId);
+
         for (int i = 0; i < importQuantity; i++) {
-            String imeiNumber = JOptionPane.showInputDialog(this,
+            String imeiNumber = productTypeId != 1 ? JOptionPane.showInputDialog(this,
                     "Nhập số IMEI thứ " + (i + 1) + " cho sản phẩm (ID CTSP: " + imei.getIdProductDetail() + "):",
                     "Nhập Số IMEI",
-                    JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.PLAIN_MESSAGE) : "00000";
             String imeiCode = defaultImeiCode + imeiNumber;
             System.out.println("check imei: " + imeiCode.length());
             if (imeiNumber != null && !imeiNumber.trim().isEmpty() || imeiCode.length() != 15) {
@@ -546,6 +549,7 @@ public class AddImportSlipFrame extends JFrame implements AddFrame {
     private void ResetForm() {
         if (productBox.getItemCount() > 0) {
             productBox.setSelectedIndex(0);
+
         } else {
             variantBox.removeAllItems();
             priceField.setText("0");
@@ -573,6 +577,10 @@ public class AddImportSlipFrame extends JFrame implements AddFrame {
         }
         priceField.setText(baseImportPrice.toPlainString());
         setDetailComboBox(details);
+        if (!details.isEmpty()) {
+            variantBox.setSelectedIndex(0);
+            HandleChangeVariants();
+        }
     }
 
     private void setDetailComboBox(java.util.List<ProductDetail> details) {
@@ -709,6 +717,7 @@ public class AddImportSlipFrame extends JFrame implements AddFrame {
         int selectedRow = productTable.getSelectedRow();
         if (selectedRow != -1) {
             tableModel.removeRow(selectedRow);
+            updateTotalAmount();
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần xóa!", "Chưa chọn",
                     JOptionPane.WARNING_MESSAGE);
@@ -800,6 +809,7 @@ public class AddImportSlipFrame extends JFrame implements AddFrame {
 
             if (!products.isEmpty()) {
                 productBox.setSelectedIndex(0);
+                HandleChangeProduct();
             } else {
                 variantBox.removeAllItems();
                 priceField.setText("0");

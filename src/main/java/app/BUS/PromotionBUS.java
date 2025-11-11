@@ -145,4 +145,8 @@ public class PromotionBUS {
     public int AddPromotionUsage(PromotionUsage promotionUsage) {
         return promotionUsageBUS.addPromotionUsage(promotionUsage);
     }
+
+    public List<PromotionUsage> getUsageByOrderId(int orderId) {
+        return promotionUsageBUS.getUsageByOrderId(orderId);
+    }
 }

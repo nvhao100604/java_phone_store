@@ -6,11 +6,13 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PromotionUsageDAO {
 
     public int addPromotionUsage(PromotionUsage usage) {
-        String sql = "INSERT INTO chitietkhuyenmai (idHD,MAKHUYENMAI,GIATRI) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO chitietkhuyenmai (idHD, MAKHUYENMAI, GIATRI) VALUES (?, ?, ?)";
         try (Connection con = DBConnect.getConnection()) {
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, usage.getOrderId());
@@ -35,5 +37,25 @@ public class PromotionUsageDAO {
             e.printStackTrace();
         }
         return BigDecimal.ZERO;
+    }
+
+    public List<PromotionUsage> getUsageByOrderId(int orderId) {
+        List<PromotionUsage> promotionUsages = new ArrayList<>();
+        String sql = "SELECT * FROM chitietkhuyenmai WHERE idHD = ?";
+        try (Connection con = DBConnect.getConnection()) {
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setInt(1, orderId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                PromotionUsage promotionUsage = new PromotionUsage();
+                promotionUsage.setOrderId(rs.getInt(1));
+                promotionUsage.setPromotionId(rs.getInt(2));
+                promotionUsage.setValue(rs.getBigDecimal(3));
+                promotionUsages.add(promotionUsage);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return promotionUsages;
     }
 }

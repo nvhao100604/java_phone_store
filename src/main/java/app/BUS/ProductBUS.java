@@ -181,6 +181,14 @@ public class ProductBUS {
 		return detailBUS.getProductDetailByDetailId(detailId);
 	}
 
+	public Product getProductByDetailId(int detailId) {
+		return dao.getProductByDetailId(detailId);
+	}
+
+	public int getProductTypeByDetailId(int productDetailId) {
+		return detailBUS.getProductTypeByDetailId(productDetailId);
+	}
+
 	// public static void main(String[] args) {
 	// ProductBUS bus = new ProductBUS();
 	// List<Product> products = bus.getAll();

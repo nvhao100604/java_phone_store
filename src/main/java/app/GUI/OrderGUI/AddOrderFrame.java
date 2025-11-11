@@ -36,6 +36,8 @@ import app.DTO.Product;
 import app.DTO.ProductDetail;
 import app.DTO.Promotion;
 import app.DTO.PromotionUsage;
+import app.GUI.interfaces.AddFrame;
+import app.utils.ConfirmDialog;
 import app.utils.DecimalFilter;
 
 import java.awt.BorderLayout;
@@ -54,10 +56,11 @@ import java.sql.Date;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -91,6 +94,7 @@ public class AddOrderFrame extends JFrame {
     private static final String activeStatus = "CÒN HÀNG";
     private NumberFormat currencyFormatter;
 
+    private AddFrame orderFrame;
     private ProductBUS productBUS;
     private PromotionBUS promotionBUS;
     private CustomerBUS customerBUS;
@@ -125,7 +129,8 @@ public class AddOrderFrame extends JFrame {
     private JLabel promotionLabel;
     private JLabel totalLabel;
 
-    public AddOrderFrame(int employeeId) {
+    public AddOrderFrame(AddFrame orderFrame, int employeeId) {
+        this.orderFrame = orderFrame;
         this.productBUS = new ProductBUS();
         this.promotionBUS = new PromotionBUS();
         this.customerBUS = new CustomerBUS();
@@ -774,24 +779,53 @@ public class AddOrderFrame extends JFrame {
     }
 
     private void runPromotion() {
-        // promotionLabel.setText("");
+        promoLabel1.setText("");
+        promoValueLabel1.setText("");
+        promoLabel2.setText("");
+        promoValueLabel2.setText("");
+
         LocalDate today = LocalDate.now();
         Date sqlDate = Date.valueOf(today);
 
-        int response = promotionBUS.setPromotionByStatus1(sqlDate);
-        System.out.println("1 check: " + response);
-        int response2 = promotionBUS.setPromotionByStatus0(sqlDate);
-        System.out.println("0 check: " + response2);
+        promotionBUS.setPromotionByStatus1(sqlDate);
+        promotionBUS.setPromotionByStatus0(sqlDate);
 
-        Product selectedProduct = (Product) productComboBox.getSelectedItem();
-        List<Promotion> newPromotionList = promotionBUS.getValidPromotions(
-                selectedProduct.getBrandId(),
-                selectedProduct.getCategoryId(),
-                sqlDate);
-        promotionList = Stream.concat(promotionList.stream(), newPromotionList.stream())
+        List<Promotion> allValidPromotions = new ArrayList<>();
+        if (tableModel.getRowCount() == 0) {
+            promotionList.clear();
+            HandlePromotionOrder();
+            return;
+        }
+
+        Set<String> uniqueBrandCategoryPairs = new HashSet<>();
+        for (int row = 0; row < tableModel.getRowCount(); row++) {
+            try {
+                int productDetailId = (int) tableModel.getValueAt(row, 0);
+                Product p = productBUS.getProductByDetailId(productDetailId);
+
+                if (p != null) {
+                    String pair = p.getBrandId() + " - " + p.getCategoryId();
+
+                    if (!uniqueBrandCategoryPairs.contains(pair)) {
+                        List<Promotion> promosForProduct = promotionBUS.getValidPromotions(
+                                p.getBrandId(),
+                                p.getCategoryId(),
+                                sqlDate);
+                        allValidPromotions.addAll(promosForProduct);
+                        uniqueBrandCategoryPairs.add(pair);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        promotionList = allValidPromotions.stream()
                 .distinct()
                 .collect(Collectors.toList());
-        System.out.println("check list size: " + promotionList.size());
+
+        // System.out.println("Tổng số KM hợp lệ cho giỏ hàng: " +
+        // promotionList.size());
         HandlePromotionOrder();
     }
 
@@ -824,6 +858,13 @@ public class AddOrderFrame extends JFrame {
 
     private BigDecimal getPromotionValue() {
         BigDecimal total = BigDecimal.ZERO;
+        if (promotionList.isEmpty()) {
+            promoLabel1.setText("");
+            promoValueLabel1.setText("");
+            promoLabel2.setText("");
+            promoValueLabel2.setText("");
+            return total;
+        }
         Promotion selectedPromotion1 = promotionList.get(0);
 
         if (promotionList.size() < 2) {
@@ -958,15 +999,12 @@ public class AddOrderFrame extends JFrame {
 
     private void RemoveFromList() {
         int selectedRow = cartTable.getSelectedRow();
-        if (selectedRow >= -1) {
-            JOptionPane.showMessageDialog(this,
-                    "Vui lòng chọn sản phẩm để xóa",
-                    "Cảnh báo",
-                    JOptionPane.WARNING_MESSAGE);
-        }
+
         if (selectedRow != -1) {
             tableModel.removeRow(selectedRow);
+            runPromotion();
             ResetQuantitySpinner();
+
         } else {
             JOptionPane.showMessageDialog(
                     this,
@@ -977,14 +1015,14 @@ public class AddOrderFrame extends JFrame {
     }
 
     private boolean ValidateOrder() {
-        if (this.selectedCustomer == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Vui lòng tìm và chọn một khách hàng hợp lệ (dựa trên SĐT).",
-                    "Lỗi thông tin khách hàng",
-                    JOptionPane.ERROR_MESSAGE);
-            customerPhoneField.requestFocus();
-            return false;
-        }
+        // if (this.selectedCustomer == null) {
+        // JOptionPane.showMessageDialog(this,
+        // "Vui lòng tìm và chọn một khách hàng hợp lệ (dựa trên SĐT).",
+        // "Lỗi thông tin khách hàng",
+        // JOptionPane.ERROR_MESSAGE);
+        // customerPhoneField.requestFocus();
+        // return false;
+        // }
 
         if (tableModel.getRowCount() == 0) {
             JOptionPane.showMessageDialog(this,
@@ -1060,7 +1098,7 @@ public class AddOrderFrame extends JFrame {
     }
 
     private void HandleSuccess() {
-        String customerName = selectedCustomer.getFullName();
+        String customerName = selectedCustomer == null ? "" : selectedCustomer.getFullName();
         String totalText = totalLabel.getText();
         String message = String.format(
                 "Đơn hàng đã được đặt thành công!\n\nKhách hàng: %s\n%s",
@@ -1069,8 +1107,18 @@ public class AddOrderFrame extends JFrame {
                 message,
                 "Đặt hàng thành công",
                 JOptionPane.INFORMATION_MESSAGE);
+        boolean isContinue = ConfirmDialog.confirmDialog(
+                this,
+                "Bạn có muốn tiếp tục tạo đơn hàng mới không?",
+                "Tiếp tục đặt hàng");
 
-        ResetFrom();
+        if (isContinue) {
+            ResetFrom();
+        } else {
+            ResetFrom();
+            this.dispose();
+            orderFrame.HandleLoadAll();
+        }
     }
 
     private int HandleSaveOrder() {
@@ -1079,8 +1127,8 @@ public class AddOrderFrame extends JFrame {
         PaymentMethod paymentMethod = (PaymentMethod) paymentComboBox.getSelectedItem();
 
         order.setAccountId(employeeId);
-        order.setCustomerId(selectedCustomer.getCustomerId());
-        order.setAddress(selectedCustomer.getAddress());
+        order.setCustomerId(selectedCustomer == null ? 0 : selectedCustomer.getCustomerId());
+        order.setAddress(selectedCustomer == null ? "" : selectedCustomer.getAddress());
         order.setPurchaseDate(Date.valueOf(LocalDate.now()));
         order.setTotalAmount(totalAmount);
         order.setPaymentId(paymentMethod);
@@ -1178,6 +1226,13 @@ public class AddOrderFrame extends JFrame {
     }
 
     private int SavePromotionUsage(int orderId, Promotion promotion) {
+        if (promotion.isPercent()) {
+            BigDecimal total = TotalCalculate()
+                    .multiply(BigDecimal.valueOf(promotion.getPercent()))
+                    .divide(BigDecimal.valueOf(100));
+            promotion.setValue(total);
+            System.out.println("total check: " + total);
+        }
         PromotionUsage promotionUsage = new PromotionUsage(
                 orderId,
                 promotion.getPromotionId(),
@@ -1188,7 +1243,7 @@ public class AddOrderFrame extends JFrame {
 
     private void ResetProductList() {
         List<Product> products = productBUS.getAll();
-        System.out.println("Reset product list, total products: " + products.size());
+        // System.out.println("Reset product list, total products: " + products.size());
         productComboBox.removeAllItems();
         products.forEach(productComboBox::addItem);
         if (!(productComboBox.getItemCount() > 0)) {
@@ -1203,6 +1258,8 @@ public class AddOrderFrame extends JFrame {
 
     private void clearCart() {
         tableModel.setRowCount(0);
+
+        runPromotion();
         updateTotal();
     }
 
@@ -1217,7 +1274,6 @@ public class AddOrderFrame extends JFrame {
 
     private void ResetFrom() {
         ResetProductList();
-        ResetPromotionList();
         clearCart();
         ResetQuantitySpinner();
         customerPhoneField.setText("");
@@ -1225,15 +1281,15 @@ public class AddOrderFrame extends JFrame {
         customerFoundNameLabel.setText(" (Chưa có khách hàng)");
     }
 
-    public static void main(String[] args) {
-        // Sử dụng Look and Feel của hệ thống để giao diện đẹp hơn (đặc biệt trên
-        // Windows)
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    // public static void main(String[] args) {
+    // // Sử dụng Look and Feel của hệ thống để giao diện đẹp hơn (đặc biệt trên
+    // // Windows)
+    // try {
+    // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
 
-        SwingUtilities.invokeLater(() -> new AddOrderFrame(1).setVisible(true));
-    }
+    // SwingUtilities.invokeLater(() -> new AddOrderFrame(1).setVisible(true));
+    // }
 }

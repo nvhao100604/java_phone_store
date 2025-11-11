@@ -22,7 +22,7 @@ public class OrderDetailDAO {
             while (rs.next()) {
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.setOrderId(rs.getInt("idHD"));
-                orderDetail.setProductId(rs.getInt("idSP"));
+                orderDetail.setProductId(rs.getInt("idCTSP"));
                 orderDetail.setQuantity(rs.getInt("SOLUONG"));
                 orderDetail.setPrice(rs.getBigDecimal("GIABAN"));
                 orderDetails.add(orderDetail);

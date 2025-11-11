@@ -17,6 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -43,10 +44,11 @@ import app.DTO.PaymentMethod;
 import app.GUI.MainGUI;
 import app.GUI.CustomPanels.FilterPanel;
 import app.GUI.CustomPanels.khungchucnang;
+import app.GUI.interfaces.AddFrame;
 import app.GUI.interfaces.FunctionPanel;
 import app.utils.DecimalFilter;
 
-public class OrderGUI extends JPanel implements FunctionPanel {
+public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
     private MainGUI mainGUI;
     private static final int mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
     private static final int mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -339,7 +341,7 @@ public class OrderGUI extends JPanel implements FunctionPanel {
 
     @Override
     public void Add() {
-        AddOrderFrame addOrderFrame = new AddOrderFrame(mainGUI.getAccount().getAccountId());
+        AddOrderFrame addOrderFrame = new AddOrderFrame(this, mainGUI.getAccount().getAccountId());
         addOrderFrame.setVisible(true);
     }
 
@@ -354,6 +356,10 @@ public class OrderGUI extends JPanel implements FunctionPanel {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        ViewOrderDetailFrame detailFrame = new ViewOrderDetailFrame((JFrame) mainGUI.getApplication(),
+                Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString()));
+        detailFrame.setVisible(true);
     }
 
     @Override
@@ -444,7 +450,7 @@ public class OrderGUI extends JPanel implements FunctionPanel {
                     order.getAccountId(),
                     order.getCustomerId(),
                     order.getPurchaseDate(),
-                    order.getTotalAmount(),
+                    DecimalFilter.PriceFormatter().format(order.getTotalAmount()),
                     order.getPaymentId(),
                     order.getStatus()
             });
@@ -453,5 +459,10 @@ public class OrderGUI extends JPanel implements FunctionPanel {
 
     public void SetTitleQuantity(int quantity) {
         title.setText("Danh sách đơn hàng (" + quantity + ")");
+    }
+
+    @Override
+    public void HandleLoadAll() {
+        Refresh();
     }
 }

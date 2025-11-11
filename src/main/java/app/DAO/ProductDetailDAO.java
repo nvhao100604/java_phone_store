@@ -127,6 +127,30 @@ public class ProductDetailDAO {
         return 0;
     }
 
+    public int getProductTypeByDetailId(int productDetailId) {
+        String sql = "SELECT sp.idDM " +
+                "FROM sanpham sp " +
+                "JOIN chitietsanpham ctsp ON sp.idSP = ctsp.idSP " +
+                "WHERE ctsp.idCTSP = ?";
+        int categoryId = -1;
+
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement st = con.prepareStatement(sql)) {
+            st.setInt(1, productDetailId);
+
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    categoryId = rs.getInt("idDM");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return categoryId;
+    }
+
     // public boolean checkProductDetailId(ProductDetail detail) {
     // String sql = "SELECT * FROM `chitietsanpham` WHERE CTSP= ?";
     // try (Connection connection = DBConnect.getConnection();

@@ -135,6 +135,8 @@ public class PromotionDAO {
                 Promotion promotion = new Promotion();
                 promotion.setPromotionId(rs.getInt("MAKHUYENMAI"));
                 promotion.setCode(rs.getString("CODE"));
+                promotion.setIsPercent(rs.getBoolean("IS_PERCENT"));
+                promotion.setPercent(rs.getInt("PHANTRAM"));
                 promotion.setValue(rs.getBigDecimal("GIATRI"));
                 promotion.setQuantity(rs.getInt("SOLUONG"));
                 promotion.setStartDate(rs.getDate("NGAYAPDUNG"));

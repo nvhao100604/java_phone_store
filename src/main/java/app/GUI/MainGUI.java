@@ -12,6 +12,7 @@ import app.PhoneStoreApplication;
 import app.DTO.Account;
 import app.GUI.CustomPanels.sidebar;
 import app.GUI.ImportSlipGUI.ImportSlipGUI;
+import app.GUI.OrderGUI.OrderGUI;
 import app.GUI.ProductGUI.ProductGUI;
 
 public class MainGUI extends JPanel {
@@ -34,6 +35,8 @@ public class MainGUI extends JPanel {
 		try {
 			JPanel guiInstance = null;
 			if (guiClass.equals(ImportSlipGUI.class)) {
+				guiInstance = (JPanel) guiClass.getDeclaredConstructor(MainGUI.class).newInstance(this);
+			} else if (guiClass.equals(OrderGUI.class)) {
 				guiInstance = (JPanel) guiClass.getDeclaredConstructor(MainGUI.class).newInstance(this);
 			} else {
 				guiInstance = (JPanel) guiClass.getDeclaredConstructor().newInstance();
