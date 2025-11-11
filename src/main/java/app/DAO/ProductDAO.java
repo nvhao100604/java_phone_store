@@ -91,7 +91,7 @@ public class ProductDAO {
 		String statusCheck = status.equals("CÒN HÀNG") ? "IS NOT NULL" : "IS NULL";
 		String sql = "SELECT COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE s.idSP= ? "
 				+
-				"\nAND i.idPN " + statusCheck + " GROUP BY s.idSP";
+				"\nAND i.idHD " + statusCheck + " GROUP BY s.idSP";
 		try (Connection con = DBConnect.getConnection();
 				PreparedStatement st = con.prepareStatement(sql)) {
 			st.setInt(1, productId);

@@ -26,10 +26,11 @@ import app.DTO.Product;
 import app.DTO.ProductDetail;
 import app.DTO.Supplier;
 import app.GUI.MainGUI;
+import app.GUI.interfaces.AddFrame;
 import app.utils.DecimalFilter;
 import app.utils.NumericRangeFilter;
 
-public class AddImportSlipFrame extends JFrame {
+public class AddImportSlipFrame extends JFrame implements AddFrame {
 
     private static final Color COLOR_BACKGROUND = new Color(245, 248, 251);
     private static final Color COLOR_WHITE = Color.WHITE;
@@ -348,22 +349,7 @@ public class AddImportSlipFrame extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
 
-        try {
-            java.util.List<Product> products = productBUS.getAll();
-            productBox.removeAllItems();
-            products.forEach(productBox::addItem);
-
-            if (!products.isEmpty()) {
-                productBox.setSelectedIndex(0);
-                HandleChangeProduct();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this,
-                    "Lỗi: Không thể tải danh sách sản phẩm.\n" + e.getMessage(),
-                    "Lỗi Dữ liệu",
-                    JOptionPane.ERROR_MESSAGE);
-        }
+        HandleLoadAll();
     }
 
     private void addListener() {
@@ -570,7 +556,6 @@ public class AddImportSlipFrame extends JFrame {
         quantitySpinner.setValue(1);
 
         tableModel.setRowCount(0);
-
         updateTotalAmount();
     }
 
@@ -804,6 +789,29 @@ public class AddImportSlipFrame extends JFrame {
             }
         });
         return button;
+    }
+
+    @Override
+    public void HandleLoadAll() {
+        try {
+            java.util.List<Product> products = productBUS.getAll();
+            productBox.removeAllItems();
+            products.forEach(productBox::addItem);
+
+            if (!products.isEmpty()) {
+                productBox.setSelectedIndex(0);
+            } else {
+                variantBox.removeAllItems();
+                priceField.setText("0");
+                addPriceField.setText("0");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Lỗi: Không thể tải lại danh sách sản phẩm.\n" + e.getMessage(),
+                    "Lỗi Dữ liệu",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static void main(String[] args) {

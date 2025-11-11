@@ -21,6 +21,10 @@ public class ProductDetailBUS {
 		return dao.getProductDetailByDetailId(productDetailId);
 	}
 
+	public int getQuantityByDetailId(int productDetailId, String status) {
+		return dao.getQuantityByDetailId(productDetailId, status);
+	}
+
 	public int addProductDetail(int productId, String color, String capacity, BigDecimal priceAdjustment) {
 		return dao.addProductDetail(productId, color, capacity, priceAdjustment);
 	}

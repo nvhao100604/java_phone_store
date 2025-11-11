@@ -35,7 +35,7 @@ public class OrderDetailDAO {
     }
 
     public int addOrderDetail(OrderDetail orderDetail) {
-        String sql = "INSERT INTO chitiethoadon (idHD, idSP, SOLUONG, GIABAN) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO chitiethoadon (idHD, idCTSP, SOLUONG, GIABAN) VALUES (?, ?, ?, ?)";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setInt(1, orderDetail.getOrderId());
