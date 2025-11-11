@@ -434,7 +434,7 @@ public class OrderGUI extends JPanel implements FunctionPanel {
 
         if (noResultLabel != null) {
             noResultLabel.setVisible(false);
-            scrollPane.setPreferredSize(new Dimension(0, 600));
+            scrollPane.setPreferredSize(new Dimension(0, 450));
             revalidate();
             repaint();
         }

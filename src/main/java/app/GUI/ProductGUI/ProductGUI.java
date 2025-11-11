@@ -374,7 +374,7 @@ public class ProductGUI extends JPanel
 
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		scrollPane.setViewportView(table);
-		scrollPane.setPreferredSize(new Dimension(0, 600));
+		scrollPane.setPreferredSize(new Dimension(0, 500));
 		listPanel.add(scrollPane, BorderLayout.NORTH);
 
 		noResultLabel = new JLabel("Không tìm thấy sản phẩm");
@@ -505,7 +505,7 @@ public class ProductGUI extends JPanel
 		if (products.isEmpty()) {
 			model.addRow(new Object[] { "", "", "", "", "" });
 			noResultLabel.setVisible(true);
-			scrollPane.setPreferredSize(new Dimension(0, 100));
+			scrollPane.setPreferredSize(new Dimension(0, 500));
 			revalidate();
 			repaint();
 			return;
@@ -513,7 +513,7 @@ public class ProductGUI extends JPanel
 
 		if (noResultLabel != null) {
 			noResultLabel.setVisible(false);
-			scrollPane.setPreferredSize(new Dimension(0, 600));
+			scrollPane.setPreferredSize(new Dimension(0, 500));
 			revalidate();
 			repaint();
 		}
