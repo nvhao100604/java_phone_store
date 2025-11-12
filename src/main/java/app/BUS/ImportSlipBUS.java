@@ -28,6 +28,14 @@ public class ImportSlipBUS {
         this.imeiBUS = new ImeiBUS();
     }
 
+    public ImportSlip getImportSlipById(int importSlipId) {
+        return dao.getImportSlipById(importSlipId);
+    }
+
+    public List<ImportSlipDetail> getDetailsByImportSlipId(int importSlipId) {
+        return importSlipDetailBUS.getDetailsByImportSlipId(importSlipId);
+    }
+
     public int AddImei(Imei imei) {
         return imeiBUS.AddImei(imei);
     }

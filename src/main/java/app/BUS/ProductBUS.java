@@ -3,6 +3,7 @@ package app.BUS;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +29,7 @@ public class ProductBUS {
 		return dao.getProductById(productId);
 	}
 
-	public Product getProductByName(String productName) // thêm
-	{
+	public Product getProductByName(String productName) {
 		return dao.getProductByName(productName);
 	}
 
@@ -53,11 +53,14 @@ public class ProductBUS {
 		return dao.getAllDesc();
 	}
 
-	public Map<String, Integer> getBestSellingProducts(String status) {
-		return dao.getBestSellingProducts(status);
+	public Map<String, Integer> getBestSellingProducts() {
+		return dao.getBestSellingProducts();
 	}
 
 	public int AddProduct(Product product) {
+		if (CheckProductName(product.getProductName()) <= 0) {
+			return -1;
+		}
 		return dao.addProduct(product);
 	}
 
@@ -143,7 +146,8 @@ public class ProductBUS {
 		return row;
 	}
 
-	public boolean importDataFromExcel(String filePath) {
+	public List<Integer> importDataFromExcel(String filePath) {
+		List<Integer> existedId = new ArrayList<>();
 		try (FileInputStream fis = new FileInputStream(filePath);
 				Workbook workbook = new XSSFWorkbook(fis)) {
 
@@ -164,16 +168,21 @@ public class ProductBUS {
 						row.getCell(5).toString(),
 						new BigDecimal(row.getCell(6).getNumericCellValue()));
 
-				int id = dao.addProduct(newProduct);
-				System.out.println("Đã thêm sản phẩm id = " + id);
+				int id = AddProduct(newProduct);
+				if (id > 0) {
+					System.out.println("Đã thêm sản phẩm id = " + id);
+				} else {
+					existedId.add(id);
+					System.out.println("Sản phẩm đã tồn tại !");
+				}
 			}
-			return true;
+			return existedId;
 		} catch (IOException e) {
 			System.err.println("Lỗi đọc file Excel: " + e.getMessage());
-			return false;
+			return existedId;
 		} catch (Exception e) {
 			System.err.println("Lỗi xử lý dữ liệu: " + e.getMessage());
-			return false;
+			return existedId;
 		}
 	}
 
@@ -187,6 +196,10 @@ public class ProductBUS {
 
 	public int getProductTypeByDetailId(int productDetailId) {
 		return detailBUS.getProductTypeByDetailId(productDetailId);
+	}
+
+	public int CheckProductName(String productName) {
+		return dao.CheckProductName(productName);
 	}
 
 	// public static void main(String[] args) {

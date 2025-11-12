@@ -23,6 +23,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.printing.PDFPageable;
+
 import app.BUS.CustomerBUS;
 import app.BUS.ImeiBUS;
 import app.BUS.OrderBUS;
@@ -38,6 +45,7 @@ import app.DTO.Promotion;
 import app.DTO.PromotionUsage;
 import app.GUI.interfaces.AddFrame;
 import app.utils.ConfirmDialog;
+import app.utils.DataTable;
 import app.utils.DecimalFilter;
 
 import java.awt.BorderLayout;
@@ -51,6 +59,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.NumberFormat;
@@ -101,6 +113,7 @@ public class AddOrderFrame extends JFrame {
     private ImeiBUS imeiBUS;
     private OrderBUS orderBUS;
     private int employeeId;
+    private int orderId;
 
     private JTextField customerPhoneField;
     private JLabel customerFoundNameLabel;
@@ -137,6 +150,7 @@ public class AddOrderFrame extends JFrame {
         this.imeiBUS = new ImeiBUS();
         this.orderBUS = new OrderBUS();
         this.employeeId = employeeId;
+        this.orderId = 0;
 
         this.currencyFormatter = DecimalFilter.PriceFormatter();
         this.promotionList = new ArrayList<>();
@@ -1107,6 +1121,15 @@ public class AddOrderFrame extends JFrame {
                 message,
                 "Đặt hàng thành công",
                 JOptionPane.INFORMATION_MESSAGE);
+        boolean exportInvoice = ConfirmDialog.confirmDialog(
+                this,
+                "Bạn có muốn xuất hóa đơn không?",
+                "Thông báo");
+
+        if (exportInvoice) {
+            HandlePrint();
+        }
+
         boolean isContinue = ConfirmDialog.confirmDialog(
                 this,
                 "Bạn có muốn tiếp tục tạo đơn hàng mới không?",
@@ -1118,6 +1141,30 @@ public class AddOrderFrame extends JFrame {
             ResetFrom();
             this.dispose();
             orderFrame.HandleLoadAll();
+        }
+    }
+
+    private void HandlePrint() {
+        if (orderId <= 0)
+            return;
+        String fileName = "hoadon" + orderId + ".pdf";
+        String filePath = DataTable.chooseFolder(this, fileName);
+
+        Order order = orderBUS.getOrderById(orderId);
+        List<OrderDetail> details = orderBUS.getDetailsByOrderId(orderId);
+        String path = exportInvoiceToPDF(order, details, selectedCustomer, filePath);
+        boolean response = printPDF(path);
+
+        if (response) {
+            JOptionPane.showMessageDialog(this,
+                    "Xuất hóa đơn thành công",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Xuất hóa đơn thất bại",
+                    "Thông báo",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -1135,6 +1182,7 @@ public class AddOrderFrame extends JFrame {
 
         int orderId = orderBUS.addOrder(order);
         if (orderId > 0) {
+            this.orderId = orderId;
             ApplyPromotion(orderId);
             return orderId;
         }
@@ -1279,6 +1327,151 @@ public class AddOrderFrame extends JFrame {
         customerPhoneField.setText("");
         selectedCustomer = null;
         customerFoundNameLabel.setText(" (Chưa có khách hàng)");
+    }
+
+    public String exportInvoiceToPDF(Order order, List<OrderDetail> details, Customer customer, String filePath) {
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.A5);
+            document.addPage(page);
+
+            PDType0Font fontRegular = PDType0Font.load(document, new File("C:/Windows/Fonts/arial.ttf"));
+            PDType0Font fontBold = PDType0Font.load(document, new File("C:/Windows/Fonts/arialbd.ttf"));
+
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                float y = page.getMediaBox().getUpperRightY() - 70;
+                float x = 70;
+                float lineSpacing = 18;
+
+                contentStream.beginText();
+                contentStream.setFont(fontBold, 18);
+                contentStream.newLineAtOffset(x + 180, y);
+                contentStream.showText("HÓA ĐƠN BÁN HÀNG");
+                contentStream.endText();
+                y -= lineSpacing * 2;
+
+                contentStream.beginText();
+                contentStream.setFont(fontRegular, 12);
+                contentStream.newLineAtOffset(x, y);
+                contentStream.showText("Mã Đơn hàng: #" + order.getOrderId());
+                y -= lineSpacing;
+                contentStream.newLineAtOffset(0, -lineSpacing);
+                contentStream.showText("Khách hàng: " + (customer != null ? customer.getFullName() : "Khách lẻ"));
+                y -= lineSpacing;
+                contentStream.newLineAtOffset(0, -lineSpacing);
+                contentStream.showText("Ngày đặt: " + order.getPurchaseDate().toString());
+                y -= lineSpacing * 1.5;
+                contentStream.newLineAtOffset(0, -lineSpacing * (float) 1.5);
+                contentStream.endText();
+
+                contentStream.beginText();
+                contentStream.setFont(fontBold, 12);
+                contentStream.newLineAtOffset(x, y);
+                contentStream.showText("Sản phẩm");
+                contentStream.newLineAtOffset(250, 0);
+                contentStream.showText("Số lượng");
+                contentStream.newLineAtOffset(100, 0);
+                contentStream.showText("Đơn giá");
+                contentStream.newLineAtOffset(100, 0);
+                contentStream.showText("Thành tiền");
+                contentStream.endText();
+                y -= lineSpacing;
+
+                contentStream.moveTo(x, y);
+                contentStream.lineTo(x + 480, y);
+                contentStream.stroke();
+                y -= lineSpacing;
+
+                BigDecimal subtotal = BigDecimal.ZERO;
+                contentStream.setFont(fontRegular, 11);
+
+                for (OrderDetail detail : details) {
+                    ProductDetail pd = productBUS.getProductDetailByDetailId(detail.getProductId());
+                    Product p = productBUS.getProductByDetailId(pd.getProductId());
+                    String productName = p.getProductName() + " (" + pd.toString() + ")";
+
+                    BigDecimal totalRow = detail.getPrice().multiply(BigDecimal.valueOf(detail.getQuantity()));
+                    subtotal = subtotal.add(totalRow);
+
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(x, y);
+                    contentStream.showText(productName);
+                    contentStream.newLineAtOffset(250, 0);
+                    contentStream.showText(String.valueOf(detail.getQuantity()));
+                    contentStream.newLineAtOffset(100, 0);
+                    contentStream.showText(DecimalFilter.PriceFormatter().format(detail.getPrice()));
+                    contentStream.newLineAtOffset(100, 0);
+                    contentStream.showText(DecimalFilter.PriceFormatter().format(totalRow));
+                    contentStream.endText();
+                    y -= lineSpacing;
+                }
+
+                contentStream.moveTo(x + 350, y);
+                contentStream.lineTo(x + 480, y);
+                contentStream.stroke();
+                y -= lineSpacing * 1.5;
+
+                BigDecimal promotionValue = subtotal.subtract(order.getTotalAmount());
+
+                contentStream.beginText();
+                contentStream.setFont(fontRegular, 12);
+                contentStream.newLineAtOffset(x + 350, y);
+                contentStream.showText("Tổng cộng:");
+                contentStream.newLineAtOffset(100, 0);
+                contentStream.showText(DecimalFilter.PriceFormatter().format(subtotal));
+                contentStream.endText();
+                y -= lineSpacing;
+
+                contentStream.beginText();
+                contentStream.setFont(fontRegular, 12);
+                contentStream.newLineAtOffset(x + 350, y);
+                contentStream.showText("Khuyến mãi:");
+                contentStream.newLineAtOffset(100, 0);
+                contentStream.showText("- " + DecimalFilter.PriceFormatter().format(promotionValue));
+                contentStream.endText();
+                y -= lineSpacing;
+
+                contentStream.beginText();
+                contentStream.setFont(fontBold, 14);
+                contentStream.newLineAtOffset(x + 350, y);
+                contentStream.showText("Thành tiền:");
+                contentStream.newLineAtOffset(100, 0);
+                contentStream.showText(DecimalFilter.PriceFormatter().format(order.getTotalAmount()));
+                contentStream.endText();
+
+            }
+
+            document.save(new File(filePath));
+            JOptionPane.showMessageDialog(null, "Xuất Hóa đơn PDF thành công!\nĐã lưu tại: " + filePath);
+            return filePath;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi khi xuất PDF: " + e.getMessage(), "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        return "";
+    }
+
+    private boolean printPDF(String filePath) {
+        if (filePath.trim().equals("") || filePath == null)
+            return false;
+        try (PDDocument document = PDDocument.load(new File(filePath))) {
+            PrinterJob job = PrinterJob.getPrinterJob();
+            job.setPageable(new PDFPageable(document));
+
+            if (job.printDialog()) {
+                job.print();
+                return true;
+            }
+
+        } catch (IOException | PrinterException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Lỗi khi cố gắng in PDF: " + e.getMessage(),
+                    "Lỗi In ấn",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        return false;
     }
 
     // public static void main(String[] args) {

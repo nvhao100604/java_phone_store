@@ -28,6 +28,7 @@ import app.BUS.ImportSlipBUS;
 import app.BUS.ProductBUS;
 import app.BUS.SupplierBUS;
 import app.DTO.ImportSlip;
+import app.DTO.ImportSlipDetail;
 import app.DTO.Product;
 import app.GUI.MainGUI;
 import app.GUI.CustomPanels.FilterPanel;
@@ -386,6 +387,39 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
         CreateTable();
     }
 
+    public void SetTitleQuantity(int quantity) {
+        title.setText("Danh sách phiếu nhập (" + quantity + ")");
+    }
+
+    public void CreateTable() {
+        JPanel listPanel = new JPanel(new BorderLayout());
+        scrollPane = new JScrollPane();
+        String[] columnNames = { "Mã phiếu nhập", "Người nhập", "Ngày nhập", "Nhà cung cấp", "Thành tiền", "Lợi nhuận",
+                "Trạng thái" };
+        List<ImportSlip> importslipList = importSlipBUS.getAllActiveImportSlips();
+        tableModel = new DefaultTableModel(importslipList.stream()
+                .map(p -> new Object[] { p.getImportSlipId(), p.getEmployeeId(), (java.util.Date) p.getImportDate(),
+                        supplierBUS.getSupplierNameById(p.getSupplierId()), p.getTotalAmount(), p.getProfit(),
+                        p.getStatus() })
+                .toArray(Object[][]::new), columnNames);
+        table = new JTable(tableModel);
+        table.setRowHeight(28);
+        table.setFont(new Font("Arial", Font.PLAIN, 15));
+
+        SetTitleQuantity(importslipList.size());
+        scrollPane.setViewportView(table);
+        scrollPane.setPreferredSize(new Dimension(0, 500));
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        listPanel.add(scrollPane, BorderLayout.NORTH);
+
+        add(listPanel, BorderLayout.SOUTH);
+        JTableHeader header = table.getTableHeader();
+        header.setBackground(new Color(0, 64, 128));
+        header.setForeground(Color.WHITE);
+        header.setFont(new Font("Arial", Font.BOLD, 16));
+        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+    }
+
     @Override
     public void Add() {
         AddImportSlipFrame addImportSlipFrame = new AddImportSlipFrame(mainGUI.getAccount().getAccountId());
@@ -412,118 +446,14 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
     // Chỉnh sửa
     @Override
     public void Edit() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập để chỉnh sửa!", "Lỗi",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        int importSlipId = (int) tableModel.getValueAt(selectedRow, 0);
-        ImportSlip slip = importSlipBUS.getAllImportSlips().stream()
-                .filter(s -> s.getImportSlipId() == importSlipId)
-                .findFirst().orElse(null);
-        if (slip == null) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu nhập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Chỉnh sửa phiếu nhập", true);
-        dialog.setSize(500, 400);
-        dialog.setLayout(new GridBagLayout());
-        dialog.setLocationRelativeTo(this);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        JLabel supplierLabel = new JLabel("Nhà cung cấp (ID):");
-        supplierLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        JTextField supplierField = new JTextField(String.valueOf(slip.getSupplierId()), 20);
-        supplierField.setFont(new Font("Arial", Font.PLAIN, 20));
-
-        JLabel totalLabel = new JLabel("Thành tiền:");
-        totalLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        JTextField totalField = new JTextField(slip.getTotalAmount().toString(), 20);
-        totalField.setFont(new Font("Arial", Font.PLAIN, 20));
-        ((AbstractDocument) totalField.getDocument()).setDocumentFilter(new DecimalFilter());
-
-        JLabel profitLabel = new JLabel("Lợi nhuận:");
-        profitLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        JTextField profitField = new JTextField(String.valueOf(slip.getProfit()), 20);
-        profitField.setFont(new Font("Arial", Font.PLAIN, 20));
-        ((AbstractDocument) profitField.getDocument()).setDocumentFilter(new DecimalFilter());
-
-        JLabel statusLabel = new JLabel("Trạng thái:");
-        statusLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        JComboBox<String> statusCombo = new JComboBox<>(new String[] { "0 - Không hoạt động", "1 - Hoạt động" });
-        statusCombo.setFont(new Font("Arial", Font.PLAIN, 20));
-        statusCombo.setSelectedIndex(slip.getStatus());
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        dialog.add(supplierLabel, gbc);
-        gbc.gridx = 1;
-        dialog.add(supplierField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        dialog.add(totalLabel, gbc);
-        gbc.gridx = 1;
-        dialog.add(totalField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        dialog.add(profitLabel, gbc);
-        gbc.gridx = 1;
-        dialog.add(profitField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        dialog.add(statusLabel, gbc);
-        gbc.gridx = 1;
-        dialog.add(statusCombo, gbc);
-
-        JButton saveButton = new JButton("Lưu");
-        saveButton.setFont(new Font("Arial", Font.PLAIN, 20));
-        saveButton.setBackground(Color.BLUE);
-        saveButton.setForeground(Color.WHITE);
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        dialog.add(saveButton, gbc);
-
-        saveButton.addActionListener(e -> {
-            try {
-                int supplierId = Integer.parseInt(supplierField.getText().trim());
-                BigDecimal totalAmount = new BigDecimal(totalField.getText().trim());
-                BigDecimal profit = new BigDecimal(profitField.getText().trim());
-                int status = statusCombo.getSelectedIndex();
-
-                slip.setSupplierId(supplierId);
-                slip.setTotalAmount(totalAmount);
-                slip.setProfit(profit.intValue());
-                slip.setStatus(status);
-
-                int rowsAffected = importSlipBUS.updateImportSlip(slip);
-                if (rowsAffected > 0) {
-                    updateTable(importSlipBUS.getAllImportSlips());
-                    JOptionPane.showMessageDialog(dialog, "Cập nhật phiếu nhập thành công!");
-                    dialog.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(dialog, "Cập nhật thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(dialog, "Vui lòng nhập số hợp lệ cho ID, thành tiền hoặc lợi nhuận!",
-                        "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(dialog, "Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        dialog.setVisible(true);
+        int selectedRow = (int) table.getSelectedRow();
+        int selectedId = (int) tableModel.getValueAt(selectedRow, 0);
+        ImportSlip selectedSlip = importSlipBUS.getImportSlipById(selectedId);
+        List<ImportSlipDetail> details = importSlipBUS.getDetailsByImportSlipId(selectedId);
+        ViewImportSlipFrame viewImportSlipFrame = new ViewImportSlipFrame(
+                this.mainGUI.getApplication(),
+                selectedSlip, details);
+        viewImportSlipFrame.setVisible(true);
     }
 
     // Import Excel
@@ -676,35 +606,6 @@ public class ImportSlipGUI extends JPanel implements FunctionPanel {
                         JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
-
-    public void SetTitleQuantity(int quantity) {
-        title.setText("Danh sách phiếu nhập (" + quantity + ")");
-    }
-
-    public void CreateTable() {
-        JPanel listPanel = new JPanel(new BorderLayout());
-        scrollPane = new JScrollPane();
-        String[] columnNames = { "Mã phiếu nhập", "Người nhập", "Ngày nhập", "Nhà cung cấp", "Thành tiền", "Lợi nhuận",
-                "Trạng thái" };
-        List<ImportSlip> importslipList = importSlipBUS.getAllActiveImportSlips();
-        tableModel = new DefaultTableModel(importslipList.stream()
-                .map(p -> new Object[] { p.getImportSlipId(), p.getEmployeeId(), (java.util.Date) p.getImportDate(),
-                        supplierBUS.getSupplierNameById(p.getSupplierId()), p.getTotalAmount(), p.getProfit(),
-                        p.getStatus() })
-                .toArray(Object[][]::new), columnNames); // join để lấy tên nhà cung cấp
-        table = new JTable(tableModel);
-        table.setRowHeight(28);
-        table.setFont(new Font("Arial", Font.PLAIN, 15));
-        SetTitleQuantity(importslipList.size());
-        scrollPane.setViewportView(table);
-        listPanel.add(scrollPane, BorderLayout.NORTH);
-        add(listPanel, BorderLayout.SOUTH);
-        JTableHeader header = table.getTableHeader();
-        header.setBackground(new Color(0, 64, 128));
-        header.setForeground(Color.WHITE);
-        header.setFont(new Font("Arial", Font.BOLD, 16));
-        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
     }
 
     private void handleFilterChangeThanhTien() {

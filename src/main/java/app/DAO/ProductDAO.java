@@ -7,13 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import app.DTO.Product;
-import app.DTO.ProductDetail;
 import app.database.DBConnect;
 
 public class ProductDAO {
@@ -72,12 +70,11 @@ public class ProductDAO {
 		return list;
 	}
 
-	public Map<String, Integer> getBestSellingProducts(String status) {
+	public Map<String, Integer> getBestSellingProducts() {
 		Map<String, Integer> list = new LinkedHashMap<>();
-		String sql = "SELECT s.TENSP, COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE i.STATUS= ? GROUP BY s.idSP ORDER BY COUNT(i.imei) DESC";
+		String sql = "SELECT s.TENSP, COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE i.idHD IS NOT NULL GROUP BY s.idSP ORDER BY COUNT(i.imei) DESC";
 		try (Connection con = DBConnect.getConnection();
 				PreparedStatement st = con.prepareStatement(sql)) {
-			st.setString(1, status);
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				list.put(rs.getString(1), rs.getInt(2));
@@ -107,11 +104,13 @@ public class ProductDAO {
 	}
 
 	public int getQuantityByName(String productName, String status) {
-		String sql = "SELECT COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE s.TENSP= ? AND i.STATUS= ? GROUP BY s.idSP";
+		String statusCheck = status.equals("CÒN HÀNG") ? "IS NULL" : "IS NOT NULL";
+		String sql = "SELECT COUNT(i.imei) AS SOLUONG FROM `sanpham` s LEFT JOIN chitietsanpham ct ON s.idSP=ct.idSP LEFT JOIN imei i ON ct.idCTSP=i.idCTSP "
+				+
+				"\nWHERE s.TENSP= ? AND i.idHD " + statusCheck + " GROUP BY s.idSP";
 		try (Connection con = DBConnect.getConnection();
 				PreparedStatement st = con.prepareStatement(sql)) {
 			st.setString(1, productName);
-			st.setString(2, status);
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				return rs.getInt(1);
@@ -517,6 +516,24 @@ public class ProductDAO {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public int CheckProductName(String productName) {
+		String sql = "SELECT idSP FROM sanpham WHERE TENSP = ?";
+		try (Connection connection = DBConnect.getConnection();
+				PreparedStatement st = connection.prepareStatement(sql)) {
+			st.setString(1, productName);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(0);
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		return -1;
 	}
 
 	// public static void main(String[] args) {

@@ -115,7 +115,7 @@ public class OrderDAO {
                 "LEFT JOIN donhang d \r\n" +
                 "    ON MONTH(d.NGAYMUA) = m.month AND YEAR(d.NGAYMUA) = ?\r\n" +
                 "GROUP BY m.month\r\n" +
-                "ORDER BY m.month;";
+                "ORDER BY m.month";
         try (Connection connection = DBConnect.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, year);
@@ -151,7 +151,9 @@ public class OrderDAO {
         String sql = "SELECT sp.TENSP, COALESCE(SUM(d.THANHTIEN), 0) AS TONGDOANHTHU FROM `donhang` d RIGHT JOIN chitiethoadon ct ON ct.idHD=d.idHD"
                 + "\nRIGHT JOIN chitietsanpham ctsp ON ct.idCTSP=ctsp.idCTSP\n"
                 + "\nJOIN sanpham sp ON ctsp.idSP=sp.idSP JOIN danhmuc dm ON sp.idDM = dm.idDM\n"
-                + "\nWHERE sp.idDM = ? GROUP BY sp.idSP\n"
+                + "\nJOIN imei i ON ctsp.idCTSP=i.idCTSP"
+                + "\nWHERE sp.idDM = ? AND i.idHD IS NOT NULL"
+                + "\nGROUP BY sp.idSP\n"
                 + "ORDER BY COALESCE(SUM(d.THANHTIEN), 0) DESC LIMIT 5\n";
         try (Connection connection = DBConnect.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {

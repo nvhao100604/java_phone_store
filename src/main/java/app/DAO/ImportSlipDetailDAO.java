@@ -7,10 +7,34 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.DTO.ImportSlipDetail;
 import app.DTO.Product;
 import app.database.DBConnect;
 
 public class ImportSlipDetailDAO {
+    public List<ImportSlipDetail> getDetailsByImportSlipId(int importSlipId) {
+        List<ImportSlipDetail> detailsList = new ArrayList<>();
+        String sql = "SELECT idPN, idCTSP, SOLUONG, GIANHAP, DIEUCHINHGIA FROM chitietphieunhap WHERE idPN = ?";
+
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, importSlipId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ImportSlipDetail detail = new ImportSlipDetail();
+                detail.setImportSlipId(rs.getInt("idPN"));
+                detail.setProductDetailId(rs.getInt("idCTSP"));
+                detail.setQuantity(rs.getInt("SOLUONG"));
+                detail.setImportPrice(rs.getBigDecimal("GIANHAP"));
+                detail.setPriceAdjustment(rs.getBigDecimal("DIEUCHINHGIA"));
+                detailsList.add(detail);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return detailsList;
+    }
 
     public List<Product> getProductsByImportSlipId(int importSlipId) {
         List<Product> products = new ArrayList<>();

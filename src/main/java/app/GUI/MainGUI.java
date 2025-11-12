@@ -1,11 +1,9 @@
 package app.GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import app.PhoneStoreApplication;
@@ -22,14 +20,6 @@ public class MainGUI extends JPanel {
 	private JPanel contentPane;
 	private sidebar navBar;
 	private Account account;
-
-	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the frame.
-	 */
 
 	public void InitialGUI(Class<?> guiClass) {
 		try {

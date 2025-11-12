@@ -317,12 +317,12 @@ public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
         header.setBackground(new Color(0, 64, 128));
         header.setForeground(Color.WHITE);
         header.setFont(new Font("Arial", Font.BOLD, 16));
+        header.setPreferredSize(new Dimension(header.getWidth(), 35));
         ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 
-        scrollPane.setViewportView(table);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         scrollPane.setPreferredSize(new Dimension(0, 500));
         scrollPane.setViewportView(table);
-        scrollPane.setPreferredSize(new Dimension(0, 600));
         listPanel.add(scrollPane, BorderLayout.NORTH);
 
         noResultLabel = new JLabel("Không tìm thấy đơn hàng");
@@ -334,7 +334,6 @@ public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
         listPanel.add(noResultLabel, BorderLayout.CENTER);
 
         add(listPanel, BorderLayout.SOUTH);
-
         // Load dữ liệu ban đầu
         updateTable(orderList);
     }
@@ -346,6 +345,10 @@ public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
     }
 
     public void Delete() {
+        JOptionPane.showMessageDialog(this,
+                "Tính năng không được cung cấp",
+                "Thông báo",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
@@ -364,14 +367,25 @@ public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
 
     @Override
     public void ImportExcel() {
+        JOptionPane.showMessageDialog(this,
+                "Tính năng không được cung cấp",
+                "Thông báo",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
     public void ExportExcel() {
+        JOptionPane.showMessageDialog(this,
+                "Tính năng không được cung cấp",
+                "Thông báo",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void restore() {
-
+        JOptionPane.showMessageDialog(this,
+                "Tính năng không được cung cấp",
+                "Thông báo",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void FilterOrder() {

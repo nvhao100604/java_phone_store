@@ -54,7 +54,7 @@ public class ViewImportSlipFrame extends JDialog {
     private final DecimalFormat formatter = DecimalFilter.PriceFormatter();
 
     public ViewImportSlipFrame(Frame owner, ImportSlip slipToView, List<ImportSlipDetail> slipDetails) {
-        super(owner, "Chi tiết Phiếu Nhập #" + slipToView.getImportSlipId(), true); // true = Modal
+        super(owner, "Chi tiết Phiếu Nhập #" + slipToView.getImportSlipId(), true);
 
         this.slipToView = slipToView;
         this.slipDetails = slipDetails;
@@ -85,7 +85,7 @@ public class ViewImportSlipFrame extends JDialog {
         JPanel bottomPanel = createBottomPanel();
         add(bottomPanel, BorderLayout.SOUTH);
 
-        setVisible(true);
+        // setVisible(true);
     }
 
     private JPanel createInfoPanel() {
@@ -201,6 +201,7 @@ public class ViewImportSlipFrame extends JDialog {
         try {
             String supplierName = supplierBUS.getSupplierNameById(slipToView.getSupplierId());
             String employeeName = employeeBUS.getEmployeeNameById(slipToView.getEmployeeId());
+            System.out.println();
 
             supplierDisplay.setText(supplierName != null ? supplierName : "N/A");
             employeeDisplay.setText(employeeName != null ? employeeName : "N/A");
@@ -218,7 +219,7 @@ public class ViewImportSlipFrame extends JDialog {
         for (ImportSlipDetail detail : slipDetails) {
             try {
                 ProductDetail pd = productBUS.getProductDetailByDetailId(detail.getProductDetailId());
-                Product p = productBUS.getProductById(pd.getProductId()); // Giả sử pd có getProductId()
+                Product p = productBUS.getProductById(pd.getProductId());
 
                 BigDecimal rowTotal = detail.getImportPrice().add(detail.getPriceAdjustment())
                         .multiply(BigDecimal.valueOf(detail.getQuantity()));
@@ -226,16 +227,15 @@ public class ViewImportSlipFrame extends JDialog {
                 tableModel.addRow(new Object[] {
                         detail.getProductDetailId(),
                         p.getProductName(),
-                        pd.toString(), // Dùng toString() của ProductDetail
+                        pd.toString(),
                         formatter.format(detail.getImportPrice()),
                         formatter.format(detail.getPriceAdjustment()),
-                        slipToView.getProfit() + "%", // Lấy lợi nhuận chung
+                        slipToView.getProfit() + "%",
                         detail.getQuantity(),
                         formatter.format(rowTotal)
                 });
             } catch (Exception e) {
                 e.printStackTrace();
-                // Thêm hàng báo lỗi nếu tra cứu thất bại
                 tableModel.addRow(new Object[] { detail.getProductDetailId(), "Lỗi tải Tên", "N/A", 0, 0, 0, 0, 0 });
             }
         }
@@ -256,11 +256,10 @@ public class ViewImportSlipFrame extends JDialog {
         label.setFont(FONT_FIELD);
         label.setBackground(COLOR_FIELD_BG);
         label.setForeground(COLOR_TEXT_DARK);
-        label.setOpaque(true); // Phải là true để nền hiển thị
+        label.setOpaque(true);
         label.setBorder(new CompoundBorder(
                 BorderFactory.createLineBorder(COLOR_BORDER),
-                new EmptyBorder(5, 8, 5, 8) // Padding bên trong
-        ));
+                new EmptyBorder(5, 8, 5, 8)));
         return label;
     }
 

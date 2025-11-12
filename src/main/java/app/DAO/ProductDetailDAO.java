@@ -13,7 +13,7 @@ import app.database.DBConnect;
 public class ProductDetailDAO {
     public List<ProductDetail> getProductDetailById(int productId) {
         List<ProductDetail> detail_list = new ArrayList<>();
-        String sql = "SELECT ct.*, COUNT(i.imei) AS SOLUONG from chitietsanpham ct LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE ct.idSP= ? GROUP BY ct.idCTSP";
+        String sql = "SELECT ct.*, COUNT(i.imei) AS SOLUONG from chitietsanpham ct LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE ct.idSP= ? AND i.idHD IS NULL GROUP BY ct.idCTSP";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement st = con.prepareStatement(sql)) {
             st.setInt(1, productId);
@@ -25,7 +25,7 @@ public class ProductDetailDAO {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getBigDecimal(5),
-                        rs.getInt(6)));
+                        rs.getInt(7)));
             }
             return detail_list;
         } catch (Exception e) {
@@ -36,7 +36,7 @@ public class ProductDetailDAO {
     }
 
     public ProductDetail getProductDetailByDetailId(int productDetailId) {
-        String sql = "SELECT ct.*, COUNT(i.imei) AS SOLUONG from chitietsanpham ct LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE ct.idCTSP= ? GROUP BY ct.idCTSP";
+        String sql = "SELECT ct.*, COUNT(i.imei) AS SOLUONG from chitietsanpham ct LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE ct.idCTSP= ? AND i.idHD IS NULL GROUP BY ct.idCTSP";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement st = con.prepareStatement(sql)) {
             st.setInt(1, productDetailId);
@@ -48,7 +48,7 @@ public class ProductDetailDAO {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getBigDecimal(5),
-                        rs.getInt(6));
+                        rs.getInt(7));
             }
         } catch (Exception e) {
             e.printStackTrace();
