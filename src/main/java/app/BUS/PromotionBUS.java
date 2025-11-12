@@ -15,12 +15,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import app.DAO.PromotionDAO;
 import app.DTO.Promotion;
+import app.DTO.PromotionUsage;
 
 public class PromotionBUS {
 
     private final PromotionDAO dao;
 
+    private final PromotionUsageBUS promotionUsageBUS;
+
     public PromotionBUS() {
+        this.promotionUsageBUS = new PromotionUsageBUS();
         this.dao = new PromotionDAO();
     }
 
@@ -78,7 +82,7 @@ public class PromotionBUS {
 
     public boolean importDataFromExcel(String filePath) {
         try (FileInputStream fis = new FileInputStream(filePath);
-            Workbook workbook = new XSSFWorkbook(fis)) {
+                Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(0);
 
@@ -125,8 +129,24 @@ public class PromotionBUS {
             return false;
         }
     }
-    public int setPromotionstatus(int brandId, int categoryId, Date currentDate)
-    {
-    	return dao.setPromotionstatus(brandId, categoryId, currentDate);
+
+    public int setPromotionByStatus1(Date currentDate) {
+        return dao.setPromotionByStatus1(currentDate);
+    }
+
+    public int setPromotionByStatus0(Date currentDate) {
+        return dao.setPromotionByStatus0(currentDate);
+    }
+
+    public int reducePromotionQuantity(int promotionId) {
+        return dao.reducePromotionQuantity(promotionId);
+    }
+
+    public int AddPromotionUsage(PromotionUsage promotionUsage) {
+        return promotionUsageBUS.addPromotionUsage(promotionUsage);
+    }
+
+    public List<PromotionUsage> getUsageByOrderId(int orderId) {
+        return promotionUsageBUS.getUsageByOrderId(orderId);
     }
 }

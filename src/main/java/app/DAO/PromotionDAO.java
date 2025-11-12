@@ -95,7 +95,7 @@ public class PromotionDAO {
 
     public List<Promotion> getValidPromotions(int brandId, int categoryId, Date currentDate) {
         List<Promotion> promotions = new ArrayList<>();
-        String sql = "SELECT * FROM khuyenmai WHERE TRANGTHAI = 1 AND SOLUONG > 0 AND NGAYAPDUNG <= ? AND HANSUDUNG >= ? "
+        String sql = "SELECT * FROM khuyenmai WHERE SOLUONG > 0 AND NGAYAPDUNG <= ? AND HANSUDUNG >= ? "
                 + "AND (HANG = ? OR DANHMUC = ? OR (HANG IS NULL AND DANHMUC IS NULL))";
         try (Connection con = DBConnect.getConnection()) {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -107,7 +107,9 @@ public class PromotionDAO {
             while (rs.next()) {
                 Promotion promotion = new Promotion();
                 promotion.setPromotionId(rs.getInt("MAKHUYENMAI"));
+                promotion.setIsPercent(rs.getBoolean("IS_PERCENT"));
                 promotion.setCode(rs.getString("CODE"));
+                promotion.setPercent(rs.getInt("PHANTRAM"));
                 promotion.setValue(rs.getBigDecimal("GIATRI"));
                 promotion.setQuantity(rs.getInt("SOLUONG"));
                 promotion.setStartDate(rs.getDate("NGAYAPDUNG"));
@@ -133,6 +135,8 @@ public class PromotionDAO {
                 Promotion promotion = new Promotion();
                 promotion.setPromotionId(rs.getInt("MAKHUYENMAI"));
                 promotion.setCode(rs.getString("CODE"));
+                promotion.setIsPercent(rs.getBoolean("IS_PERCENT"));
+                promotion.setPercent(rs.getInt("PHANTRAM"));
                 promotion.setValue(rs.getBigDecimal("GIATRI"));
                 promotion.setQuantity(rs.getInt("SOLUONG"));
                 promotion.setStartDate(rs.getDate("NGAYAPDUNG"));
@@ -162,7 +166,7 @@ public class PromotionDAO {
                 st.setInt(5, promotion.getPercent());
             } else {
                 st.setBigDecimal(4, promotion.getValue());
-                st.setInt(5, 0);    
+                st.setInt(5, 0);
             }
 
             st.setInt(6, promotion.getQuantity());
@@ -194,7 +198,7 @@ public class PromotionDAO {
         String sql = "UPDATE khuyenmai SET CODE = ?, MOTA = ?, IS_PERCENT = ?, GIATRI = ?, PHANTRAM = ?, SOLUONG = ?, "
                 + "NGAYAPDUNG = ?, HANSUDUNG = ?, HANG = ?, DANHMUC = ?, TRANGTHAI = ? WHERE MAKHUYENMAI = ?";
         try (Connection con = DBConnect.getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
+                PreparedStatement st = con.prepareStatement(sql)) {
             st.setString(1, promotion.getCode());
             st.setString(2, promotion.getDescription());
             st.setBoolean(3, promotion.isPercent());
@@ -204,7 +208,7 @@ public class PromotionDAO {
                 st.setInt(5, promotion.getPercent());
             } else {
                 st.setBigDecimal(4, promotion.getValue());
-                st.setInt(5, 0);    
+                st.setInt(5, 0);
             }
 
             st.setInt(6, promotion.getQuantity());
@@ -290,33 +294,33 @@ public class PromotionDAO {
         List<Promotion> promotions = new ArrayList<>();
         String sql = "SELECT * FROM khuyenmai WHERE CODE LIKE ?";
         try (Connection con = DBConnect.getConnection();
-            PreparedStatement st = con.prepareStatement(sql)) {
-                String likeKeyword = "%" + keyword + "%";
-                    st.setString(1, likeKeyword);
-                    try (ResultSet rs = st.executeQuery()) {
-                        while (rs.next()) {
-                            Promotion promotion = new Promotion();
-                            promotion.setPromotionId(rs.getInt("MAKHUYENMAI"));
-                            promotion.setCode(rs.getString("CODE"));
-                            promotion.setIsPercent(rs.getBoolean("IS_PERCENT"));
-                            promotion.setValue(rs.getBigDecimal("GIATRI"));
-                            promotion.setPercent(rs.getInt("PHANTRAM"));
-                            promotion.setQuantity(rs.getInt("SOLUONG"));
-                            promotion.setStartDate(rs.getDate("NGAYAPDUNG"));
-                            promotion.setExpirationDate(rs.getDate("HANSUDUNG"));
-                            promotion.setBrandId(rs.getInt("HANG"));
-                            promotion.setCategoryId(rs.getInt("DANHMUC"));
-                            promotion.setStatus(rs.getInt("TRANGTHAI"));
-                            promotions.add(promotion);
-                        }
-                    }
-            } catch (SQLException e) {
-                e.printStackTrace();
+                PreparedStatement st = con.prepareStatement(sql)) {
+            String likeKeyword = "%" + keyword + "%";
+            st.setString(1, likeKeyword);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Promotion promotion = new Promotion();
+                    promotion.setPromotionId(rs.getInt("MAKHUYENMAI"));
+                    promotion.setCode(rs.getString("CODE"));
+                    promotion.setIsPercent(rs.getBoolean("IS_PERCENT"));
+                    promotion.setValue(rs.getBigDecimal("GIATRI"));
+                    promotion.setPercent(rs.getInt("PHANTRAM"));
+                    promotion.setQuantity(rs.getInt("SOLUONG"));
+                    promotion.setStartDate(rs.getDate("NGAYAPDUNG"));
+                    promotion.setExpirationDate(rs.getDate("HANSUDUNG"));
+                    promotion.setBrandId(rs.getInt("HANG"));
+                    promotion.setCategoryId(rs.getInt("DANHMUC"));
+                    promotion.setStatus(rs.getInt("TRANGTHAI"));
+                    promotions.add(promotion);
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return promotions;
     }
 
-    public List<Promotion> filterPromotions(int brandId, int categoryId, int status){
+    public List<Promotion> filterPromotions(int brandId, int categoryId, int status) {
         List<Promotion> promotions = new ArrayList<>();
         StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM khuyenmai WHERE 1=1");
 
@@ -331,9 +335,9 @@ public class PromotionDAO {
         }
 
         try (Connection con = DBConnect.getConnection();
-             PreparedStatement st = con.prepareStatement(sqlBuilder.toString());
-             ResultSet rs = st.executeQuery()) {
-             while (rs.next()) {
+                PreparedStatement st = con.prepareStatement(sqlBuilder.toString());
+                ResultSet rs = st.executeQuery()) {
+            while (rs.next()) {
                 Promotion promotion = new Promotion();
                 promotion.setPromotionId(rs.getInt("MAKHUYENMAI"));
                 promotion.setCode(rs.getString("CODE"));
@@ -347,23 +351,21 @@ public class PromotionDAO {
                 promotion.setCategoryId(rs.getInt("DANHMUC"));
                 promotion.setStatus(rs.getInt("TRANGTHAI"));
                 promotions.add(promotion);
-             }      
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return promotions;
     }
-    public Promotion getromotionByDate(Date ngaylapphieu)
-    {
+
+    public Promotion getromotionByDate(Date ngaylapphieu) {
         String sql = "SELECT * FROM khuyenmai WHERE NGAYAPDUNG <= ? AND HANSUDUNG >= ?";
-        try (Connection con = DBConnect.getConnection()) 
-        {
+        try (Connection con = DBConnect.getConnection()) {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setDate(1, ngaylapphieu);
             ps.setDate(2, ngaylapphieu);
             ResultSet rs = ps.executeQuery();
-            if (rs.next())
-            {
+            if (rs.next()) {
                 Promotion promotion = new Promotion();
                 promotion.setPromotionId(rs.getInt("MAKHUYENMAI"));
                 promotion.setCode(rs.getString("CODE"));
@@ -378,66 +380,52 @@ public class PromotionDAO {
                 promotion.setStatus(rs.getInt("TRANGTHAI"));
                 return promotion;
             }
-        } 
-        catch (Exception e) 
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    public int setPromotionByStatus1(int brandId, int categoryId, Date currentDate)
-    {
-    	String sql = "UPDATE khuyenmai SET TRANGTHAI = 1 WHERE TRANGTHAI = 1 AND SOLUONG > 0 AND NGAYAPDUNG <= ? "
-    			+"AND HANSUDUNG >= ?"
-    			+"AND (HANG = ? OR DANHMUC = ? OR (HANG IS NULL AND DANHMUC IS NULL))";
-    	try (Connection con = DBConnect.getConnection()) 
-        {
+
+    public int setPromotionByStatus1(Date currentDate) {
+        String sql = "UPDATE khuyenmai SET TRANGTHAI = 1 WHERE SOLUONG > 0 AND NGAYAPDUNG <= ? "
+                + "AND HANSUDUNG >= ?";
+        try (Connection con = DBConnect.getConnection()) {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setDate(1, new Date(currentDate.getTime()));
             ps.setDate(2, new Date(currentDate.getTime()));
-            ps.setInt(3, brandId);
-            ps.setInt(4, categoryId);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected;
-        } 
-        catch (Exception e) 
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    	return -1;
+        return -1;
     }
-    public int setPromotionByStatus0(int brandId, int categoryId, Date currentDate)
-    {
-    	String sql = "UPDATE khuyenmai SET TRANGTHAI = 0 WHERE TRANGTHAI = 1 AND SOLUONG > 0 AND NGAYAPDUNG <= ? "
-    			+"AND HANSUDUNG >= ?"
-    			+"AND (HANG = ? OR DANHMUC = ? OR (HANG IS NULL AND DANHMUC IS NULL))";
-    	try (Connection con = DBConnect.getConnection()) 
-        {
+
+    public int setPromotionByStatus0(Date currentDate) {
+        String sql = "UPDATE khuyenmai SET TRANGTHAI = 0 WHERE NGAYAPDUNG > ? "
+                + "AND HANSUDUNG < ?";
+        try (Connection con = DBConnect.getConnection()) {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setDate(1, new Date(currentDate.getTime()));
             ps.setDate(2, new Date(currentDate.getTime()));
-            ps.setInt(3, brandId);
-            ps.setInt(4, categoryId);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected;
-        } 
-        catch (Exception e) 
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    	return -1;
+        return -1;
     }
-    public int setPromotionstatus(int brandId, int categoryId, Date currentDate)
-    {
-    	if(getValidPromotions(brandId,categoryId,currentDate) != null)
-    	{
-    		setPromotionByStatus1(brandId,categoryId,currentDate);
-    		return 1;
-    	}
-    	else
-    	{
-    		setPromotionByStatus0(brandId,categoryId,currentDate);
-    		return 0;
-    	}
+
+    public int reducePromotionQuantity(int promotionId) {
+        String sql = "UPDATE khuyenmai SET SOLUONG = SOLUONG - 1 WHERE MAKHUYENMAI = ? AND SOLUONG > 0";
+        try (Connection con = DBConnect.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, promotionId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

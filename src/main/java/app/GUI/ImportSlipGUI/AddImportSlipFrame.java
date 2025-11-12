@@ -26,10 +26,11 @@ import app.DTO.Product;
 import app.DTO.ProductDetail;
 import app.DTO.Supplier;
 import app.GUI.MainGUI;
+import app.GUI.interfaces.AddFrame;
 import app.utils.DecimalFilter;
 import app.utils.NumericRangeFilter;
 
-public class AddImportSlipFrame extends JFrame {
+public class AddImportSlipFrame extends JFrame implements AddFrame {
 
     private static final Color COLOR_BACKGROUND = new Color(245, 248, 251);
     private static final Color COLOR_WHITE = Color.WHITE;
@@ -348,22 +349,7 @@ public class AddImportSlipFrame extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
 
-        try {
-            java.util.List<Product> products = productBUS.getAll();
-            productBox.removeAllItems();
-            products.forEach(productBox::addItem);
-
-            if (!products.isEmpty()) {
-                productBox.setSelectedIndex(0);
-                HandleChangeProduct();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this,
-                    "Lỗi: Không thể tải danh sách sản phẩm.\n" + e.getMessage(),
-                    "Lỗi Dữ liệu",
-                    JOptionPane.ERROR_MESSAGE);
-        }
+        HandleLoadAll();
     }
 
     private void addListener() {
@@ -533,14 +519,17 @@ public class AddImportSlipFrame extends JFrame {
 
     private void SaveImeiNumbers(int importQuantity, int productDetailId, int importSlipId) {
         String defaultImeiCode = "1234567890";
+        int productTypeId = productBUS.getProductTypeByDetailId(productDetailId);
+
         Imei imei = new Imei();
         imei.setIdProductDetail(productDetailId);
         imei.setIdImport(importSlipId);
+
         for (int i = 0; i < importQuantity; i++) {
-            String imeiNumber = JOptionPane.showInputDialog(this,
+            String imeiNumber = productTypeId != 1 ? JOptionPane.showInputDialog(this,
                     "Nhập số IMEI thứ " + (i + 1) + " cho sản phẩm (ID CTSP: " + imei.getIdProductDetail() + "):",
                     "Nhập Số IMEI",
-                    JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.PLAIN_MESSAGE) : "00000";
             String imeiCode = defaultImeiCode + imeiNumber;
             System.out.println("check imei: " + imeiCode.length());
             if (imeiNumber != null && !imeiNumber.trim().isEmpty() || imeiCode.length() != 15) {
@@ -560,6 +549,7 @@ public class AddImportSlipFrame extends JFrame {
     private void ResetForm() {
         if (productBox.getItemCount() > 0) {
             productBox.setSelectedIndex(0);
+
         } else {
             variantBox.removeAllItems();
             priceField.setText("0");
@@ -570,7 +560,6 @@ public class AddImportSlipFrame extends JFrame {
         quantitySpinner.setValue(1);
 
         tableModel.setRowCount(0);
-
         updateTotalAmount();
     }
 
@@ -588,6 +577,10 @@ public class AddImportSlipFrame extends JFrame {
         }
         priceField.setText(baseImportPrice.toPlainString());
         setDetailComboBox(details);
+        if (!details.isEmpty()) {
+            variantBox.setSelectedIndex(0);
+            HandleChangeVariants();
+        }
     }
 
     private void setDetailComboBox(java.util.List<ProductDetail> details) {
@@ -724,6 +717,7 @@ public class AddImportSlipFrame extends JFrame {
         int selectedRow = productTable.getSelectedRow();
         if (selectedRow != -1) {
             tableModel.removeRow(selectedRow);
+            updateTotalAmount();
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần xóa!", "Chưa chọn",
                     JOptionPane.WARNING_MESSAGE);
@@ -804,6 +798,30 @@ public class AddImportSlipFrame extends JFrame {
             }
         });
         return button;
+    }
+
+    @Override
+    public void HandleLoadAll() {
+        try {
+            java.util.List<Product> products = productBUS.getAll();
+            productBox.removeAllItems();
+            products.forEach(productBox::addItem);
+
+            if (!products.isEmpty()) {
+                productBox.setSelectedIndex(0);
+                HandleChangeProduct();
+            } else {
+                variantBox.removeAllItems();
+                priceField.setText("0");
+                addPriceField.setText("0");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Lỗi: Không thể tải lại danh sách sản phẩm.\n" + e.getMessage(),
+                    "Lỗi Dữ liệu",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static void main(String[] args) {

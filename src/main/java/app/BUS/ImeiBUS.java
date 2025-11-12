@@ -16,4 +16,8 @@ public class ImeiBUS {
     public int AddImei(app.DTO.Imei imei) {
         return imeiDAO.AddImei(imei);
     }
+
+    public int UpdateImeiByOrderQuantity(int idOrder, int ProductDetailId, int Quantity) {
+        return imeiDAO.UpdateImeiByOrderQuantity(idOrder, ProductDetailId, Quantity);
+    }
 }

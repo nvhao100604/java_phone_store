@@ -12,7 +12,7 @@ public class Promotion {
 	private BigDecimal value;
 	private int percent;
 	private int quantity;
-	private Date startDate; 
+	private Date startDate;
 	private Date expirationDate;
 	private int brandId; // ứng 1 - 3.1
 	private int categoryId; // ứng 2 - 3.2
@@ -33,7 +33,8 @@ public class Promotion {
 		this.status = 0;
 	}
 
-	public Promotion(int promotionId, String code, String description, boolean isPercent, int percent, BigDecimal value, int quantity,
+	public Promotion(int promotionId, String code, String description, boolean isPercent, int percent, BigDecimal value,
+			int quantity,
 			Date startDate, Date expirationDate,
 			int brandId, int categoryId, int status) {
 		this.promotionId = promotionId;
@@ -161,5 +162,27 @@ public class Promotion {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
+
+	@Override
+	public String toString() {
+		return this.code + " - " + this.quantity;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		Promotion promotion = (Promotion) o;
+		return this.promotionId == promotion.promotionId;
+	}
+
+	@Override
+	public int hashCode() {
+		return java.util.Objects.hash(this.promotionId);
+	}
+
 }

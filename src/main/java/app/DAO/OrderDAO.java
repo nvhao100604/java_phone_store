@@ -115,7 +115,7 @@ public class OrderDAO {
                 "LEFT JOIN donhang d \r\n" +
                 "    ON MONTH(d.NGAYMUA) = m.month AND YEAR(d.NGAYMUA) = ?\r\n" +
                 "GROUP BY m.month\r\n" +
-                "ORDER BY m.month;";
+                "ORDER BY m.month";
         try (Connection connection = DBConnect.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, year);
@@ -151,7 +151,9 @@ public class OrderDAO {
         String sql = "SELECT sp.TENSP, COALESCE(SUM(d.THANHTIEN), 0) AS TONGDOANHTHU FROM `donhang` d RIGHT JOIN chitiethoadon ct ON ct.idHD=d.idHD"
                 + "\nRIGHT JOIN chitietsanpham ctsp ON ct.idCTSP=ctsp.idCTSP\n"
                 + "\nJOIN sanpham sp ON ctsp.idSP=sp.idSP JOIN danhmuc dm ON sp.idDM = dm.idDM\n"
-                + "\nWHERE sp.idDM = ? GROUP BY sp.idSP\n"
+                + "\nJOIN imei i ON ctsp.idCTSP=i.idCTSP"
+                + "\nWHERE sp.idDM = ? AND i.idHD IS NOT NULL"
+                + "\nGROUP BY sp.idSP\n"
                 + "ORDER BY COALESCE(SUM(d.THANHTIEN), 0) DESC LIMIT 5\n";
         try (Connection connection = DBConnect.getConnection();
                 PreparedStatement st = connection.prepareStatement(sql)) {
@@ -169,7 +171,7 @@ public class OrderDAO {
     }
 
     public int addOrder(Order order) {
-        String sql = "INSERT INTO donhang (idTK, idkh, THANHTIEN, NGAYMUA, DIACHI, MAKHUYENMAI, PTTHANHTOAN) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO donhang (idTK, idkh, THANHTIEN, NGAYMUA, DIACHI, PTTHANHTOAN) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, order.getAccountId());
@@ -177,12 +179,7 @@ public class OrderDAO {
             ps.setBigDecimal(3, order.getTotalAmount());
             ps.setDate(4, new java.sql.Date(order.getPurchaseDate().getTime()));
             ps.setString(5, order.getAddress());
-            if (order.getPromotionCode() != null) {
-                ps.setInt(6, order.getPromotionCode());
-            } else {
-                ps.setNull(6, java.sql.Types.INTEGER);
-            }
-            ps.setString(8, order.getPaymentId().name());
+            ps.setString(6, order.getPaymentId().name());
 
             int rowsAffect = ps.executeUpdate();
             if (rowsAffect == 0) {

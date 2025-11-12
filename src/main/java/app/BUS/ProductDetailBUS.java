@@ -21,6 +21,10 @@ public class ProductDetailBUS {
 		return dao.getProductDetailByDetailId(productDetailId);
 	}
 
+	public int getQuantityByDetailId(int productDetailId, String status) {
+		return dao.getQuantityByDetailId(productDetailId, status);
+	}
+
 	public int addProductDetail(int productId, String color, String capacity, BigDecimal priceAdjustment) {
 		return dao.addProductDetail(productId, color, capacity, priceAdjustment);
 	}
@@ -31,6 +35,10 @@ public class ProductDetailBUS {
 
 	public int updateProductPriceByDetailId(int productDetailId, BigDecimal newSalePrice) {
 		return dao.updateProductPriceByDetailId(productDetailId, newSalePrice);
+	}
+
+	public int getProductTypeByDetailId(int productDetailId) {
+		return dao.getProductTypeByDetailId(productDetailId);
 	}
 
 	public static void main(String[] args) {

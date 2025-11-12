@@ -13,6 +13,32 @@ import app.DTO.ImportSlip;
 import app.database.DBConnect;
 
 public class ImportSlipDAO {
+    public ImportSlip getImportSlipById(int importSlipId) {
+        ImportSlip importSlip = null;
+        String sql = "SELECT * FROM phieunhap WHERE idPN = ?";
+        try (Connection con = DBConnect.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, importSlipId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    importSlip = new ImportSlip(
+                            rs.getInt(1),
+                            rs.getInt(2),
+                            rs.getInt(3),
+                            rs.getDate(4),
+                            rs.getBigDecimal(5),
+                            rs.getInt(6),
+                            rs.getInt(7));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return importSlip;
+    }
 
     public List<ImportSlip> getAllImportSlips() {
         List<ImportSlip> list = new ArrayList<>();
