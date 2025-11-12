@@ -165,7 +165,24 @@ public class Promotion {
 
 	@Override
 	public String toString() {
-		return this.code;
+		return this.code + " - " + this.quantity;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		Promotion promotion = (Promotion) o;
+		return this.promotionId == promotion.promotionId;
+	}
+
+	@Override
+	public int hashCode() {
+		return java.util.Objects.hash(this.promotionId);
 	}
 
 }

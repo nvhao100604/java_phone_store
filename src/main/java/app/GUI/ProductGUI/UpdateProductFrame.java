@@ -129,6 +129,7 @@ public class UpdateProductFrame extends JFrame {
         gbc.gridy = 1;
         gbc.weightx = 1.0;
         importPriceField = new JFormattedTextField(numberFormatter);
+        importPriceField.setEditable(false);
         importPriceField.setValue(BigDecimal.ZERO);
         panel.add(importPriceField, gbc);
 
@@ -314,7 +315,7 @@ public class UpdateProductFrame extends JFrame {
                     productDetail.getColor(),
                     productDetail.getCapacity(),
                     productDetail.getPriceAdjustment(),
-                    productDetail.getStock() <= 0 ? "Hết hàng" : productDetail.getStock()
+                    productDetail.getStock()
             });
         }
     }

@@ -160,10 +160,10 @@ public class LoginGUI extends JPanel {
 	}
 
 	public void HandleLogin() {
-		// String username = nameField.getText();
-		// String password = pwdField.getText();
-		String username = "admin";
-		String password = "12345";
+		String username = nameField.getText();
+		String password = pwdField.getText();
+		// String username = "admin";
+		// String password = "12345";
 		Account responseAccount = bus.Login(username, password);
 
 		if (responseAccount == null) {

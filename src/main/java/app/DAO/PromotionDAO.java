@@ -107,7 +107,9 @@ public class PromotionDAO {
             while (rs.next()) {
                 Promotion promotion = new Promotion();
                 promotion.setPromotionId(rs.getInt("MAKHUYENMAI"));
+                promotion.setIsPercent(rs.getBoolean("IS_PERCENT"));
                 promotion.setCode(rs.getString("CODE"));
+                promotion.setPercent(rs.getInt("PHANTRAM"));
                 promotion.setValue(rs.getBigDecimal("GIATRI"));
                 promotion.setQuantity(rs.getInt("SOLUONG"));
                 promotion.setStartDate(rs.getDate("NGAYAPDUNG"));
@@ -133,6 +135,8 @@ public class PromotionDAO {
                 Promotion promotion = new Promotion();
                 promotion.setPromotionId(rs.getInt("MAKHUYENMAI"));
                 promotion.setCode(rs.getString("CODE"));
+                promotion.setIsPercent(rs.getBoolean("IS_PERCENT"));
+                promotion.setPercent(rs.getInt("PHANTRAM"));
                 promotion.setValue(rs.getBigDecimal("GIATRI"));
                 promotion.setQuantity(rs.getInt("SOLUONG"));
                 promotion.setStartDate(rs.getDate("NGAYAPDUNG"));
@@ -404,6 +408,19 @@ public class PromotionDAO {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setDate(1, new Date(currentDate.getTime()));
             ps.setDate(2, new Date(currentDate.getTime()));
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int reducePromotionQuantity(int promotionId) {
+        String sql = "UPDATE khuyenmai SET SOLUONG = SOLUONG - 1 WHERE MAKHUYENMAI = ? AND SOLUONG > 0";
+        try (Connection con = DBConnect.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, promotionId);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected;
         } catch (Exception e) {

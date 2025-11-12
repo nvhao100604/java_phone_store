@@ -2,6 +2,8 @@ package app.DTO;
 
 import java.math.BigDecimal;
 
+import java.math.BigDecimal;
+
 public class PromotionUsage {
     private int orderId;            
     private int promotionId;     

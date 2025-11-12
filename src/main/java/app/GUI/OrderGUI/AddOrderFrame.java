@@ -23,6 +23,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.printing.PDFPageable;
+
 import app.BUS.CustomerBUS;
 import app.BUS.ImeiBUS;
 import app.BUS.OrderBUS;
@@ -35,6 +42,10 @@ import app.DTO.PaymentMethod;
 import app.DTO.Product;
 import app.DTO.ProductDetail;
 import app.DTO.Promotion;
+import app.DTO.PromotionUsage;
+import app.GUI.interfaces.AddFrame;
+import app.utils.ConfirmDialog;
+import app.utils.DataTable;
 import app.utils.DecimalFilter;
 
 import java.awt.BorderLayout;
@@ -48,13 +59,22 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AddOrderFrame extends JFrame {
 
@@ -86,12 +106,14 @@ public class AddOrderFrame extends JFrame {
     private static final String activeStatus = "CÒN HÀNG";
     private NumberFormat currencyFormatter;
 
+    private AddFrame orderFrame;
     private ProductBUS productBUS;
     private PromotionBUS promotionBUS;
     private CustomerBUS customerBUS;
     private ImeiBUS imeiBUS;
     private OrderBUS orderBUS;
     private int employeeId;
+    private int orderId;
 
     private JTextField customerPhoneField;
     private JLabel customerFoundNameLabel;
@@ -99,6 +121,7 @@ public class AddOrderFrame extends JFrame {
     private Customer selectedCustomer;
 
     private JComboBox<Product> productComboBox;
+    private JComboBox<ProductDetail> variantComboBox;
     private JSpinner quantitySpinner;
     private JLabel lblPrice;
     private JButton addButton;
@@ -109,22 +132,25 @@ public class AddOrderFrame extends JFrame {
     private DefaultTableModel tableModel;
     private JComboBox<PaymentMethod> paymentComboBox;
 
-    private JComboBox<ProductDetail> variantComboBox;
     private JComboBox<Promotion> comboPromoType;
     private List<Promotion> promotionList;
     private JLabel promoLabel1;
     private JLabel promoLabel2;
+    private JLabel promoValueLabel1;
+    private JLabel promoValueLabel2;
     private JLabel subtotalLabel;
     private JLabel promotionLabel;
     private JLabel totalLabel;
 
-    public AddOrderFrame(int employeeId) {
+    public AddOrderFrame(AddFrame orderFrame, int employeeId) {
+        this.orderFrame = orderFrame;
         this.productBUS = new ProductBUS();
         this.promotionBUS = new PromotionBUS();
         this.customerBUS = new CustomerBUS();
         this.imeiBUS = new ImeiBUS();
         this.orderBUS = new OrderBUS();
         this.employeeId = employeeId;
+        this.orderId = 0;
 
         this.currencyFormatter = DecimalFilter.PriceFormatter();
         this.promotionList = new ArrayList<>();
@@ -429,13 +455,31 @@ public class AddOrderFrame extends JFrame {
 
         JPanel panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panel1.setOpaque(false);
-        promoLabel1 = new JLabel(""); // để đó
+
+        promoLabel1 = new JLabel("");
+        promoLabel1.setFont(FONT_LABEL.deriveFont(Font.ITALIC));
+        promoLabel1.setForeground(TEXT_LIGHT);
+
+        promoValueLabel1 = new JLabel("");
+        promoValueLabel1.setFont(FONT_LABEL.deriveFont(Font.BOLD));
+        promoValueLabel1.setForeground(COLOR_PRIMARY);
+
         panel1.add(promoLabel1);
+        panel1.add(promoValueLabel1);
 
         JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panel2.setOpaque(false);
-        promoLabel2 = new JLabel(""); // để đó
+
+        promoLabel2 = new JLabel("");
+        promoLabel2.setFont(FONT_LABEL.deriveFont(Font.ITALIC));
+        promoLabel2.setForeground(TEXT_LIGHT);
+
+        promoValueLabel2 = new JLabel("");
+        promoValueLabel2.setFont(FONT_LABEL.deriveFont(Font.BOLD));
+        promoValueLabel2.setForeground(COLOR_PRIMARY);
+
         panel2.add(promoLabel2);
+        panel2.add(promoValueLabel2);
 
         JPanel panel3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panel3.setOpaque(false);
@@ -443,7 +487,6 @@ public class AddOrderFrame extends JFrame {
         comboPromoType.setPreferredSize(new Dimension(160, 20));
         panel3.add(comboPromoType);
 
-        // ===== Thêm các panel con vào panel chính theo hàng ngang =====
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(panel1, gbc);
@@ -482,9 +525,17 @@ public class AddOrderFrame extends JFrame {
             public void setValueAt(Object aValue, int row, int column) {
                 super.setValueAt(aValue, row, column);
                 if (column == 3) {
-                    int quantity = DecimalFilter.PriceParser(aValue.toString()).intValue();
-                    HandleUpdateQuantity(row, quantity);
-                    ResetQuantitySpinner();
+                    try {
+                        int newQuantity = Integer.parseInt(aValue.toString());
+                        HandleUpdateQuantity(row, newQuantity);
+                        super.setValueAt(newQuantity, row, column);
+
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(cartTable, "Vui lòng nhập số.", "Lỗi",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+                } else {
+                    super.setValueAt(aValue, row, column);
                 }
             }
         };
@@ -649,6 +700,14 @@ public class AddOrderFrame extends JFrame {
         }
     }
 
+    private void HandleChangePromotion() {
+        int newPromotionIndex = comboPromoType.getSelectedIndex();
+        if (newPromotionIndex < 0 || newPromotionIndex >= promotionList.size()) {
+            return;
+        }
+        Collections.swap(promotionList, 0, newPromotionIndex);
+    }
+
     private void searchCustomer() {
         String phone = customerPhoneField.getText().trim();
         if (phone.length() >= 10) {
@@ -684,36 +743,76 @@ public class AddOrderFrame extends JFrame {
     }
 
     private void runPromotion() {
-        // promotionLabel.setText("");
+        promoLabel1.setText("");
+        promoValueLabel1.setText("");
+        promoLabel2.setText("");
+        promoValueLabel2.setText("");
+
         LocalDate today = LocalDate.now();
         Date sqlDate = Date.valueOf(today);
 
-        int response = promotionBUS.setPromotionByStatus1(sqlDate);
-        System.out.println("1 check: " + response);
-        int response2 = promotionBUS.setPromotionByStatus0(sqlDate);
-        System.out.println("0 check: " + response2);
+        promotionBUS.setPromotionByStatus1(sqlDate);
+        promotionBUS.setPromotionByStatus0(sqlDate);
 
-        Product selectedProduct = (Product) productComboBox.getSelectedItem();
-        promotionList = promotionBUS.getValidPromotions(selectedProduct.getBrandId(), selectedProduct.getCategoryId(),
-                sqlDate);
+        List<Promotion> allValidPromotions = new ArrayList<>();
+        if (tableModel.getRowCount() == 0) {
+            promotionList.clear();
+            HandlePromotionOrder();
+            return;
+        }
+
+        Set<String> uniqueBrandCategoryPairs = new HashSet<>();
+        for (int row = 0; row < tableModel.getRowCount(); row++) {
+            try {
+                int productDetailId = (int) tableModel.getValueAt(row, 0);
+                Product p = productBUS.getProductByDetailId(productDetailId);
+
+                if (p != null) {
+                    String pair = p.getBrandId() + " - " + p.getCategoryId();
+
+                    if (!uniqueBrandCategoryPairs.contains(pair)) {
+                        List<Promotion> promosForProduct = promotionBUS.getValidPromotions(
+                                p.getBrandId(),
+                                p.getCategoryId(),
+                                sqlDate);
+                        allValidPromotions.addAll(promosForProduct);
+                        uniqueBrandCategoryPairs.add(pair);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        promotionList = allValidPromotions.stream()
+                .distinct()
+                .collect(Collectors.toList());
+
+        // System.out.println("Tổng số KM hợp lệ cho giỏ hàng: " +
+        // promotionList.size());
         HandlePromotionOrder();
     }
 
     private void HandlePromotionOrder() {
         BigDecimal total = TotalCalculate();
+        // System.out.println("total check: " + total);
         for (Promotion promotion : promotionList) {
             if (promotion.isPercent()) {
-                promotion.setValue(
-                        total.multiply(BigDecimal.valueOf(promotion.getPercent())
-                                .divide(BigDecimal.valueOf(100))));
+                // System.out.println("percent check: " + promotion.getPercent());
+                BigDecimal percentValue = total.multiply(BigDecimal.valueOf(promotion.getPercent())
+                        .divide(BigDecimal.valueOf(100)));
+                // System.out.println("percent value: " + percentValue);
+                promotion.setValue(percentValue);
             }
+            // System.out.println("check value: " + promotion.getValue() + "\n");
         }
-        promotionList.sort(Comparator.comparing(Promotion::getValue));
+        promotionList.sort(Comparator.comparing(Promotion::getValue).reversed());
 
         comboPromoType.removeAllItems();
         for (Promotion promo : promotionList) {
             comboPromoType.addItem(promo);
-            System.out.println("check promo:" + promo.getCode());
+            // System.out.println("check promo:" + promo.getCode() + " " +
+            // promo.getValue());
         }
 
         if (comboPromoType.getItemCount() > 0) {
@@ -723,9 +822,35 @@ public class AddOrderFrame extends JFrame {
 
     private BigDecimal getPromotionValue() {
         BigDecimal total = BigDecimal.ZERO;
-        for (Promotion promo : promotionList) {
-            total = total.add(promo.getValue());
+        if (promotionList.isEmpty()) {
+            promoLabel1.setText("");
+            promoValueLabel1.setText("");
+            promoLabel2.setText("");
+            promoValueLabel2.setText("");
+            return total;
         }
+        Promotion selectedPromotion1 = promotionList.get(0);
+
+        if (promotionList.size() < 2) {
+            promoLabel1.setText(selectedPromotion1.getCode());
+            promoValueLabel1.setText(": - " + selectedPromotion1.getValue());
+            promoLabel2.setText("");
+            promoLabel2.setText("");
+            total = total.add(selectedPromotion1.getValue());
+            return total;
+        }
+
+        promoLabel1.setText(selectedPromotion1.getCode());
+        promoValueLabel1.setText(": - " + selectedPromotion1.getValue());
+        Promotion selectedPromotion2 = promotionList.get(1);
+        promoValueLabel2.setText(": - " + selectedPromotion2.getValue());
+
+        promoLabel1.setText(selectedPromotion1.getCode());
+        promoLabel2.setText(selectedPromotion2.getCode());
+
+        total = total.add(selectedPromotion1.getValue())
+                .add(selectedPromotion2.getValue());
+
         return total;
     }
 
@@ -749,11 +874,13 @@ public class AddOrderFrame extends JFrame {
         int targetDetailId = selectedVariant.getProductDetailId();
         int addQuantity = (int) quantitySpinner.getValue();
 
-        if (getRow(targetDetailId) > -1) {
-            System.out.println("Check row: " + getRow(targetDetailId));
-            String quantity = cartTable.getValueAt(getRow(targetDetailId), 3).toString();
+        int selectedRow = cartTable.getSelectedRow() < 0 ? getRow(targetDetailId) : cartTable.getSelectedRow();
+
+        if (selectedRow > -1) {
+            System.out.println("Check row: " + selectedRow);
+            String quantity = cartTable.getValueAt(selectedRow, 3).toString();
             int currentQuantity = DecimalFilter.PriceParser(quantity).intValue();
-            cartTable.setValueAt(currentQuantity + addQuantity, getRow(targetDetailId), 3);
+            cartTable.setValueAt(currentQuantity + addQuantity, selectedRow, 3);
             return;
         }
         BigDecimal uniPrice = selectedProduct.getSalePrice().add(selectedVariant.getPriceAdjustment());
@@ -774,8 +901,14 @@ public class AddOrderFrame extends JFrame {
     }
 
     private void HandleUpdateQuantity(int row, int quantity) {
-        // int targetDetailId = (int) cartTable.getValueAt(row, 0);
-        // System.out.println("Check target id: " + targetDetailId);
+        if (quantity <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Số lượng phải lớn hơn 0.",
+                    "Lỗi Số lượng",
+                    JOptionPane.ERROR_MESSAGE);
+            cartTable.setValueAt(1, row, 3);
+            quantity = 1;
+        }
         updateQuantityForTable(row);
         updateTotal();
     }
@@ -823,22 +956,19 @@ public class AddOrderFrame extends JFrame {
         BigDecimal subtotal = TotalCalculate();
         subtotalLabel.setText("Tổng cộng: " + currencyFormatter.format(subtotal));
         BigDecimal promotionValue = getPromotionValue();
-        promotionLabel.setText("Khuyến mãi: " + currencyFormatter.format(promotionValue));
+        promotionLabel.setText("Khuyến mãi: - " + currencyFormatter.format(promotionValue));
         BigDecimal total = getTotalWithPromotion();
         totalLabel.setText("Thành tiền: " + currencyFormatter.format(total));
     }
 
     private void RemoveFromList() {
         int selectedRow = cartTable.getSelectedRow();
-        if (selectedRow >= -1) {
-            JOptionPane.showMessageDialog(this,
-                    "Vui lòng chọn sản phẩm để xóa",
-                    "Cảnh báo",
-                    JOptionPane.WARNING_MESSAGE);
-        }
+
         if (selectedRow != -1) {
             tableModel.removeRow(selectedRow);
+            runPromotion();
             ResetQuantitySpinner();
+
         } else {
             JOptionPane.showMessageDialog(
                     this,
@@ -849,14 +979,14 @@ public class AddOrderFrame extends JFrame {
     }
 
     private boolean ValidateOrder() {
-        if (this.selectedCustomer == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Vui lòng tìm và chọn một khách hàng hợp lệ (dựa trên SĐT).",
-                    "Lỗi thông tin khách hàng",
-                    JOptionPane.ERROR_MESSAGE);
-            customerPhoneField.requestFocus();
-            return false;
-        }
+        // if (this.selectedCustomer == null) {
+        // JOptionPane.showMessageDialog(this,
+        // "Vui lòng tìm và chọn một khách hàng hợp lệ (dựa trên SĐT).",
+        // "Lỗi thông tin khách hàng",
+        // JOptionPane.ERROR_MESSAGE);
+        // customerPhoneField.requestFocus();
+        // return false;
+        // }
 
         if (tableModel.getRowCount() == 0) {
             JOptionPane.showMessageDialog(this,
@@ -864,6 +994,42 @@ public class AddOrderFrame extends JFrame {
                     "Lỗi giỏ hàng",
                     JOptionPane.ERROR_MESSAGE);
             return false;
+        }
+
+        for (int row = 0; row < tableModel.getRowCount(); row++) {
+            try {
+                int orderDetailId = (int) tableModel.getValueAt(row, 0);
+                int quantityInCart = (int) tableModel.getValueAt(row, 3);
+                String productName = tableModel.getValueAt(row, 1).toString();
+
+                int currentStock = productBUS.getQuantityByDetailId(orderDetailId, activeStatus);
+
+                if (quantityInCart > currentStock) {
+                    JOptionPane.showMessageDialog(this,
+                            String.format("Số lượng tồn kho của [%s] không đủ!\n\nTồn kho: %d\nGiỏ hàng: %d",
+                                    productName, currentStock, quantityInCart),
+                            "Lỗi Tồn kho",
+                            JOptionPane.ERROR_MESSAGE);
+
+                    cartTable.setRowSelectionInterval(row, row);
+                    return false;
+                }
+
+                if (quantityInCart <= 0) {
+                    JOptionPane.showMessageDialog(this,
+                            String.format("Số lượng của [%s] phải lớn hơn 0.", productName),
+                            "Lỗi Số lượng",
+                            JOptionPane.ERROR_MESSAGE);
+                    cartTable.setRowSelectionInterval(row, row);
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra tồn kho hàng: " + (row + 1), "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
         }
 
         return true;
@@ -896,7 +1062,7 @@ public class AddOrderFrame extends JFrame {
     }
 
     private void HandleSuccess() {
-        String customerName = selectedCustomer.getFullName();
+        String customerName = selectedCustomer == null ? "" : selectedCustomer.getFullName();
         String totalText = totalLabel.getText();
         String message = String.format(
                 "Đơn hàng đã được đặt thành công!\n\nKhách hàng: %s\n%s",
@@ -905,7 +1071,51 @@ public class AddOrderFrame extends JFrame {
                 message,
                 "Đặt hàng thành công",
                 JOptionPane.INFORMATION_MESSAGE);
-        ResetFrom();
+        boolean exportInvoice = ConfirmDialog.confirmDialog(
+                this,
+                "Bạn có muốn xuất hóa đơn không?",
+                "Thông báo");
+
+        if (exportInvoice) {
+            HandlePrint();
+        }
+
+        boolean isContinue = ConfirmDialog.confirmDialog(
+                this,
+                "Bạn có muốn tiếp tục tạo đơn hàng mới không?",
+                "Tiếp tục đặt hàng");
+
+        if (isContinue) {
+            ResetFrom();
+        } else {
+            ResetFrom();
+            this.dispose();
+            orderFrame.HandleLoadAll();
+        }
+    }
+
+    private void HandlePrint() {
+        if (orderId <= 0)
+            return;
+        String fileName = "hoadon" + orderId + ".pdf";
+        String filePath = DataTable.chooseFolder(this, fileName);
+
+        Order order = orderBUS.getOrderById(orderId);
+        List<OrderDetail> details = orderBUS.getDetailsByOrderId(orderId);
+        String path = exportInvoiceToPDF(order, details, selectedCustomer, filePath);
+        boolean response = printPDF(path);
+
+        if (response) {
+            JOptionPane.showMessageDialog(this,
+                    "Xuất hóa đơn thành công",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Xuất hóa đơn thất bại",
+                    "Thông báo",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private int HandleSaveOrder() {
@@ -914,14 +1124,16 @@ public class AddOrderFrame extends JFrame {
         PaymentMethod paymentMethod = (PaymentMethod) paymentComboBox.getSelectedItem();
 
         order.setAccountId(employeeId);
-        order.setCustomerId(selectedCustomer.getCustomerId());
-        order.setAddress(selectedCustomer.getAddress());
+        order.setCustomerId(selectedCustomer == null ? 0 : selectedCustomer.getCustomerId());
+        order.setAddress(selectedCustomer == null ? "" : selectedCustomer.getAddress());
         order.setPurchaseDate(Date.valueOf(LocalDate.now()));
         order.setTotalAmount(totalAmount);
         order.setPaymentId(paymentMethod);
 
         int orderId = orderBUS.addOrder(order);
         if (orderId > 0) {
+            this.orderId = orderId;
+            ApplyPromotion(orderId);
             return orderId;
         }
         return -1;
@@ -963,19 +1175,73 @@ public class AddOrderFrame extends JFrame {
         return response;
     }
 
-    private int SavePromotionUsage(int orderId, int promotionId) {
-        // Promotion usage = new Promotion();
-        // usage.set(orderId);
-        // usage.setPromotionId(promotionId);
+    private void ApplyPromotion(int orderId) {
+        String code1 = promotionList.get(0).getCode();
+        Promotion promo1 = promotionBUS.getPromotionByCode(code1);
 
-        // int response = promotionBUS.addPromotionUsage(usage);
-        // return response;
-        return 0;
+        if (promotionList.size() < 2) {
+            int response = HandleDecreasePromotionStock(promo1.getPromotionId());
+            if (response > 0)
+                SavePromotionUsage(orderId, promo1);
+            System.out.println("Row affected: " + response);
+            return;
+        }
+
+        String code2 = promotionList.get(1).getCode();
+        Promotion promo2 = promotionBUS.getPromotionByCode(code2);
+
+        int response1 = HandleDecreasePromotionStock(promo1.getPromotionId());
+        if (response1 < 0) {
+            System.out.println("Lỗi 1");
+            return;
+        }
+
+        if (SavePromotionUsage(orderId, promo1) < 0) {
+            System.out.println("Lỗi lưu 1");
+            return;
+        }
+
+        int response2 = HandleDecreasePromotionStock(promo2.getPromotionId());
+        if (response2 < 0) {
+            System.out.println("Lỗi 2");
+            return;
+        }
+
+        if (SavePromotionUsage(orderId, promo2) < 0) {
+            System.out.println("Lỗi lưu 2");
+            return;
+        }
+
+        System.out.println("Row affected: " + response1 + " | " + response2);
+    }
+
+    private int HandleDecreasePromotionStock(int promotionId) {
+        int response = promotionBUS.reducePromotionQuantity(promotionId);
+        if (response > 0) {
+            return response;
+        }
+        return -1;
+    }
+
+    private int SavePromotionUsage(int orderId, Promotion promotion) {
+        if (promotion.isPercent()) {
+            BigDecimal total = TotalCalculate()
+                    .multiply(BigDecimal.valueOf(promotion.getPercent()))
+                    .divide(BigDecimal.valueOf(100));
+            promotion.setValue(total);
+            System.out.println("total check: " + total);
+        }
+        PromotionUsage promotionUsage = new PromotionUsage(
+                orderId,
+                promotion.getPromotionId(),
+                promotion.getValue());
+        int response = promotionBUS.AddPromotionUsage(promotionUsage);
+        return response;
     }
 
     private void ResetProductList() {
         List<Product> products = productBUS.getAll();
-        System.out.println("Reset product list, total products: " + products.size());
+        // System.out.println("Reset product list, total products: " + products.size());
         productComboBox.removeAllItems();
         products.forEach(productComboBox::addItem);
         if (!(productComboBox.getItemCount() > 0)) {
@@ -990,7 +1256,18 @@ public class AddOrderFrame extends JFrame {
 
     private void clearCart() {
         tableModel.setRowCount(0);
+
+        runPromotion();
         updateTotal();
+    }
+
+    private void ResetPromotionList() {
+        promotionList.clear();
+        promoLabel1.setText("");
+        promoValueLabel1.setText("");
+        promoLabel2.setText("");
+        promoValueLabel2.setText("");
+        comboPromoType.removeAllItems();
     }
 
     private void ResetFrom() {
@@ -1002,15 +1279,160 @@ public class AddOrderFrame extends JFrame {
         customerFoundNameLabel.setText(" (Chưa có khách hàng)");
     }
 
-    public static void main(String[] args) {
-        // Sử dụng Look and Feel của hệ thống để giao diện đẹp hơn (đặc biệt trên
-        // Windows)
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public String exportInvoiceToPDF(Order order, List<OrderDetail> details, Customer customer, String filePath) {
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.A5);
+            document.addPage(page);
 
-        SwingUtilities.invokeLater(() -> new AddOrderFrame(1).setVisible(true));
+            PDType0Font fontRegular = PDType0Font.load(document, new File("C:/Windows/Fonts/arial.ttf"));
+            PDType0Font fontBold = PDType0Font.load(document, new File("C:/Windows/Fonts/arialbd.ttf"));
+
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                float y = page.getMediaBox().getUpperRightY() - 70;
+                float x = 70;
+                float lineSpacing = 18;
+
+                contentStream.beginText();
+                contentStream.setFont(fontBold, 18);
+                contentStream.newLineAtOffset(x + 180, y);
+                contentStream.showText("HÓA ĐƠN BÁN HÀNG");
+                contentStream.endText();
+                y -= lineSpacing * 2;
+
+                contentStream.beginText();
+                contentStream.setFont(fontRegular, 12);
+                contentStream.newLineAtOffset(x, y);
+                contentStream.showText("Mã Đơn hàng: #" + order.getOrderId());
+                y -= lineSpacing;
+                contentStream.newLineAtOffset(0, -lineSpacing);
+                contentStream.showText("Khách hàng: " + (customer != null ? customer.getFullName() : "Khách lẻ"));
+                y -= lineSpacing;
+                contentStream.newLineAtOffset(0, -lineSpacing);
+                contentStream.showText("Ngày đặt: " + order.getPurchaseDate().toString());
+                y -= lineSpacing * 1.5;
+                contentStream.newLineAtOffset(0, -lineSpacing * (float) 1.5);
+                contentStream.endText();
+
+                contentStream.beginText();
+                contentStream.setFont(fontBold, 12);
+                contentStream.newLineAtOffset(x, y);
+                contentStream.showText("Sản phẩm");
+                contentStream.newLineAtOffset(250, 0);
+                contentStream.showText("Số lượng");
+                contentStream.newLineAtOffset(100, 0);
+                contentStream.showText("Đơn giá");
+                contentStream.newLineAtOffset(100, 0);
+                contentStream.showText("Thành tiền");
+                contentStream.endText();
+                y -= lineSpacing;
+
+                contentStream.moveTo(x, y);
+                contentStream.lineTo(x + 480, y);
+                contentStream.stroke();
+                y -= lineSpacing;
+
+                BigDecimal subtotal = BigDecimal.ZERO;
+                contentStream.setFont(fontRegular, 11);
+
+                for (OrderDetail detail : details) {
+                    ProductDetail pd = productBUS.getProductDetailByDetailId(detail.getProductId());
+                    Product p = productBUS.getProductByDetailId(pd.getProductId());
+                    String productName = p.getProductName() + " (" + pd.toString() + ")";
+
+                    BigDecimal totalRow = detail.getPrice().multiply(BigDecimal.valueOf(detail.getQuantity()));
+                    subtotal = subtotal.add(totalRow);
+
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(x, y);
+                    contentStream.showText(productName);
+                    contentStream.newLineAtOffset(250, 0);
+                    contentStream.showText(String.valueOf(detail.getQuantity()));
+                    contentStream.newLineAtOffset(100, 0);
+                    contentStream.showText(DecimalFilter.PriceFormatter().format(detail.getPrice()));
+                    contentStream.newLineAtOffset(100, 0);
+                    contentStream.showText(DecimalFilter.PriceFormatter().format(totalRow));
+                    contentStream.endText();
+                    y -= lineSpacing;
+                }
+
+                contentStream.moveTo(x + 350, y);
+                contentStream.lineTo(x + 480, y);
+                contentStream.stroke();
+                y -= lineSpacing * 1.5;
+
+                BigDecimal promotionValue = subtotal.subtract(order.getTotalAmount());
+
+                contentStream.beginText();
+                contentStream.setFont(fontRegular, 12);
+                contentStream.newLineAtOffset(x + 350, y);
+                contentStream.showText("Tổng cộng:");
+                contentStream.newLineAtOffset(100, 0);
+                contentStream.showText(DecimalFilter.PriceFormatter().format(subtotal));
+                contentStream.endText();
+                y -= lineSpacing;
+
+                contentStream.beginText();
+                contentStream.setFont(fontRegular, 12);
+                contentStream.newLineAtOffset(x + 350, y);
+                contentStream.showText("Khuyến mãi:");
+                contentStream.newLineAtOffset(100, 0);
+                contentStream.showText("- " + DecimalFilter.PriceFormatter().format(promotionValue));
+                contentStream.endText();
+                y -= lineSpacing;
+
+                contentStream.beginText();
+                contentStream.setFont(fontBold, 14);
+                contentStream.newLineAtOffset(x + 350, y);
+                contentStream.showText("Thành tiền:");
+                contentStream.newLineAtOffset(100, 0);
+                contentStream.showText(DecimalFilter.PriceFormatter().format(order.getTotalAmount()));
+                contentStream.endText();
+
+            }
+
+            document.save(new File(filePath));
+            JOptionPane.showMessageDialog(null, "Xuất Hóa đơn PDF thành công!\nĐã lưu tại: " + filePath);
+            return filePath;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi khi xuất PDF: " + e.getMessage(), "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        return "";
     }
+
+    private boolean printPDF(String filePath) {
+        if (filePath.trim().equals("") || filePath == null)
+            return false;
+        try (PDDocument document = PDDocument.load(new File(filePath))) {
+            PrinterJob job = PrinterJob.getPrinterJob();
+            job.setPageable(new PDFPageable(document));
+
+            if (job.printDialog()) {
+                job.print();
+                return true;
+            }
+
+        } catch (IOException | PrinterException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Lỗi khi cố gắng in PDF: " + e.getMessage(),
+                    "Lỗi In ấn",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        return false;
+    }
+
+    // public static void main(String[] args) {
+    // // Sử dụng Look and Feel của hệ thống để giao diện đẹp hơn (đặc biệt trên
+    // // Windows)
+    // try {
+    // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+
+    // SwingUtilities.invokeLater(() -> new AddOrderFrame(1).setVisible(true));
+    // }
 }

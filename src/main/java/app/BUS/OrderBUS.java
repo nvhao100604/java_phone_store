@@ -120,4 +120,8 @@ public class OrderBUS {
                 payment,
                 sortByPriceAscending);
     }
+
+    public List<OrderDetail> getDetailsByOrderId(int orderId) {
+        return orderDetailBUS.getOrderDetailsByOrderId(orderId);
+    }
 }
