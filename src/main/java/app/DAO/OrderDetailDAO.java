@@ -22,7 +22,7 @@ public class OrderDetailDAO {
             while (rs.next()) {
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.setOrderId(rs.getInt("idHD"));
-                orderDetail.setProductId(rs.getInt("idCTSP"));
+                orderDetail.setProductId(rs.getInt("idSP"));
                 orderDetail.setQuantity(rs.getInt("SOLUONG"));
                 orderDetail.setPrice(rs.getBigDecimal("GIABAN"));
                 orderDetails.add(orderDetail);
@@ -35,7 +35,7 @@ public class OrderDetailDAO {
     }
 
     public int addOrderDetail(OrderDetail orderDetail) {
-        String sql = "INSERT INTO chitiethoadon (idHD, idCTSP, SOLUONG, GIABAN) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO chitiethoadon (idHD, idSP, SOLUONG, GIABAN) VALUES (?, ?, ?, ?)";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setInt(1, orderDetail.getOrderId());

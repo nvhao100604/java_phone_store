@@ -6,14 +6,10 @@ import app.DAO.CustomerDAO;
 import app.DTO.Customer;
 
 public class CustomerBUS {
-    private CustomerDAO dao;
+    private CustomerDAO dao;    
 
     public CustomerBUS() {
         dao = new CustomerDAO();
-    }
-
-    public Customer getCustomerByPhone(String phone) {
-        return dao.getCustomerByPhone(phone);
     }
 
     public List<Customer> getAll() {
@@ -23,7 +19,7 @@ public class CustomerBUS {
     public Customer getCustomerById(int customerId) {
         return dao.getCustomerById(customerId);
     }
-
+    
     public int addCustomer(Customer customer) {
         return dao.addCustomer(customer);
     }
@@ -38,7 +34,7 @@ public class CustomerBUS {
 
     public List<Customer> searchCustomers(String keyword) {
         return dao.searchCustomers(keyword);
-    }
+    } 
 
     public static void main(String[] args) {
         CustomerBUS bus = new CustomerBUS();

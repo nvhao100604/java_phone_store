@@ -7,21 +7,14 @@ import java.util.Map;
 
 import app.DAO.OrderDAO;
 import app.DTO.Order;
-import app.DTO.OrderDetail;
 import app.DTO.PaymentMethod;
 
 public class OrderBUS {
 
     private final OrderDAO dao;
-    private final OrderDetailBUS orderDetailBUS;
 
     public OrderBUS() {
-        this.orderDetailBUS = new OrderDetailBUS();
         this.dao = new OrderDAO();
-    }
-
-    public int addOrderDetail(OrderDetail orderDetail) {
-        return orderDetailBUS.addOrderDetail(orderDetail);
     }
 
     public List<Order> getAllOrders() {
@@ -119,9 +112,5 @@ public class OrderBUS {
                 toPrice,
                 payment,
                 sortByPriceAscending);
-    }
-
-    public List<OrderDetail> getDetailsByOrderId(int orderId) {
-        return orderDetailBUS.getOrderDetailsByOrderId(orderId);
     }
 }

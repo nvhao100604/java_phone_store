@@ -39,14 +39,12 @@ import app.BUS.ProductBUS;
 import app.DTO.Product;
 import app.GUI.CustomPanels.FilterPanel;
 import app.GUI.CustomPanels.khungchucnang;
-import app.GUI.interfaces.AddFrame;
 import app.GUI.interfaces.FunctionPanel;
 import app.utils.ConfirmDialog;
 import app.utils.DataTable;
 import app.utils.DecimalFilter;
 
-public class ProductGUI extends JPanel
-		implements FunctionPanel, AddFrame {
+public class ProductGUI extends JPanel implements FunctionPanel {
 
 	private static final int mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
 	private static final int mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -491,7 +489,6 @@ public class ProductGUI extends JPanel
 		SetDataTable(allProducts);
 	}
 
-	@Override
 	public void HandleLoadAll() {
 		List<Product> allProducts = bus.getAll();
 		SetDataTable(allProducts);
@@ -574,12 +571,9 @@ public class ProductGUI extends JPanel
 		boolean isConfirmed = ConfirmDialog.confirmDialog(this, "File sản phẩm tại  " + filePath + " ?",
 				"Xác nhận thêm danh sách sản phẩm");
 		if (isConfirmed) {
-			List<Integer> result = bus.importDataFromExcel(filePath);
-			if (!result.isEmpty()) {
-				JOptionPane.showMessageDialog(this,
-						"Thêm danh sách sản phẩm thành công" +
-								"\nSản phẩm đã tồn tại: " + result.size(),
-						"Thông báo",
+			boolean result = bus.importDataFromExcel(filePath);
+			if (result) {
+				JOptionPane.showMessageDialog(this, "Thêm danh sách sản phẩm thành công", "Thông báo",
 						JOptionPane.INFORMATION_MESSAGE);
 				List<Product> allProducts = bus.getAllDesc();
 				SetDataTable(allProducts);

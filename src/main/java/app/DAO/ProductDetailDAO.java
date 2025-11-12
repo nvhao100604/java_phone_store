@@ -13,7 +13,7 @@ import app.database.DBConnect;
 public class ProductDetailDAO {
     public List<ProductDetail> getProductDetailById(int productId) {
         List<ProductDetail> detail_list = new ArrayList<>();
-        String sql = "SELECT ct.*, COUNT(i.imei) AS SOLUONG from chitietsanpham ct LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE ct.idSP= ? AND i.idHD IS NULL GROUP BY ct.idCTSP";
+        String sql = "SELECT ct.*, COUNT(i.imei) AS SOLUONG from chitietsanpham ct LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE ct.idSP= ? GROUP BY ct.idCTSP";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement st = con.prepareStatement(sql)) {
             st.setInt(1, productId);
@@ -25,7 +25,7 @@ public class ProductDetailDAO {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getBigDecimal(5),
-                        rs.getInt(7)));
+                        rs.getInt(6)));
             }
             return detail_list;
         } catch (Exception e) {
@@ -36,7 +36,7 @@ public class ProductDetailDAO {
     }
 
     public ProductDetail getProductDetailByDetailId(int productDetailId) {
-        String sql = "SELECT ct.*, COUNT(i.imei) AS SOLUONG from chitietsanpham ct LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE ct.idCTSP= ? AND i.idHD IS NULL GROUP BY ct.idCTSP";
+        String sql = "SELECT ct.*, COUNT(i.imei) AS SOLUONG from chitietsanpham ct LEFT JOIN imei i ON ct.idCTSP=i.idCTSP WHERE ct.idCTSP= ? GROUP BY ct.idCTSP";
         try (Connection con = DBConnect.getConnection();
                 PreparedStatement st = con.prepareStatement(sql)) {
             st.setInt(1, productDetailId);
@@ -48,30 +48,12 @@ public class ProductDetailDAO {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getBigDecimal(5),
-                        rs.getInt(7));
+                        rs.getInt(6));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public int getQuantityByDetailId(int productDetailId, String status) {
-        String statuCheck = status.equals("CÒN HÀNG") ? " IS NULL " : " IS NOT NULL ";
-        String sql = "SELECT COUNT(i.imei) AS SOLUONG from chitietsanpham ct JOIN imei i " +
-                "\nON ct.idCTSP=i.idCTSP LEFT JOIN sanpham s ON ct.idSP=s.idSP" +
-                "\n WHERE ct.idCTSP= ? AND i.idHD " + statuCheck + " GROUP BY ct.idCTSP";
-        try (Connection con = DBConnect.getConnection();
-                PreparedStatement st = con.prepareStatement(sql)) {
-            st.setInt(1, productDetailId);
-            ResultSet rs = st.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("SOLUONG");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     public int addProductDetail(int productId, String color, String capacity, BigDecimal priceAdjustment) {
@@ -125,30 +107,6 @@ public class ProductDetailDAO {
             e.printStackTrace();
         }
         return 0;
-    }
-
-    public int getProductTypeByDetailId(int productDetailId) {
-        String sql = "SELECT sp.idDM " +
-                "FROM sanpham sp " +
-                "JOIN chitietsanpham ctsp ON sp.idSP = ctsp.idSP " +
-                "WHERE ctsp.idCTSP = ?";
-        int categoryId = -1;
-
-        try (Connection con = DBConnect.getConnection();
-                PreparedStatement st = con.prepareStatement(sql)) {
-            st.setInt(1, productDetailId);
-
-            try (ResultSet rs = st.executeQuery()) {
-                if (rs.next()) {
-                    categoryId = rs.getInt("idDM");
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return categoryId;
     }
 
     // public boolean checkProductDetailId(ProductDetail detail) {

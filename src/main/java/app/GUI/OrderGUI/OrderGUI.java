@@ -17,7 +17,6 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -41,15 +40,12 @@ import app.BUS.OrderBUS;
 
 import app.DTO.Order;
 import app.DTO.PaymentMethod;
-import app.GUI.MainGUI;
 import app.GUI.CustomPanels.FilterPanel;
 import app.GUI.CustomPanels.khungchucnang;
-import app.GUI.interfaces.AddFrame;
 import app.GUI.interfaces.FunctionPanel;
 import app.utils.DecimalFilter;
 
-public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
-    private MainGUI mainGUI;
+public class OrderGUI extends JPanel implements FunctionPanel {
     private static final int mainWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
     private static final int mainHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 
@@ -72,8 +68,7 @@ public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
     private JTable table;
     private DefaultTableModel tableModel;
 
-    public OrderGUI(MainGUI mainGUI) {
-        this.mainGUI = mainGUI;
+    public OrderGUI() {
         initialize();
     }
 
@@ -317,12 +312,12 @@ public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
         header.setBackground(new Color(0, 64, 128));
         header.setForeground(Color.WHITE);
         header.setFont(new Font("Arial", Font.BOLD, 16));
-        header.setPreferredSize(new Dimension(header.getWidth(), 35));
         ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        scrollPane.setViewportView(table);
         scrollPane.setPreferredSize(new Dimension(0, 500));
         scrollPane.setViewportView(table);
+        scrollPane.setPreferredSize(new Dimension(0, 600));
         listPanel.add(scrollPane, BorderLayout.NORTH);
 
         noResultLabel = new JLabel("Không tìm thấy đơn hàng");
@@ -334,21 +329,18 @@ public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
         listPanel.add(noResultLabel, BorderLayout.CENTER);
 
         add(listPanel, BorderLayout.SOUTH);
+
         // Load dữ liệu ban đầu
         updateTable(orderList);
     }
 
     @Override
     public void Add() {
-        AddOrderFrame addOrderFrame = new AddOrderFrame(this, mainGUI.getAccount().getAccountId());
+        AddOrderFrame addOrderFrame = new AddOrderFrame();
         addOrderFrame.setVisible(true);
     }
 
     public void Delete() {
-        JOptionPane.showMessageDialog(this,
-                "Tính năng không được cung cấp",
-                "Thông báo",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
@@ -359,33 +351,18 @@ public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        ViewOrderDetailFrame detailFrame = new ViewOrderDetailFrame((JFrame) mainGUI.getApplication(),
-                Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString()));
-        detailFrame.setVisible(true);
     }
 
     @Override
     public void ImportExcel() {
-        JOptionPane.showMessageDialog(this,
-                "Tính năng không được cung cấp",
-                "Thông báo",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
     public void ExportExcel() {
-        JOptionPane.showMessageDialog(this,
-                "Tính năng không được cung cấp",
-                "Thông báo",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void restore() {
-        JOptionPane.showMessageDialog(this,
-                "Tính năng không được cung cấp",
-                "Thông báo",
-                JOptionPane.INFORMATION_MESSAGE);
+
     }
 
     private void FilterOrder() {
@@ -464,7 +441,7 @@ public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
                     order.getAccountId(),
                     order.getCustomerId(),
                     order.getPurchaseDate(),
-                    DecimalFilter.PriceFormatter().format(order.getTotalAmount()),
+                    order.getTotalAmount(),
                     order.getPaymentId(),
                     order.getStatus()
             });
@@ -473,10 +450,5 @@ public class OrderGUI extends JPanel implements FunctionPanel, AddFrame {
 
     public void SetTitleQuantity(int quantity) {
         title.setText("Danh sách đơn hàng (" + quantity + ")");
-    }
-
-    @Override
-    public void HandleLoadAll() {
-        Refresh();
     }
 }

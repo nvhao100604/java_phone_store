@@ -3,7 +3,6 @@ package app.BUS;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,16 +28,13 @@ public class ProductBUS {
 		return dao.getProductById(productId);
 	}
 
-	public Product getProductByName(String productName) {
+	public Product getProductByName(String productName) // thêm
+	{
 		return dao.getProductByName(productName);
 	}
 
 	public int getQuantityById(int productId, String status) {
 		return dao.getQuantityById(productId, status);
-	}
-
-	public int getQuantityByDetailId(int productDetailId, String status) {
-		return detailBUS.getQuantityByDetailId(productDetailId, status);
 	}
 
 	public int getQuantityByName(String productName, String status) {
@@ -53,14 +49,11 @@ public class ProductBUS {
 		return dao.getAllDesc();
 	}
 
-	public Map<String, Integer> getBestSellingProducts() {
-		return dao.getBestSellingProducts();
+	public Map<String, Integer> getBestSellingProducts(String status) {
+		return dao.getBestSellingProducts(status);
 	}
 
 	public int AddProduct(Product product) {
-		if (CheckProductName(product.getProductName()) <= 0) {
-			return -1;
-		}
 		return dao.addProduct(product);
 	}
 
@@ -146,8 +139,7 @@ public class ProductBUS {
 		return row;
 	}
 
-	public List<Integer> importDataFromExcel(String filePath) {
-		List<Integer> existedId = new ArrayList<>();
+	public boolean importDataFromExcel(String filePath) {
 		try (FileInputStream fis = new FileInputStream(filePath);
 				Workbook workbook = new XSSFWorkbook(fis)) {
 
@@ -168,38 +160,17 @@ public class ProductBUS {
 						row.getCell(5).toString(),
 						new BigDecimal(row.getCell(6).getNumericCellValue()));
 
-				int id = AddProduct(newProduct);
-				if (id > 0) {
-					System.out.println("Đã thêm sản phẩm id = " + id);
-				} else {
-					existedId.add(id);
-					System.out.println("Sản phẩm đã tồn tại !");
-				}
+				int id = dao.addProduct(newProduct);
+				System.out.println("Đã thêm sản phẩm id = " + id);
 			}
-			return existedId;
+			return true;
 		} catch (IOException e) {
 			System.err.println("Lỗi đọc file Excel: " + e.getMessage());
-			return existedId;
+			return false;
 		} catch (Exception e) {
 			System.err.println("Lỗi xử lý dữ liệu: " + e.getMessage());
-			return existedId;
+			return false;
 		}
-	}
-
-	public ProductDetail getProductDetailByDetailId(int detailId) {
-		return detailBUS.getProductDetailByDetailId(detailId);
-	}
-
-	public Product getProductByDetailId(int detailId) {
-		return dao.getProductByDetailId(detailId);
-	}
-
-	public int getProductTypeByDetailId(int productDetailId) {
-		return detailBUS.getProductTypeByDetailId(productDetailId);
-	}
-
-	public int CheckProductName(String productName) {
-		return dao.CheckProductName(productName);
 	}
 
 	// public static void main(String[] args) {

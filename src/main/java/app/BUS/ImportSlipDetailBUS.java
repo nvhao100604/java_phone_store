@@ -3,7 +3,6 @@ package app.BUS;
 import java.util.List;
 
 import app.DAO.ImportSlipDetailDAO;
-import app.DTO.ImportSlipDetail;
 import app.DTO.Product;
 import app.DTO.ProductDetail;
 
@@ -13,10 +12,6 @@ public class ImportSlipDetailBUS {
 
 	public ImportSlipDetailBUS() {
 		dao = new ImportSlipDetailDAO();
-	}
-
-	public List<ImportSlipDetail> getDetailsByImportSlipId(int importSlipId) {
-		return dao.getDetailsByImportSlipId(importSlipId);
 	}
 
 	public List<Product> getProductsByImportSlipId(int importSlipId) {

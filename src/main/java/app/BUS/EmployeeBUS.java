@@ -20,7 +20,7 @@ import app.DTO.Account;
 import app.DTO.Employee;
 
 public class EmployeeBUS {
-    private EmployeeDAO dao;
+    private EmployeeDAO dao;    
 
     public EmployeeBUS() {
         dao = new EmployeeDAO();
@@ -72,7 +72,7 @@ public class EmployeeBUS {
 
     public boolean importDataFromExcel(String filePath) {
         try (FileInputStream fis = new FileInputStream(filePath);
-                Workbook workbook = new XSSFWorkbook(fis)) {
+            Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(0);
             AccountBUS accountBUS = new AccountBUS();
@@ -127,7 +127,7 @@ public class EmployeeBUS {
 
                 if (dob == null) {
                     System.err.println("Không thể đọc ngày sinh tại dòng " + (rowIndex + 1));
-                    continue;
+                    continue; 
                 }
 
                 Employee newEmployee = new Employee(accountId, gender, dob, address);
@@ -151,10 +151,8 @@ public class EmployeeBUS {
     }
 
     private String getCellStringValue(Cell cell) {
-        if (cell == null)
-            return "";
-        if (cell.getCellType() == CellType.STRING)
-            return cell.getStringCellValue().trim();
+        if (cell == null) return "";
+        if (cell.getCellType() == CellType.STRING) return cell.getStringCellValue().trim();
         if (cell.getCellType() == CellType.NUMERIC) {
             double value = cell.getNumericCellValue();
             if (DateUtil.isCellDateFormatted(cell)) {
@@ -165,9 +163,5 @@ public class EmployeeBUS {
             }
         }
         return "";
-    }
-
-    public String getEmployeeNameById(int employeeId) {
-        return dao.getEmployeeNameById(employeeId);
     }
 }
