@@ -37,6 +37,10 @@ public class ProductDetailBUS {
 		return dao.updateProductPriceByDetailId(productDetailId, newSalePrice);
 	}
 
+	public int getProductTypeByDetailId(int productDetailId) {
+		return dao.getProductTypeByDetailId(productDetailId);
+	}
+
 	public static void main(String[] args) {
 		// ProductDetailBUS bus = new ProductDetailBUS();
 		// List<ProductDetail> list = bus.getProductDetailById(1);

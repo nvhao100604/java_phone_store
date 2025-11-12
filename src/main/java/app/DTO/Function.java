@@ -91,7 +91,7 @@ public class Function {
 			case 10:
 				return StatisticGUI.class;
 			default:
-				return ProductGUI.class;
+				return StatisticGUI.class;
 		}
 	}
 }

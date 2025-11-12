@@ -574,9 +574,12 @@ public class ProductGUI extends JPanel
 		boolean isConfirmed = ConfirmDialog.confirmDialog(this, "File sản phẩm tại  " + filePath + " ?",
 				"Xác nhận thêm danh sách sản phẩm");
 		if (isConfirmed) {
-			boolean result = bus.importDataFromExcel(filePath);
-			if (result) {
-				JOptionPane.showMessageDialog(this, "Thêm danh sách sản phẩm thành công", "Thông báo",
+			List<Integer> result = bus.importDataFromExcel(filePath);
+			if (!result.isEmpty()) {
+				JOptionPane.showMessageDialog(this,
+						"Thêm danh sách sản phẩm thành công" +
+								"\nSản phẩm đã tồn tại: " + result.size(),
+						"Thông báo",
 						JOptionPane.INFORMATION_MESSAGE);
 				List<Product> allProducts = bus.getAllDesc();
 				SetDataTable(allProducts);

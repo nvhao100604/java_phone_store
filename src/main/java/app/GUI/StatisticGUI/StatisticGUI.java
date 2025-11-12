@@ -4,6 +4,15 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,6 +30,7 @@ import app.BUS.OrderBUS;
 public class StatisticGUI extends JPanel {
     private JLabel lblTotalProduct, lblTotalRevenue, lblTotalEmployee, lblAOV;
     private JPanel chartPanel;
+    private JPanel chartContainer;
 
     private ProductBUS productBUS;
     private OrderBUS orderBUS;
@@ -57,7 +67,7 @@ public class StatisticGUI extends JPanel {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.BOTH;
 
-        JPanel chartContainer = new JPanel(new BorderLayout());
+        chartContainer = new JPanel(new BorderLayout());
         chartContainer.setBackground(Color.WHITE);
         chartContainer.setOpaque(true);
         chartContainer.setPreferredSize(new Dimension(600, 350));
@@ -72,8 +82,9 @@ public class StatisticGUI extends JPanel {
         gbc.weighty = 0.5;
         chartPanel.add(chartContainer, gbc);
 
-        Map<String, Integer> saleMap = productBUS.getBestSellingProducts("ĐÃ BÁN");
+        Map<String, Integer> saleMap = productBUS.getBestSellingProducts();
         JPanel piePanel = createTopProductPieChartPanel(saleMap);
+        piePanel.setPreferredSize(new Dimension(500, 400));
 
         gbc.gridx = 2;
         gbc.gridy = 0;
@@ -100,6 +111,7 @@ public class StatisticGUI extends JPanel {
 
     private JPanel ControlPanel() {
         JPanel controlPanel = new JPanel(new BorderLayout());
+        // controlPanel.setPreferredSize(new Dimension(0, 20));
         controlPanel.setBackground(null);
         JButton prevButton = new JButton("<<");
         prevButton.addActionListener(e -> DecreaseYear());
@@ -143,87 +155,53 @@ public class StatisticGUI extends JPanel {
     }
 
     private JPanel createChartPanel() {
-        chartPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                drawMockRevenueChart(g);
-            }
-        };
-        chartPanel.setPreferredSize(new Dimension(500, 350));
-        chartPanel.setBackground(Color.WHITE);
-        return chartPanel;
-    }
+        // Dữ liệu doanh thu theo tháng
+        List<BigDecimal> revenue = orderBUS.getTotalRevenueByMonth(currentYear);
 
-    private void drawMockRevenueChart(Graphics g) {
-        revenue = orderBUS.getTotalRevenueByMonth(currentYear);
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (int i = 0; i < revenue.size(); i++) {
+            dataset.addValue(revenue.get(i), "Doanh thu", "T" + (i + 1));
+        }
 
-        int barWidth = 40;
-        int barSpacing = 50;
-        int startX = 120;
-        int chartBottomY = 450;
-        int maxBarHeight = 300;
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Doanh thu theo tháng (" + currentYear + ")",
+                "Tháng",
+                "Doanh thu (VNĐ)",
+                dataset);
 
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(Color.WHITE);
-        g2.fillRect(0, 0, getWidth(), getHeight());
+        CategoryPlot plot = chart.getCategoryPlot();
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setDomainGridlinePaint(Color.LIGHT_GRAY);
+        plot.setRangeGridlinePaint(Color.GRAY);
 
-        g2.setColor(Color.DARK_GRAY);
-        g2.setFont(new Font("Arial", Font.BOLD, 18));
-        g2.drawString("Doanh thu theo tháng (" + currentYear + ")", startX, 50);
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        rangeAxis.setNumberFormatOverride(new java.text.DecimalFormat("#,###"));
 
         BigDecimal maxValue = revenue.stream().max(Comparator.naturalOrder()).orElse(BigDecimal.ONE);
-        maxValue = maxValue.multiply(new BigDecimal(5));
-        if (maxValue.compareTo(BigDecimal.ZERO) == 0)
-            maxValue = BigDecimal.ONE;
+        double step = maxValue.doubleValue() / 5;
+        rangeAxis.setTickUnit(new NumberTickUnit(step));
+        rangeAxis.setRange(0, maxValue.doubleValue() * 1.1);
 
-        for (int i = 0; i < revenue.size(); i++) {
-            BigDecimal value = revenue.get(i);
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, new Color(46, 134, 222));
+        renderer.setBarPainter(new org.jfree.chart.renderer.category.StandardBarPainter());
+        renderer.setDrawBarOutline(false);
+        renderer.setShadowVisible(false);
+        renderer.setDefaultItemLabelsVisible(true);
+        renderer.setDefaultItemLabelFont(new Font("Arial", Font.BOLD, 11));
+        renderer.setDefaultItemLabelPaint(Color.BLACK);
 
-            int barHeight = value.multiply(BigDecimal.valueOf(maxBarHeight))
-                    .divide(maxValue, RoundingMode.HALF_UP)
-                    .intValue();
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setPreferredSize(new Dimension(800, 500));
+        chartPanel.setBackground(Color.WHITE);
+        chartPanel.setDomainZoomable(false);
+        chartPanel.setRangeZoomable(false);
 
-            int x = startX + i * barSpacing;
-            int y = chartBottomY - barHeight;
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.add(chartPanel, BorderLayout.CENTER);
 
-            g2.setColor(new Color(46, 134, 222));
-            g2.fillRect(x, y, barWidth, barHeight);
-
-            g2.setColor(Color.BLACK);
-            g2.drawRect(x, y, barWidth, barHeight);
-
-            g2.setFont(new Font("Arial", Font.PLAIN, 11));
-            g2.setColor(Color.BLACK);
-            String valueText = DecimalFilter.PriceFormatter().format(value);
-            FontMetrics fm = g2.getFontMetrics();
-            int textWidth = fm.stringWidth(valueText);
-            g2.drawString(valueText, x + (barWidth - textWidth) / 2, y - 5);
-
-            g2.setFont(new Font("Arial", Font.BOLD, 12));
-            g2.drawString("T" + (i + 1), x + 10, chartBottomY + 20);
-        }
-
-        g2.setColor(Color.GRAY);
-        g2.setStroke(new BasicStroke(2));
-        g2.drawLine(startX - 10, chartBottomY, startX + revenue.size() * barSpacing, chartBottomY);
-
-        g2.drawLine(startX - 10, chartBottomY, startX - 10, chartBottomY - maxBarHeight - 20);
-
-        g2.setFont(new Font("Arial", Font.PLAIN, 10));
-        for (int i = 0; i <= 5; i++) {
-            int yPos = chartBottomY - (maxBarHeight * i / 5);
-            BigDecimal scaleValue = maxValue.multiply(BigDecimal.valueOf(i)).divide(BigDecimal.valueOf(5),
-                    RoundingMode.HALF_UP);
-
-            g2.drawLine(startX - 15, yPos, startX - 5, yPos);
-
-            String scaleText = DecimalFilter.PriceFormatter().format(scaleValue);
-            FontMetrics fm = g2.getFontMetrics();
-            int textWidth = fm.stringWidth(scaleText);
-            g2.drawString(scaleText, startX - textWidth - 20, yPos + 4);
-        }
+        return wrapper;
     }
 
     private static JPanel createTopProductPieChartPanel(Map<String, Integer> data) {
@@ -231,11 +209,19 @@ public class StatisticGUI extends JPanel {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                if (data == null || data.isEmpty())
-                    return;
-
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                if (data == null || data.isEmpty()) {
+                    g2.setColor(Color.LIGHT_GRAY);
+                    g2.setFont(new Font("Arial", Font.BOLD, 18));
+                    String msg = "Không có dữ liệu để hiển thị";
+                    FontMetrics fm = g2.getFontMetrics();
+                    int msgWidth = fm.stringWidth(msg);
+                    int msgHeight = fm.getHeight();
+                    g2.drawString(msg, (getWidth() - msgWidth) / 2, (getHeight() - msgHeight) / 2 + fm.getAscent());
+                    return;
+                }
 
                 int total = data.values().stream().mapToInt(Integer::intValue).sum();
                 int startAngle = 0;
@@ -460,12 +446,11 @@ public class StatisticGUI extends JPanel {
     }
 
     public void IncreaseYear() {
-        System.out.println("All year check" + allYear.size());
+        // System.out.println("All year check" + allYear.size());
         if (allYear.size() == 0)
             return;
         currentYear = allYear.contains(currentYear + 1) ? currentYear + 1 : currentYear;
-        revalidate();
-        repaint();
+        RevalidateChart();
     }
 
     public void DecreaseYear() {
@@ -473,8 +458,15 @@ public class StatisticGUI extends JPanel {
         if (allYear.size() == 0)
             return;
         currentYear = allYear.contains(currentYear - 1) ? currentYear - 1 : currentYear;
-        revalidate();
-        repaint();
+        RevalidateChart();
+    }
+
+    public void RevalidateChart() {
+        chartContainer.removeAll();
+        chartContainer.add(createChartPanel(), BorderLayout.CENTER);
+        chartContainer.add(ControlPanel(), BorderLayout.SOUTH);
+        chartContainer.revalidate();
+        chartContainer.repaint();
     }
 
 }

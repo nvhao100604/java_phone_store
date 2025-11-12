@@ -1,17 +1,16 @@
 package app.GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import app.PhoneStoreApplication;
 import app.DTO.Account;
 import app.GUI.CustomPanels.sidebar;
 import app.GUI.ImportSlipGUI.ImportSlipGUI;
+import app.GUI.OrderGUI.OrderGUI;
 import app.GUI.ProductGUI.ProductGUI;
 
 public class MainGUI extends JPanel {
@@ -22,18 +21,12 @@ public class MainGUI extends JPanel {
 	private sidebar navBar;
 	private Account account;
 
-	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the frame.
-	 */
-
 	public void InitialGUI(Class<?> guiClass) {
 		try {
 			JPanel guiInstance = null;
 			if (guiClass.equals(ImportSlipGUI.class)) {
+				guiInstance = (JPanel) guiClass.getDeclaredConstructor(MainGUI.class).newInstance(this);
+			} else if (guiClass.equals(OrderGUI.class)) {
 				guiInstance = (JPanel) guiClass.getDeclaredConstructor(MainGUI.class).newInstance(this);
 			} else {
 				guiInstance = (JPanel) guiClass.getDeclaredConstructor().newInstance();
