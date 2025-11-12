@@ -3,6 +3,7 @@ package app.GUI;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -111,7 +112,7 @@ public class LoginGUI extends JPanel {
 		gbc.anchor = GridBagConstraints.CENTER;
 		inputPanel.add(lblNewLabel_2, gbc);
 
-		pwdField = new JTextField();
+		pwdField = new JPasswordField();
 		pwdField.setColumns(10);
 		pwdField.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		pwdField.setBorder(new EmptyBorder(10, 10, 10, 10));
